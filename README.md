@@ -1,7 +1,7 @@
 # SheetModal
 An interactive sheet modal, fully customizable, performance focused
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/myalbum/sheet-modal/publish)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/myalbum/sheet-modal/publish.yml)
 ![GitHub License](https://img.shields.io/github/license/myalbum/sheet-modal)
 ![GitHub Release](https://img.shields.io/github/v/release/myalbum/sheet-modal)
 [![Runs with expo](https://img.shields.io/badge/Runs%20with%20Expo-000020.svg?style=flat&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://expo.io/)
