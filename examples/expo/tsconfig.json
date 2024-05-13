@@ -1,0 +1,12 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@myalbum/sheet-modal": ["../../src/index"]
+    },
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
