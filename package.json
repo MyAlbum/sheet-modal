@@ -19,12 +19,13 @@
   "keywords": [
     "react",
     "react-native",
-    "sheet",
     "modal",
     "bottom-sheet",
+    "sheet",
+    "expo",
+    "reanimated",
     "bottom-modal",
-    "sheet-modal",
-    "react-native-sheet-modal"
+    "modal-sheet"
   ],
   "scripts": {
     "test": "yarn build",
