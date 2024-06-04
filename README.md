@@ -25,6 +25,7 @@ An interactive sheet modal, fully customizable, performance focused
 - [Methods](#methods)
 - [Examples](#examples)
 - [License](#license)
+- [Contributing](#contributing)
 
 
 <br/><br/>
@@ -182,6 +183,10 @@ After that you can run the examples:
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute to this project.
 
 ## Build with ❤️
 
