@@ -106,14 +106,14 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: alignSelf === "flex-start" ? horizontalOffset : 0,
           marginRight: alignSelf === "flex-end" ? horizontalOffset : 0,
           height: store.state.height.value,
-          maxWidth: window.width - 2 * horizontalOffset,
+          maxWidth: window.value.width - 2 * horizontalOffset,
         };
       }
     };
 
     return getStyle() as DefaultStyle;
   }, [
-    window.width,
+    window,
     store.config.containerStyle,
     horizontalOffset,
     horizontalPosition,

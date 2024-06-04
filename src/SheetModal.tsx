@@ -2,10 +2,10 @@ import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useId,
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
 } from "react";
 import {
   useSharedValue,
@@ -32,10 +32,12 @@ import useKey from "./hooks/useKey";
 import useBackHandler from "./hooks/useBackHandler";
 import { WindowContext } from "./hooks/useWindowDimensions";
 import { LayoutChangeEvent, View } from "react-native";
+import SheetModalStack from "./SheetModalStack";
 
 const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
   (_props, ref) => {
     const height = useSharedValue(0);
+    const id = useId();
     const contentLayout = useSharedValue<ContentLayout>({
       width: 0,
       height: 0,
@@ -49,8 +51,8 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     const _prevPosition = useRef(config.position);
     const { mount, unmount, isMounted } = useMount(snapPoints, contentLayout);
     const isPresenting = useSharedValue(false);
-    const [window, setWindow] = useState({ width: 0, height: 0 });
-    const _oldWindowHeight = useRef(window.height);
+    const window = useSharedValue({ width: 0, height: 0 });
+    const _oldWindowHeight = useRef(0);
     const snapPointIndex = useSharedValue(config.snapPointIndex);
 
     const getNextSnapPointIndex = useCallback(
@@ -127,12 +129,15 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       [contentLayout, isPanning, skippedContentLayout]
     );
 
-    const onWindowResize = useCallback((e: LayoutChangeEvent) => {
-      setWindow({
-        width: e.nativeEvent.layout.width,
-        height: e.nativeEvent.layout.height,
-      });
-    }, []);
+    const onWindowResize = useCallback(
+      (e: LayoutChangeEvent) => {
+        window.value = {
+          width: e.nativeEvent.layout.width,
+          height: e.nativeEvent.layout.height,
+        };
+      },
+      [window]
+    );
 
     const getYForHeight = useCallback(
       (h: number) => {
@@ -141,11 +146,11 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
         let newY = 0;
         if (config.detached) {
           if (config.position[0] === "center") {
-            newY = window.height / 2 + h / 2;
+            newY = window.value.height / 2 + h / 2;
           } else if (config.position[0] === "bottom") {
             newY = h + config.offset[0];
           } else if (config.position[0] === "top") {
-            newY = window.height - config.offset[0];
+            newY = window.value.height - config.offset[0];
           }
         } else {
           newY = h;
@@ -159,9 +164,9 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     const snapToIndex = useCallback(
       (index: number = 0, animate: boolean = true) => {
         isPresenting.value = true;
+        snapPointIndex.value = index;
 
         mount(() => {
-          snapPointIndex.value = index;
           cancelAnimation(height);
           cancelAnimation(visibilityPercentage);
           cancelAnimation(y);
@@ -232,9 +237,9 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
         ? config.offset[0] * 2
         : config.offset[0];
       const convertConfig = {
-        windowHeight: window.height,
+        windowHeight: window.value.height,
         maxHeight: Math.min(
-          window.height - offsetYSpacing,
+          window.value.height - offsetYSpacing,
           contentLayout.value.height
         ),
         minHeight: Math.min(contentLayout.value.height, config.minHeight),
@@ -246,13 +251,14 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
         _snapPoints.length !== snapPoints.value.length ||
         !_snapPoints.every((point, i) => point === snapPoints.value[i]);
       const detachedChanged = config.detached !== _prevDetached.current;
-      const windowHeightChanged = window.height !== _oldWindowHeight.current;
+      const windowHeightChanged =
+        window.value.height !== _oldWindowHeight.current;
       const positionChanged = config.position.some(
         (v, i) => v !== _prevPosition.current[i]
       );
 
       _prevDetached.current = config.detached;
-      _oldWindowHeight.current = window.height;
+      _oldWindowHeight.current = window.value.height;
       _prevPosition.current = config.position;
 
       if (snapPointsChanged) {
@@ -292,7 +298,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       config.snapPoints,
       config.position,
       config.autoResize,
-      window.height,
+      window,
       contentLayout,
       snapPoints,
       y,
@@ -302,7 +308,10 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     ]);
 
     useKey("Escape", (e) => {
-      if (!store.state.visibilityPercentage.value) {
+      if (
+        !store.state.visibilityPercentage.value ||
+        SheetModalStack.getTop() !== id
+      ) {
         return;
       }
 
@@ -340,6 +349,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
           !_isPresenting
         ) {
           runOnJS(unmount)();
+          snapPointIndex.value = -1;
         }
       },
       [y, isPanning, isPresenting, config.closeY]
@@ -351,6 +361,22 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
         runOnJS(updateSnapPoints)();
       },
       [contentLayout, updateSnapPoints]
+    );
+
+    useAnimatedReaction(
+      () => visibilityPercentage.value,
+      (v, prevV) => {
+        if (v === prevV) {
+          return;
+        }
+
+        if (v === 1) {
+          SheetModalStack.push(id);
+        } else if (v === 0) {
+          SheetModalStack.remove(id);
+        }
+      },
+      [visibilityPercentage]
     );
 
     useEffect(() => {
