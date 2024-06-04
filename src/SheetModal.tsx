@@ -6,6 +6,7 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import {
   useSharedValue,
@@ -49,11 +50,12 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     const y = useSharedValue(config.closeY);
     const _prevDetached = useRef(config.detached);
     const _prevPosition = useRef(config.position);
-    const { mount, unmount, isMounted } = useMount(snapPoints, contentLayout);
+    const { mount, isMounted } = useMount(snapPoints, contentLayout);
     const isPresenting = useSharedValue(false);
     const window = useSharedValue({ width: 0, height: 0 });
     const _oldWindowHeight = useRef(0);
-    const snapPointIndex = useSharedValue(config.snapPointIndex);
+    const snapPointIndex = useSharedValue(-1);
+    const [mountCount, setMountCount] = useState(0);
 
     const getNextSnapPointIndex = useCallback(
       (_snapPoints: number[], _y: number) => {
@@ -163,6 +165,10 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
 
     const snapToIndex = useCallback(
       (index: number = 0, animate: boolean = true) => {
+        if (snapPointIndex.value === -1) {
+          setMountCount((z) => z + 1);
+        }
+
         isPresenting.value = true;
         snapPointIndex.value = index;
 
@@ -339,16 +345,17 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
           boolean,
           boolean
         ],
-      ([_y, _isPanning, _isPresenting], prevY) => {
+      (v, prevV) => {
+        const [_y, _isPanning, _isPresenting] = v;
+
         // Unmount if y is 0 and not panning nor presenting
         if (
           _y <= config.closeY &&
-          prevY &&
-          prevY[0] &&
+          prevV &&
+          prevV[0] > _y &&
           !_isPanning &&
           !_isPresenting
         ) {
-          runOnJS(unmount)();
           snapPointIndex.value = -1;
         }
       },
@@ -432,8 +439,19 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       snapPointIndex,
     ]);
 
-    return (
-      <Portal>
+    const content = useMemo(() => {
+      return (
+        <WindowContext.Provider value={window}>
+          <SheetModalContext.Provider value={store}>
+            <SheetModalBackdrop />
+            <SheetModalContent>{_props.children}</SheetModalContent>
+          </SheetModalContext.Provider>
+        </WindowContext.Provider>
+      );
+    }, [_props.children, store, window]);
+
+    const windowSizeWatcher = useMemo(() => {
+      return (
         <View
           onLayout={onWindowResize}
           style={{
@@ -445,15 +463,17 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
             pointerEvents: "none",
           }}
         />
+      );
+    }, [onWindowResize]);
 
-        <WindowContext.Provider value={window}>
-          {isMounted && (
-            <SheetModalContext.Provider value={store}>
-              <SheetModalBackdrop />
-              <SheetModalContent>{_props.children}</SheetModalContent>
-            </SheetModalContext.Provider>
-          )}
-        </WindowContext.Provider>
+    if (!isMounted) {
+      return null;
+    }
+
+    return (
+      <Portal key={`${id}-${mountCount}`}>
+        {windowSizeWatcher}
+        {content}
       </Portal>
     );
   }
