@@ -28,7 +28,8 @@
     "modal-sheet"
   ],
   "scripts": {
-    "test": "yarn build",
+    "test": "yarn lint && yarn build",
+    "lint": "eslint src --ext .ts,.tsx",
     "build": "bob build",
     "bare": "cd examples/bare && yarn start",
     "expo": "cd examples/expo && yarn start",
