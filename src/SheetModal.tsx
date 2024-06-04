@@ -440,15 +440,20 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     ]);
 
     const content = useMemo(() => {
+      // Force re-render (fixes initial content layout issues, like scroll positions)
+      const key = `${id}-${mountCount}`;
+
       return (
         <WindowContext.Provider value={window}>
           <SheetModalContext.Provider value={store}>
-            <SheetModalBackdrop />
-            <SheetModalContent>{_props.children}</SheetModalContent>
+            <SheetModalBackdrop key={`drop-${key}`} />
+            <SheetModalContent key={`content-${key}`}>
+              {_props.children}
+            </SheetModalContent>
           </SheetModalContext.Provider>
         </WindowContext.Provider>
       );
-    }, [_props.children, store, window]);
+    }, [_props.children, id, mountCount, store, window]);
 
     const windowSizeWatcher = useMemo(() => {
       return (
