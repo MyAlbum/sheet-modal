@@ -169,6 +169,10 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
           setMountCount((z) => z + 1);
         }
 
+        if (index > -1) {
+          SheetModalStack.push(id);
+        }
+
         isPresenting.value = true;
         snapPointIndex.value = index;
 
@@ -210,14 +214,15 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
         });
       },
       [
-        getYForHeight,
-        height,
+        snapPointIndex,
         isPresenting,
         mount,
-        snapPoints,
-        snapPointIndex,
+        id,
+        height,
         visibilityPercentage,
         y,
+        snapPoints.value,
+        getYForHeight,
       ]
     );
 
@@ -225,6 +230,8 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       cancelAnimation(y);
       cancelAnimation(visibilityPercentage);
       isPresenting.value = false;
+
+      SheetModalStack.remove(id);
 
       visibilityPercentage.value = withSpring(0, AniConfig);
       y.value = withSpring(config.closeY, AniConfig, (success) => {
@@ -235,7 +242,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
           y.value = config.closeY;
         }
       });
-    }, [y, visibilityPercentage, isPresenting, config.closeY]);
+    }, [y, visibilityPercentage, isPresenting, id, config.closeY]);
 
     const updateSnapPoints = useCallback(() => {
       // Update snapPoints using window size and layout
@@ -368,22 +375,6 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
         runOnJS(updateSnapPoints)();
       },
       [contentLayout, updateSnapPoints]
-    );
-
-    useAnimatedReaction(
-      () => visibilityPercentage.value,
-      (v, prevV) => {
-        if (v === prevV) {
-          return;
-        }
-
-        if (v === 1) {
-          SheetModalStack.push(id);
-        } else if (v === 0) {
-          SheetModalStack.remove(id);
-        }
-      },
-      [visibilityPercentage]
     );
 
     useEffect(() => {
