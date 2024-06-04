@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export default function useKey(
   key: KeyboardEvent["key"],
-  callback: () => void
+  callback: (e: KeyboardEvent) => void
 ) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -10,14 +10,14 @@ export default function useKey(
         e.preventDefault();
         e.stopPropagation();
 
-        callback();
+        callback(e);
       }
     };
 
-    window.addEventListener("keydown", onKey);
+    window.addEventListener("keyup", onKey);
 
     return () => {
-      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("keyup", onKey);
     };
   }, [callback, key]);
 }
