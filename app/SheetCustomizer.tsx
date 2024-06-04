@@ -5,8 +5,8 @@ import SegmentedControl from "@react-native-segmented-control/segmented-control"
 import { Pressable, Switch, Text, TextInput, View } from "react-native";
 import SheetModalDynamicContent from "./SheetModalDynamicContent";
 
-const positionH = ["top", "center", "bottom"];
-const positionV = ["left", "center", "right"];
+const positionVertical = ["top", "center", "bottom"];
+const positionHorizontal = ["left", "center", "right"];
 
 export default function SheetCustomizer() {
   const customSheetModalRef = React.useRef<SheetModalMethods>(null);
@@ -115,23 +115,31 @@ export default function SheetCustomizer() {
         <Switch value={panDownToClose} onValueChange={setPanDownToClose} />
       </View>
 
-      <View style={styles.option}>
-        <Text>Position Horizontal</Text>
+      <View
+        style={{
+          ...styles.option,
+          ...{
+            opacity: detached ? 1 : 0.4,
+            pointerEvents: detached ? "auto" : "none",
+          },
+        }}
+      >
+        <Text>Position Vertical (only when detached)</Text>
         <SegmentedControl
-          values={positionH}
+          values={positionVertical}
           appearance="light"
-          selectedIndex={positionH.indexOf(position[0])}
+          selectedIndex={positionVertical.indexOf(position[0])}
           onValueChange={(hpos) => {
             setPosition([hpos as Position[0], position[1]]);
           }}
         />
       </View>
       <View style={styles.option}>
-        <Text>Position Vertical</Text>
+        <Text>Position Horizontal</Text>
         <SegmentedControl
-          values={positionV}
+          values={positionHorizontal}
           appearance="light"
-          selectedIndex={positionV.indexOf(position[1])}
+          selectedIndex={positionHorizontal.indexOf(position[1])}
           onValueChange={(vpos) => {
             setPosition([position[0], vpos as Position[1]]);
           }}

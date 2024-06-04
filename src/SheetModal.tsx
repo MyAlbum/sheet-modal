@@ -301,9 +301,14 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       height,
     ]);
 
-    useKey("Escape", () => {
+    useKey("Escape", (e) => {
+      if (!store.state.visibilityPercentage.value) {
+        return;
+      }
+
       if (store.config.closeOnEscape) {
         close();
+        e.stopImmediatePropagation();
       }
     });
 

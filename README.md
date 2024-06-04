@@ -115,7 +115,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `closeOnEscape` | `boolean` | `true` | Close the sheet modal when pressing the escape key on the web |
 | `withClosebutton` | `boolean` | `true` | Render a close button in the header |
 | `withBackdrop` | `boolean` | `true` | Render a backdrop behind the sheet modal |
-| `snapPoints` | `Array<number \| string>` | `[350, "70%"]` | Array of snappoints for the sheet modal, in pixels (number) or percentage (string).<br/><br/>If a snapPoint is greater than the content height, the sheet modal will not expand beyond the actual content size. |
+| `snapPoints` | `Array<number \| string>` | `["100%"]` | Array of snappoints for the sheet modal, in pixels (number) or percentage (string).<br/><br/>If a snapPoint is greater than the content height, the sheet modal will not expand beyond the actual content size. |
 | `snapPointIndex` | `number` | `-1` | Initial snap index. Provide -1 to initiate sheet in closed state |
 | `panDownToClose` | `boolean` | `true` | Allow panning down to close the sheet modal |
 | `panContent` | `boolean` | `true` | Allow panning the content of the sheet modal, when false and panDownToClose is true, only the handle can be used to pan |

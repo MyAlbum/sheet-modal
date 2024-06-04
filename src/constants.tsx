@@ -62,7 +62,7 @@ export const defaultProps: Required<SheetModalProps> = {
   autoResize: true,
   closeOnEscape: true,
 
-  snapPoints: [350, "70%"],
+  snapPoints: ["100%"],
   snapPointIndex: -1,
   offset: [50, 30],
   minHeight: 50,
