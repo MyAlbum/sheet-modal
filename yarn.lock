@@ -1952,6 +1952,7 @@ __metadata:
     "@types/react": "npm:^18.3.1"
     "@types/semver": "npm:^7"
     eslint: "npm:^8.19.0"
+    eslint-plugin-only-warn: "npm:^1.1.0"
     husky: "npm:^9.0.11"
     prettier: "npm:2.8.8"
     react: "npm:^18.3.1"
@@ -4210,6 +4211,13 @@ __metadata:
     jest:
       optional: true
   checksum: 10c0/6b3c984de3550e2a72b98838120f28b1020c725921f5961a8931f8db0362b7a8a451ffbe4a92ba72ba2ffe876f8d8ecbac9b6109c7702ec4ff155e8cac593462
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-only-warn@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "eslint-plugin-only-warn@npm:1.1.0"
+  checksum: 10c0/72dfc947aa944321dfa63938f2e8bb91e7fda68f988837a8accf4551534ed04bf71957a46d00a4ddc43de5fe31055da12365b2c53c6ee6508f2ba203cd2cfa27
   languageName: node
   linkType: hard
 
