@@ -60,19 +60,19 @@ const stylesheet = StyleSheet.create({
   },
   x: {
     position: "absolute",
-    width: 2,
-    height: 16,
+    width: 1.5,
+    height: 12,
     borderRadius: 1,
     pointerEvents: "none",
   },
   x1: {
     transform: [{ rotate: "45deg" }],
-    top: 7,
+    top: 9,
     left: 14,
   },
   x2: {
     transform: [{ rotate: "-45deg" }],
-    top: 7,
+    top: 9,
     left: 14,
   },
 });
