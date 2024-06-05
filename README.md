@@ -57,7 +57,7 @@ $ npx expo install react-native-reanimated react-native-gesture-handler @gorhom/
 
 <br/>
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > **React Native Gesture Handler** needs extra installation steps, please follow their [guide](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
 >
 > **React Native Reanimated** needs extra installation steps, please follow their [guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
@@ -174,6 +174,9 @@ First bootstrap the examples by installing the dependencies
 ```bash
 $ yarn bootstrap
 ```
+
+> [!IMPORTANT]
+> For the bare example you need prepare the Pod project before running the example, this can be done by running: `$ cd examples/bare && yarn prepare-ios`
 
 After that you can run the examples:
 - `$ yarn expo` to start the expo example

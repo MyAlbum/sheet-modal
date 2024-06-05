@@ -9,7 +9,8 @@
     "start": "react-native start",
     "test": "jest",
     "update": "yarn upgrade-interactive",
-    "bootstrap": "yarn install"
+    "bootstrap": "yarn install",
+    "prepare-ios": "cd ios && bundle install && bundle exec pod install"
   },
   "dependencies": {
     "@gorhom/portal": "^1.0.14",
