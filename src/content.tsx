@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useCallback } from "react";
 import useSheetModal from "./hooks/useSheetModal";
 import { Platform, PointerEvent, View } from "react-native";
 import Animated, {
+  useAnimatedReaction,
   useAnimatedRef,
   useScrollViewOffset,
 } from "react-native-reanimated";
@@ -19,6 +20,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
   const window = useWindowDimensions();
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
+  const containerRef = useAnimatedRef<View>();
 
   const onStartShouldSetPanResponder = useCallback(
     (gestureDirection: PanDirection) => {
@@ -70,6 +72,24 @@ const SheetModalContent = (props: PropsWithChildren) => {
   const horizontalPosition = store.config.position[1];
   const horizontalOffset = store.config.offset[1];
 
+  useAnimatedReaction(
+    () => store.state.isInert.value,
+    (isInert) => {
+      if (Platform.OS !== "web") {
+        return;
+      }
+
+      if (isInert) {
+        // @ts-expect-error
+        containerRef.current?.setAttribute("inert", true);
+      } else {
+        // @ts-expect-error
+        containerRef.current?.removeAttribute("inert");
+      }
+    },
+    [store.state.y]
+  );
+
   const style = useStableAnimatedStyle(() => {
     "worklet";
 
@@ -81,6 +101,8 @@ const SheetModalContent = (props: PropsWithChildren) => {
           ? "flex-start"
           : "flex-end";
       const transform = [{ translateY: -store.state.y.value }];
+      const visibility =
+        store.state.y.value <= store.config.closeY ? "hidden" : "visible";
 
       if (store.config.detached) {
         // DETACHED
@@ -96,6 +118,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: horizontalOffset,
           marginRight: horizontalOffset,
           height: store.state.height.value,
+          visibility,
         };
       } else {
         return {
@@ -107,6 +130,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginRight: alignSelf === "flex-end" ? horizontalOffset : 0,
           height: store.state.height.value,
           maxWidth: window.value.width - 2 * horizontalOffset,
+          visibility,
         };
       }
     };
@@ -133,6 +157,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
 
   return (
     <View
+      ref={containerRef}
       style={{
         position: "absolute",
         bottom: 0,

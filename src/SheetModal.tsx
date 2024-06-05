@@ -55,6 +55,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     const window = useSharedValue({ width: 0, height: 0 });
     const _oldWindowHeight = useRef(0);
     const snapPointIndex = useSharedValue(-1);
+    const isInert = useSharedValue(false);
     const [mountCount, setMountCount] = useState(0);
 
     const getNextSnapPointIndex = useCallback(
@@ -165,16 +166,13 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
 
     const snapToIndex = useCallback(
       (index: number = 0, animate: boolean = true) => {
-        if (snapPointIndex.value === -1) {
-          setMountCount((z) => z + 1);
-        }
-
         if (index > -1) {
           SheetModalStack.push(id);
         }
 
         isPresenting.value = true;
         snapPointIndex.value = index;
+        isInert.value = index < 0;
 
         mount(() => {
           cancelAnimation(height);
@@ -216,6 +214,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       [
         snapPointIndex,
         isPresenting,
+        isInert,
         mount,
         id,
         height,
@@ -226,10 +225,15 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       ]
     );
 
+    const increaseMountCount = useCallback(() => {
+      setMountCount((z) => z + 1);
+    }, []);
+
     const close = useCallback(() => {
       cancelAnimation(y);
       cancelAnimation(visibilityPercentage);
       isPresenting.value = false;
+      isInert.value = true;
 
       SheetModalStack.remove(id);
 
@@ -240,9 +244,18 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
         // Sometimes y value is not set to 0 after animation ends
         if (success) {
           y.value = config.closeY;
+          runOnJS(increaseMountCount)();
         }
       });
-    }, [y, visibilityPercentage, isPresenting, id, config.closeY]);
+    }, [
+      y,
+      visibilityPercentage,
+      isPresenting,
+      isInert,
+      id,
+      config.closeY,
+      increaseMountCount,
+    ]);
 
     const updateSnapPoints = useCallback(() => {
       // Update snapPoints using window size and layout
@@ -397,6 +410,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
 
         state: {
           isPanning,
+          isInert,
           snapPoints,
           snapPointIndex,
           height,
@@ -416,6 +430,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     }, [
       config,
       isPanning,
+      isInert,
       snapPoints,
       height,
       y,
