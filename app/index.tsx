@@ -1,5 +1,5 @@
 import { PortalProvider } from "@gorhom/portal";
-import SheetModal, { SheetModalMethods, SheetModalProvider } from "../src";
+import { SheetModal, SheetModalMethods, SheetModalProvider } from "../src";
 import React, { useCallback, useRef } from "react";
 import {
   Pressable,

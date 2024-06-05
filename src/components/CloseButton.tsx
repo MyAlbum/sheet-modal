@@ -6,7 +6,7 @@ import {
   StyleProp,
   ViewStyle,
 } from "react-native";
-import useSheetModal from "./hooks/useSheetModal";
+import useSheetModal from "../hooks/useSheetModal";
 
 export default function SheetModalCloseButton() {
   const store = useSheetModal();

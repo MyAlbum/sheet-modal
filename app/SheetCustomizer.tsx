@@ -1,5 +1,5 @@
 import React from "react";
-import SheetModal, { Offset, Position, SheetModalMethods } from "../src";
+import { SheetModal, Offset, Position, SheetModalMethods } from "../src";
 import { styles } from "./styles";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { Pressable, Switch, Text, TextInput, View } from "react-native";

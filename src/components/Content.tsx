@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useCallback } from "react";
-import useSheetModal from "./hooks/useSheetModal";
+import useSheetModal from "../hooks/useSheetModal";
 import { Platform, PointerEvent, View } from "react-native";
 import Animated, {
   useAnimatedReaction,
@@ -8,11 +8,11 @@ import Animated, {
 } from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
 import { FlexAlignType } from "react-native";
-import usePan from "./hooks/usePan";
-import { ContentAnimationStyle, PanDirection } from "./types";
+import usePan from "../hooks/usePan";
+import { ContentAnimationStyle, PanDirection } from "../types";
 import HandleWrapper from "./HandleWrapper";
-import useWindowDimensions from "./hooks/useWindowDimensions";
-import useStableAnimatedStyle from "./hooks/useStableAnimatedStyle";
+import useWindowDimensions from "../hooks/useWindowDimensions";
+import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
 import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes";
 
 const SheetModalContent = (props: PropsWithChildren) => {
@@ -73,13 +73,13 @@ const SheetModalContent = (props: PropsWithChildren) => {
   const horizontalOffset = store.config.offset[1];
 
   useAnimatedReaction(
-    () => store.state.isInert.value,
-    (isInert) => {
+    () => store.state.isClosed.value,
+    (isClosed) => {
       if (Platform.OS !== "web") {
         return;
       }
 
-      if (isInert) {
+      if (isClosed) {
         // @ts-expect-error
         containerRef.current?.setAttribute("inert", true);
       } else {

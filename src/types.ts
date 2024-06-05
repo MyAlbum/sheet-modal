@@ -121,7 +121,7 @@ export type SheetModalStore = SheetModalMethods & {
     visibilityPercentage: SharedValue<number>;
     contentLayout: SharedValue<{ width: number; height: number }>;
     isPanning: SharedValue<boolean>;
-    isInert: SharedValue<boolean>;
+    isClosed: SharedValue<boolean>;
   };
 
   /**
@@ -166,4 +166,8 @@ export type ContentAnimationStyle = {
   height?: number;
   maxWidth?: number;
   visibility: "hidden" | "visible";
+};
+
+export type SheetModalInstanceMethods = SheetModalMethods & {
+  isClosed: () => boolean;
 };

@@ -1,5 +1,5 @@
-import SheetModalCloseButton from "./closebutton";
-import SheetHandle from "./handle";
+import SheetModalCloseButton from "./components/CloseButton";
+import SheetHandle from "./components/Handle";
 import { SheetModalProps } from "./types";
 import React from "react";
 import { StyleSheet, View } from "react-native";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useSheetModal from "./hooks/useSheetModal";
+import useSheetModal from "../hooks/useSheetModal";
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
 
 function HandleWrapper() {
