@@ -21,7 +21,6 @@ import type {
   SheetModalWithChildren,
 } from "../types";
 import SheetModalContext from "../context";
-import { Portal } from "@gorhom/portal";
 import SheetModalBackdrop from "./Backdrop";
 import SheetModalContent from "./Content";
 import { AniConfig } from "../constants";
@@ -37,6 +36,7 @@ import useBackHandler from "../hooks/useBackHandler";
 import { WindowContext } from "../hooks/useWindowDimensions";
 import { LayoutChangeEvent, View } from "react-native";
 import sheetModalStack from "../lib/sheetModalStack";
+import PortalWorkaround from "./Portal";
 
 const SheetModalInstance = forwardRef<
   SheetModalInstanceMethods,
@@ -392,7 +392,7 @@ const SheetModalInstance = forwardRef<
   }
 
   return (
-    <Portal>
+    <PortalWorkaround>
       <View
         onLayout={onWindowResize}
         style={{
@@ -411,7 +411,7 @@ const SheetModalInstance = forwardRef<
           <SheetModalContent>{_props.children}</SheetModalContent>
         </SheetModalContext.Provider>
       </WindowContext.Provider>
-    </Portal>
+    </PortalWorkaround>
   );
 });
 
