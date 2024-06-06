@@ -1,5 +1,4 @@
-import { PortalProvider } from "@gorhom/portal";
-import { SheetModal, SheetModalMethods, SheetModalProvider } from "../src";
+import { PortalHost, SheetModal, SheetModalMethods, SheetModalProvider } from "../src";
 import React, { useCallback, useRef } from "react";
 import {
   Pressable,
@@ -19,7 +18,7 @@ function App(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{ ...styles.flex, ...styles.background }}>
       <View style={styles.flex}>
-        <PortalProvider>
+        <PortalHost name="sheet-modal">
           <SheetModalProvider
             containerStyle={styles.container}
             handleStyle={styles.handle}
@@ -27,7 +26,7 @@ function App(): React.JSX.Element {
           >
             <Content />
           </SheetModalProvider>
-        </PortalProvider>
+        </PortalHost>
       </View>
     </GestureHandlerRootView>
   );

@@ -36,7 +36,7 @@ import useBackHandler from "../hooks/useBackHandler";
 import { WindowContext } from "../hooks/useWindowDimensions";
 import { LayoutChangeEvent, View } from "react-native";
 import sheetModalStack from "../lib/sheetModalStack";
-import PortalWorkaround from "./Portal";
+import PortalComponent from "./Portal/Portal";
 
 const SheetModalInstance = forwardRef<
   SheetModalInstanceMethods,
@@ -394,7 +394,7 @@ const SheetModalInstance = forwardRef<
   }
 
   return (
-    <PortalWorkaround>
+    <PortalComponent host="sheet-modal">
       <View
         onLayout={onWindowResize}
         style={{
@@ -414,7 +414,7 @@ const SheetModalInstance = forwardRef<
           <SheetModalContent>{_props.children}</SheetModalContent>
         </SheetModalContext.Provider>
       </WindowContext.Provider>
-    </PortalWorkaround>
+    </PortalComponent>
   );
 });
 
