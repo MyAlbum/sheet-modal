@@ -164,6 +164,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
         left: 0,
         right: 0,
       }}
+      testID={`${store.id}-content`}
     >
       <Animated.View
         style={[
