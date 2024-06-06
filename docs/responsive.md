@@ -3,7 +3,7 @@ Auto switch between attached/detached mode based on screensize.
 
 ```tsx
 import React, { useRef } from 'react';
-import SheetModal, { SheetModalMethods } from '@myalbum/sheet-modal';
+import { SheetModal, SheetModalMethods } from '@myalbum/sheet-modal';
 import { useWindowDimensions, Pressable, Text, View } from "react-native";
 
 function ResponsiveExample() {

@@ -72,7 +72,7 @@ Below a simple usage example
 
 ```tsx
 import React, { useCallback, useRef } from 'react';
-import SheetModal, { SheetModalMethods } from '@myalbum/sheet-modal';
+import { SheetModal, SheetModalMethods } from '@myalbum/sheet-modal';
 
 export default function App() {
   const sheetModalRef = useRef<SheetModalMethods>(null);

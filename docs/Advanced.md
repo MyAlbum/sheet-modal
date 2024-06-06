@@ -5,7 +5,7 @@
 The `useSheetModal` hook is a custom hook that provides the `SheetModalMethods` instance of the nearest `SheetModal` component in the component tree.
 
 ```tsx
-import SheetModal, { useSheetModal, SheetModalMethods } from '@myalbum/sheet-modal';
+import { SheetModal, useSheetModal, SheetModalMethods } from '@myalbum/sheet-modal';
 
 export default function App() {
   const sheetModalRef = useRef<SheetModalMethods>();
