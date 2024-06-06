@@ -111,6 +111,8 @@ export type SheetModalMethods = {
 export type SheetModalConfig = Required<SheetModalProps>;
 
 export type SheetModalStore = SheetModalMethods & {
+  id: string;
+  
   config: SheetModalConfig;
 
   state: {

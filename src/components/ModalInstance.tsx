@@ -336,6 +336,7 @@ const SheetModalInstance = forwardRef<
 
   const store = useMemo<SheetModalStore>(() => {
     return {
+      id,
       config,
 
       state: {
@@ -358,6 +359,7 @@ const SheetModalInstance = forwardRef<
       getYForHeight,
     };
   }, [
+    id,
     config,
     isPanning,
     _isClosed,
@@ -403,6 +405,7 @@ const SheetModalInstance = forwardRef<
           bottom: 0,
           pointerEvents: "none",
         }}
+        testID={`${id}-window`}
       />
 
       <WindowContext.Provider value={window}>
