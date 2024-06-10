@@ -47,7 +47,6 @@
     "clean": "git clean -fdX"
   },
   "devDependencies": {
-    "@gorhom/portal": "^1.0.14",
     "@react-native-segmented-control/segmented-control": "^2.5.2",
     "@react-native/eslint-config": "0.74.81",
     "@types/react": "^18.3.1",
@@ -65,7 +64,6 @@
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@gorhom/portal": "^1.0.14",
     "@types/react": "*",
     "@types/react-native": "*",
     "react": "*",
