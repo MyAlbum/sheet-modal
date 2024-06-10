@@ -2,14 +2,20 @@ import React, { Fragment, PropsWithChildren, useEffect, useState } from "react";
 import { Portal, portalHosts } from "./lib/portalHosts";
 
 type Props = {
-  host: string;
+  host?: string;
 };
 
 function PortalComponent(props: PropsWithChildren<Props>) {
   const [portal] = useState(
     (() => {
       const portalInstance = new Portal(props.children);
-      portalHosts.getHost(props.host).addPortal(portalInstance);
+      const host = portalHosts.getHost(props.host!);
+
+      if (!host) {
+        throw new Error(`PortalHost with name ${props.host} does not exist`);
+      } else {
+        host.addPortal(portalInstance);
+      }
 
       return portalInstance;
     })()
@@ -27,5 +33,9 @@ function PortalComponent(props: PropsWithChildren<Props>) {
 
   return null;
 }
+
+PortalComponent.defaultProps = {
+  host: "default",
+};
 
 export default PortalComponent;

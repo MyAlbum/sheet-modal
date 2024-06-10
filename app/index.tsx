@@ -23,7 +23,7 @@ function App(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{ ...styles.flex, ...styles.background }}>
       <View style={styles.flex}>
-        <PortalHost name="sheet-modal">
+        <PortalHost>
           <SheetModalProvider
             containerStyle={styles.container}
             handleStyle={styles.handle}

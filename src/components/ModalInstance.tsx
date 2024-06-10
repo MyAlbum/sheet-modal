@@ -394,7 +394,7 @@ const SheetModalInstance = forwardRef<
   }
 
   return (
-    <PortalComponent host="sheet-modal">
+    <PortalComponent>
       <View
         onLayout={onWindowResize}
         style={{

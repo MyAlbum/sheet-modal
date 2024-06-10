@@ -8,11 +8,11 @@ import React, {
 import { portalHosts } from "./lib/portalHosts";
 
 type Props = {
-  name: string;
+  name?: string;
 };
 
 function PortalHost(props: PropsWithChildren<Props>) {
-  const [host] = useState(portalHosts.addHost(props.name));
+  const [host] = useState(portalHosts.addHost(props.name!));
   const [content, setContent] = useState<Array<ReactNode>>([]);
 
   useEffect(() => {
@@ -29,5 +29,9 @@ function PortalHost(props: PropsWithChildren<Props>) {
     </Fragment>
   );
 }
+
+PortalHost.defaultProps = {
+  name: "default",
+};
 
 export default PortalHost;

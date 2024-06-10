@@ -13,7 +13,7 @@ class PortalHosts {
     return this.hosts[name];
   }
 
-  getHost(name: string) {
+  getHost(name: string): PortalHost | undefined {
     return this.hosts[name];
   }
 }
