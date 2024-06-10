@@ -16,7 +16,23 @@ import SheetModalInstance from "./ModalInstance";
 const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
   (_props, ref) => {
     const refs = useRef<Array<SheetModalInstanceMethods | null>>([]);
-    const [instances, setInstances] = useState<ReactElement[]>([]);
+    const [instances, setInstances] = useState<ReactElement[]>(
+      (() => {
+        if (_props.snapPointIndex !== undefined && _props.snapPointIndex >= 0) {
+          return [
+            <SheetModalInstance
+              key={0}
+              {..._props}
+              ref={(r) => {
+                refs.current[0] = r;
+              }}
+            />,
+          ];
+        }
+
+        return [];
+      })()
+    );
 
     const close = useCallback(() => {
       const activeInstance = refs.current.at(-1);
