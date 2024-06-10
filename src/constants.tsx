@@ -61,6 +61,7 @@ export const defaultProps: Required<SheetModalProps> = {
   panContent: true,
   autoResize: true,
   closeOnEscape: true,
+  animateOnMount: true,
 
   snapPoints: ["100%"],
   snapPointIndex: -1,

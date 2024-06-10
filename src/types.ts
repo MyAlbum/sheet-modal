@@ -25,6 +25,12 @@ export type SheetModalProps = {
   handleStyle?: StyleProp<ViewStyle>;
 
   /**
+   * Animate the sheet modal when it mounts
+   * Defaults to true
+   */
+  animateOnMount?: boolean;
+
+  /**
    * Close the sheet modal when pressing the escape key on the web
    * Defaults to true
    */
@@ -112,7 +118,7 @@ export type SheetModalConfig = Required<SheetModalProps>;
 
 export type SheetModalStore = SheetModalMethods & {
   id: string;
-  
+
   config: SheetModalConfig;
 
   state: {

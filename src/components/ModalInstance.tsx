@@ -322,7 +322,7 @@ const SheetModalInstance = forwardRef<
   useEffect(() => {
     // Snap to initial snap point on mount
     if (config.snapPointIndex >= 0) {
-      snapToIndex(config.snapPointIndex, true);
+      snapToIndex(config.snapPointIndex, config.animateOnMount);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

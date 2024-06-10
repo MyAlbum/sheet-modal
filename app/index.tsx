@@ -1,4 +1,9 @@
-import { PortalHost, SheetModal, SheetModalMethods, SheetModalProvider } from "../src";
+import {
+  PortalHost,
+  SheetModal,
+  SheetModalMethods,
+  SheetModalProvider,
+} from "../src";
 import React, { useCallback, useRef } from "react";
 import {
   Pressable,
@@ -120,6 +125,7 @@ function Content(): React.JSX.Element {
             offset={[50, 30]}
             withBackdrop={false}
             snapPointIndex={0}
+            animateOnMount={false}
           >
             <SheetModalContent title={"This modal is opened on mount"} />
           </SheetModal>
