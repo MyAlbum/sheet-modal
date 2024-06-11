@@ -1745,18 +1745,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/portal@npm:^1.0.14":
-  version: 1.0.14
-  resolution: "@gorhom/portal@npm:1.0.14"
-  dependencies:
-    nanoid: "npm:^3.3.1"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10c0/86f33afc2ac2656a86a6f3fd1e41565419839576ede2c38333434a93a0a2fe4fb6fc18ab3360579427f2a1fc3b4564b933cc5ae1793a7e2825c93860a00b215f
-  languageName: node
-  linkType: hard
-
 "@hapi/hoek@npm:^9.0.0, @hapi/hoek@npm:^9.3.0":
   version: 9.3.0
   resolution: "@hapi/hoek@npm:9.3.0"
@@ -1946,12 +1934,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@myalbum/sheet-modal@workspace:."
   dependencies:
-    "@gorhom/portal": "npm:^1.0.14"
     "@react-native-segmented-control/segmented-control": "npm:^2.5.2"
     "@react-native/eslint-config": "npm:0.74.81"
     "@types/react": "npm:^18.3.1"
     "@types/semver": "npm:^7"
     eslint: "npm:^8.19.0"
+    eslint-plugin-only-warn: "npm:^1.1.0"
     husky: "npm:^9.0.11"
     prettier: "npm:2.8.8"
     react: "npm:^18.3.1"
@@ -1962,7 +1950,6 @@ __metadata:
     semver: "npm:^7.6.2"
     typescript: "npm:^5.4.5"
   peerDependencies:
-    "@gorhom/portal": ^1.0.14
     "@types/react": "*"
     "@types/react-native": "*"
     react: "*"
@@ -4210,6 +4197,13 @@ __metadata:
     jest:
       optional: true
   checksum: 10c0/6b3c984de3550e2a72b98838120f28b1020c725921f5961a8931f8db0362b7a8a451ffbe4a92ba72ba2ffe876f8d8ecbac9b6109c7702ec4ff155e8cac593462
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-only-warn@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "eslint-plugin-only-warn@npm:1.1.0"
+  checksum: 10c0/72dfc947aa944321dfa63938f2e8bb91e7fda68f988837a8accf4551534ed04bf71957a46d00a4ddc43de5fe31055da12365b2c53c6ee6508f2ba203cd2cfa27
   languageName: node
   linkType: hard
 
@@ -6637,15 +6631,6 @@ __metadata:
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: 10c0/d924b57e7312b3b63ad21fc5b3dc0af5e78d61a1fc7cfb5457edaf26326bf62be5307cc87ffb6862ef1c2b33b0233cdb5d4f01c4c958cc0d660948b65a287a48
-  languageName: node
-  linkType: hard
-
-"nanoid@npm:^3.3.1":
-  version: 3.3.7
-  resolution: "nanoid@npm:3.3.7"
-  bin:
-    nanoid: bin/nanoid.cjs
-  checksum: 10c0/e3fb661aa083454f40500473bb69eedb85dc160e763150b9a2c567c7e9ff560ce028a9f833123b618a6ea742e311138b591910e795614a629029e86e180660f3
   languageName: node
   linkType: hard
 

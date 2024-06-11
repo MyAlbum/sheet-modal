@@ -1,5 +1,5 @@
-import SheetModalCloseButton from "./closebutton";
-import SheetHandle from "./handle";
+import SheetModalCloseButton from "./components/CloseButton";
+import SheetHandle from "./components/Handle";
 import { SheetModalProps } from "./types";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -61,8 +61,9 @@ export const defaultProps: Required<SheetModalProps> = {
   panContent: true,
   autoResize: true,
   closeOnEscape: true,
+  animateOnMount: true,
 
-  snapPoints: [350, "70%"],
+  snapPoints: ["100%"],
   snapPointIndex: -1,
   offset: [50, 30],
   minHeight: 50,

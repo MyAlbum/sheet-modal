@@ -1,5 +1,9 @@
-import { PortalProvider } from "@gorhom/portal";
-import SheetModal, { SheetModalMethods, SheetModalProvider } from "../src";
+import {
+  PortalHost,
+  SheetModal,
+  SheetModalMethods,
+  SheetModalProvider,
+} from "../src";
 import React, { useCallback, useRef } from "react";
 import {
   Pressable,
@@ -19,7 +23,7 @@ function App(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{ ...styles.flex, ...styles.background }}>
       <View style={styles.flex}>
-        <PortalProvider>
+        <PortalHost>
           <SheetModalProvider
             containerStyle={styles.container}
             handleStyle={styles.handle}
@@ -27,7 +31,7 @@ function App(): React.JSX.Element {
           >
             <Content />
           </SheetModalProvider>
-        </PortalProvider>
+        </PortalHost>
       </View>
     </GestureHandlerRootView>
   );
@@ -102,8 +106,6 @@ function Content(): React.JSX.Element {
             position={["bottom", "left"]}
             offset={[50, 30]}
             withBackdrop={false}
-            panContent={false}
-            panDownToClose={false}
           >
             <SheetModalContent title={"Floating sheet modal"} />
           </SheetModal>
@@ -122,9 +124,8 @@ function Content(): React.JSX.Element {
             position={["bottom", "left"]}
             offset={[50, 30]}
             withBackdrop={false}
-            panContent={false}
-            panDownToClose={false}
             snapPointIndex={0}
+            animateOnMount={false}
           >
             <SheetModalContent title={"This modal is opened on mount"} />
           </SheetModal>

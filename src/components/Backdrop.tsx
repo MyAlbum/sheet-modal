@@ -1,7 +1,7 @@
 import React from "react";
-import useSheetModal from "./hooks/useSheetModal";
+import useSheetModal from "../hooks/useSheetModal";
 import Animated from "react-native-reanimated";
-import useStableAnimatedStyle from "./hooks/useStableAnimatedStyle";
+import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
 
 function SheetModalBackdrop() {
   const store = useSheetModal();
@@ -39,6 +39,8 @@ function SheetModalBackdrop() {
         },
         style,
       ]}
+
+      testID={`${store.id}-backdrop`}
     >
       {store.config.backdropComponent?.()}
     </Animated.View>

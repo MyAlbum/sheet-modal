@@ -25,6 +25,12 @@ export type SheetModalProps = {
   handleStyle?: StyleProp<ViewStyle>;
 
   /**
+   * Animate the sheet modal when it mounts
+   * Defaults to true
+   */
+  animateOnMount?: boolean;
+
+  /**
    * Close the sheet modal when pressing the escape key on the web
    * Defaults to true
    */
@@ -111,6 +117,8 @@ export type SheetModalMethods = {
 export type SheetModalConfig = Required<SheetModalProps>;
 
 export type SheetModalStore = SheetModalMethods & {
+  id: string;
+
   config: SheetModalConfig;
 
   state: {
@@ -121,6 +129,7 @@ export type SheetModalStore = SheetModalMethods & {
     visibilityPercentage: SharedValue<number>;
     contentLayout: SharedValue<{ width: number; height: number }>;
     isPanning: SharedValue<boolean>;
+    isClosed: SharedValue<boolean>;
   };
 
   /**
@@ -164,4 +173,9 @@ export type ContentAnimationStyle = {
   marginRight: number;
   height?: number;
   maxWidth?: number;
+  visibility: "hidden" | "visible";
+};
+
+export type SheetModalInstanceMethods = SheetModalMethods & {
+  isClosed: () => boolean;
 };

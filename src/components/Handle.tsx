@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import useSheetModal from "./hooks/useSheetModal";
+import useSheetModal from "../hooks/useSheetModal";
 
 function SheetHandle() {
   const store = useSheetModal();

@@ -1,4 +1,4 @@
-import { SnapPoint } from "./types";
+import { SnapPoint } from "../types";
 
 type convertSnapPointsConfig = {
   windowHeight: number;
@@ -51,4 +51,32 @@ export const convertSnapPoints = (
   s = s.filter((_s, index, arr) => arr.indexOf(_s) === index);
 
   return s;
+};
+
+export const getNextSnapPointIndex = (_snapPoints: number[], _y: number) => {
+  "worklet";
+
+  const filterValue = Math.min(_y, Math.max(..._snapPoints));
+  return _snapPoints.findIndex((point) => {
+    return point > filterValue;
+  }) as number;
+};
+
+export const getPreviousSnapPointIndex = (
+  _snapPoints: number[],
+  _y: number
+) => {
+  "worklet";
+  const filterValue = Math.max(_y, Math.min(..._snapPoints));
+  const snaps = [..._snapPoints].reverse();
+
+  const reverseIndex = snaps.findIndex((point) => {
+    return point < filterValue;
+  }) as number;
+
+  if (reverseIndex === -1) {
+    return -1;
+  }
+
+  return snaps.length - reverseIndex - 1;
 };

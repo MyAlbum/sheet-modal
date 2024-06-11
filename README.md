@@ -25,6 +25,7 @@ An interactive sheet modal, fully customizable, performance focused
 - [Methods](#methods)
 - [Examples](#examples)
 - [License](#license)
+- [Contributing](#contributing)
 
 
 <br/><br/>
@@ -56,7 +57,7 @@ $ npx expo install react-native-reanimated react-native-gesture-handler @gorhom/
 
 <br/>
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > **React Native Gesture Handler** needs extra installation steps, please follow their [guide](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
 >
 > **React Native Reanimated** needs extra installation steps, please follow their [guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
@@ -71,7 +72,7 @@ Below a simple usage example
 
 ```tsx
 import React, { useCallback, useRef } from 'react';
-import SheetModal, { SheetModalMethods } from '@myalbum/sheet-modal';
+import { SheetModal, SheetModalMethods } from '@myalbum/sheet-modal';
 
 export default function App() {
   const sheetModalRef = useRef<SheetModalMethods>(null);
@@ -115,7 +116,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `closeOnEscape` | `boolean` | `true` | Close the sheet modal when pressing the escape key on the web |
 | `withClosebutton` | `boolean` | `true` | Render a close button in the header |
 | `withBackdrop` | `boolean` | `true` | Render a backdrop behind the sheet modal |
-| `snapPoints` | `Array<number \| string>` | `[350, "70%"]` | Array of snappoints for the sheet modal, in pixels (number) or percentage (string).<br/><br/>If a snapPoint is greater than the content height, the sheet modal will not expand beyond the actual content size. |
+| `snapPoints` | `Array<number \| string>` | `["100%"]` | Array of snappoints for the sheet modal, in pixels (number) or percentage (string).<br/><br/>If a snapPoint is greater than the content height, the sheet modal will not expand beyond the actual content size. |
 | `snapPointIndex` | `number` | `-1` | Initial snap index. Provide -1 to initiate sheet in closed state |
 | `panDownToClose` | `boolean` | `true` | Allow panning down to close the sheet modal |
 | `panContent` | `boolean` | `true` | Allow panning the content of the sheet modal, when false and panDownToClose is true, only the handle can be used to pan |
@@ -174,6 +175,9 @@ First bootstrap the examples by installing the dependencies
 $ yarn bootstrap
 ```
 
+> [!IMPORTANT]
+> For the bare example you need prepare the Pod project before running the example, this can be done by running: `$ cd examples/bare && yarn prepare-ios`
+
 After that you can run the examples:
 - `$ yarn expo` to start the expo example
 - `$ yarn bare` to start the bare react-native example
@@ -182,6 +186,10 @@ After that you can run the examples:
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute to this project.
 
 ## Build with ❤️
 

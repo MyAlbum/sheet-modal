@@ -28,7 +28,9 @@
     "modal-sheet"
   ],
   "scripts": {
-    "test": "yarn build",
+    "test": "yarn lint && yarn build",
+    "format": "yarn lint --fix",
+    "lint": "eslint src --ext .ts,.tsx",
     "build": "bob build",
     "bare": "cd examples/bare && yarn start",
     "expo": "cd examples/expo && yarn start",
@@ -45,12 +47,12 @@
     "clean": "git clean -fdX"
   },
   "devDependencies": {
-    "@gorhom/portal": "^1.0.14",
     "@react-native-segmented-control/segmented-control": "^2.5.2",
     "@react-native/eslint-config": "0.74.81",
     "@types/react": "^18.3.1",
     "@types/semver": "^7",
     "eslint": "^8.19.0",
+    "eslint-plugin-only-warn": "^1.1.0",
     "husky": "^9.0.11",
     "prettier": "2.8.8",
     "react": "^18.3.1",
@@ -62,7 +64,6 @@
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@gorhom/portal": "^1.0.14",
     "@types/react": "*",
     "@types/react-native": "*",
     "react": "*",

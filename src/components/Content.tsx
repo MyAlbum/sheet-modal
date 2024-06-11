@@ -1,17 +1,18 @@
 import React, { PropsWithChildren, useCallback } from "react";
-import useSheetModal from "./hooks/useSheetModal";
+import useSheetModal from "../hooks/useSheetModal";
 import { Platform, PointerEvent, View } from "react-native";
 import Animated, {
+  useAnimatedReaction,
   useAnimatedRef,
   useScrollViewOffset,
 } from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
 import { FlexAlignType } from "react-native";
-import usePan from "./hooks/usePan";
-import { ContentAnimationStyle, PanDirection } from "./types";
+import usePan from "../hooks/usePan";
+import { ContentAnimationStyle, PanDirection } from "../types";
 import HandleWrapper from "./HandleWrapper";
-import useWindowDimensions from "./hooks/useWindowDimensions";
-import useStableAnimatedStyle from "./hooks/useStableAnimatedStyle";
+import useWindowDimensions from "../hooks/useWindowDimensions";
+import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
 import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes";
 
 const SheetModalContent = (props: PropsWithChildren) => {
@@ -19,6 +20,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
   const window = useWindowDimensions();
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
+  const containerRef = useAnimatedRef<View>();
 
   const onStartShouldSetPanResponder = useCallback(
     (gestureDirection: PanDirection) => {
@@ -70,6 +72,24 @@ const SheetModalContent = (props: PropsWithChildren) => {
   const horizontalPosition = store.config.position[1];
   const horizontalOffset = store.config.offset[1];
 
+  useAnimatedReaction(
+    () => store.state.isClosed.value,
+    (isClosed) => {
+      if (Platform.OS !== "web") {
+        return;
+      }
+
+      if (isClosed) {
+        // @ts-expect-error
+        containerRef.current?.setAttribute("inert", true);
+      } else {
+        // @ts-expect-error
+        containerRef.current?.removeAttribute("inert");
+      }
+    },
+    [store.state.y]
+  );
+
   const style = useStableAnimatedStyle(() => {
     "worklet";
 
@@ -81,6 +101,8 @@ const SheetModalContent = (props: PropsWithChildren) => {
           ? "flex-start"
           : "flex-end";
       const transform = [{ translateY: -store.state.y.value }];
+      const visibility =
+        store.state.y.value <= store.config.closeY ? "hidden" : "visible";
 
       if (store.config.detached) {
         // DETACHED
@@ -96,6 +118,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: horizontalOffset,
           marginRight: horizontalOffset,
           height: store.state.height.value,
+          visibility,
         };
       } else {
         return {
@@ -106,14 +129,15 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: alignSelf === "flex-start" ? horizontalOffset : 0,
           marginRight: alignSelf === "flex-end" ? horizontalOffset : 0,
           height: store.state.height.value,
-          maxWidth: window.width - 2 * horizontalOffset,
+          maxWidth: window.value.width - 2 * horizontalOffset,
+          visibility,
         };
       }
     };
 
     return getStyle() as DefaultStyle;
   }, [
-    window.width,
+    window,
     store.config.containerStyle,
     horizontalOffset,
     horizontalPosition,
@@ -133,12 +157,14 @@ const SheetModalContent = (props: PropsWithChildren) => {
 
   return (
     <View
+      ref={containerRef}
       style={{
         position: "absolute",
         bottom: 0,
         left: 0,
         right: 0,
       }}
+      testID={`${store.id}-content`}
     >
       <Animated.View
         style={[

@@ -9,7 +9,7 @@ function useMount(
   snapPoints: SharedValue<number[]>,
   contentLayout: SharedValue<{ width: number; height: number }>
 ) {
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
   const onContentLayoutCallbacks = useRef<() => void>(() => {});
 
   const handleContentLayoutCallbacks = useCallback(() => {
@@ -29,27 +29,20 @@ function useMount(
 
   const mount = useCallback(
     (cb: () => void) => {
-      const hasLayout = snapPoints.value.length > 0;
+      const hasLayout =
+        snapPoints.value.length > 0 && contentLayout.value.height > 0;
       if (hasLayout) {
         return cb();
       }
 
       onContentLayoutCallbacks.current = cb;
-      setIsMounted(true);
     },
-    [snapPoints]
+    [contentLayout, snapPoints]
   );
 
   const unmount = useCallback(() => {
-    onContentLayoutCallbacks.current = () => {};
-
-    contentLayout.value = {
-      width: 0,
-      height: 0,
-    };
-
     setIsMounted(false);
-  }, [setIsMounted, contentLayout]);
+  }, []);
 
   return useMemo(() => {
     return {

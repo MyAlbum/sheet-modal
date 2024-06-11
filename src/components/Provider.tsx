@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useContext } from "react";
-import { SheetModalDefaultsContext } from "./context";
-import { SheetModalProps } from "./types";
+import { SheetModalDefaultsContext } from "../context";
+import { SheetModalProps } from "../types";
 
 function SheetModalProvider(_props: PropsWithChildren<SheetModalProps>) {
   const parentContext = useContext(SheetModalDefaultsContext);

@@ -1,6 +1,7 @@
 // Components
-export { default } from "./SheetModal";
-export { default as SheetModalProvider } from "./SheetModalProvider";
+export { default as SheetModal } from "./components/Modal";
+export { default as SheetModalProvider } from "./components/Provider";
+export { default as PortalHost } from "./components/Portal/PortalHost";
 
 // Hooks
 export { default as useSheetModal } from "./hooks/useSheetModal";
