@@ -5,7 +5,9 @@ type Props = {
   host?: string;
 };
 
-function PortalComponent(props: PropsWithChildren<Props>) {
+function PortalComponent(_props: PropsWithChildren<Props>) {
+  const props = { host: "default", ..._props };
+
   const [portal] = useState(
     (() => {
       const portalInstance = new Portal(props.children);
@@ -33,9 +35,5 @@ function PortalComponent(props: PropsWithChildren<Props>) {
 
   return null;
 }
-
-PortalComponent.defaultProps = {
-  host: "default",
-};
 
 export default PortalComponent;

@@ -11,7 +11,8 @@ type Props = {
   name?: string;
 };
 
-function PortalHost(props: PropsWithChildren<Props>) {
+function PortalHost(_props: PropsWithChildren<Props>) {
+  const props = { name: "default", ..._props };
   const [host] = useState(portalHosts.addHost(props.name!));
   const [content, setContent] = useState<Array<ReactNode>>([]);
 
@@ -29,9 +30,5 @@ function PortalHost(props: PropsWithChildren<Props>) {
     </Fragment>
   );
 }
-
-PortalHost.defaultProps = {
-  name: "default",
-};
 
 export default PortalHost;
