@@ -48,7 +48,31 @@ The `useSheetModal` hook returns an object with the following properties:
 
 | Property | Type | Description |
 | --- | --- | --- |
-| `present: () => void` | Present the sheet modal |
-| `dismiss: () => void` | Dismiss the sheet modal |
-| `snapTo: (index: number) => void` | Snap to a specific snap point |
+| `id` | `string` | Dutogenerated id |
+| `config` | `Object` | The current config, see [SheetModalConfig](#SheetModalConfig) |
+| `close` | `() => void` | Dismiss the sheet modal |
+| `snapTo` | `(index: number) => void` | Snap to a specific snap point |
 | `state` | `Object` | The current state of the sheet modal, see [SheetModalState](#SheetModalState) |
+| `onContentLayout` | `(w: number, h: number) => void` | Triggered when the size of the content changes |
+| `getNextSnapPointIndex` | `(snapPoints: number[], y: number) => number` | Get the next snapPointIndex based on the y position |
+| `getPreviousSnapPointIndex` | `(snapPoints: number[], y: number) => number` | Get the previous snapPointIndex based on the y position |
+| `getYForHeight` | `(h: number) => number` | Calculate the y position from the given height |
+
+### SheetModalConfig
+
+The `SheetModalConfig` is a copy of all the props that can be passed to the `SheetModal` component. All props that are not passed to the `SheetModal` component will be set to the default value.
+
+### SheetModalState
+
+The `SheetModalState` object contains the following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `height` | `SharedValue<number>` | The current height of the sheet modal |
+| `y` | `SharedValue<number>` | The current y offset of the sheet modal |
+| `snapPoints` | `SharedValue<number[]>` | Calculated snapPoints based on the current viewport dimensions |
+| `snapPointIndex` | `SharedValue<number>` | The current snap point index |
+| `visibilityPercentage` | `SharedValue<number>` | Used for the backdrop |
+| `contentLayout` | `SharedValue<{width: number, heihght: number}>` | The layout of the content |
+| `isPanning` | `SharedValue<boolean>` | Indicates if the user is currently panning the sheet modal |
+| `isClosed` | `SharedValue<boolean>` | Indicates if the sheet modal is currently closed |
