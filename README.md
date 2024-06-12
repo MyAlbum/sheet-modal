@@ -43,16 +43,16 @@ $ expo install @myalbum/sheet-modal
 <br/>
 
 ### Dependencies
-This library depends on [React Native Reanimated](https://github.com/software-mansion/react-native-reanimated), [React Native Gesture Handler](https://github.com/software-mansion/react-native-gesture-handler) & [React Native Portal](https://github.com/gorhom/react-native-portal)
+This library depends on [React Native Reanimated](https://github.com/software-mansion/react-native-reanimated) & [React Native Gesture Handler](https://github.com/software-mansion/react-native-gesture-handler)
 
 #### Install with yarn
 ```
-$ yarn add react-native-reanimated react-native-gesture-handler @gorhom/portal
+$ yarn add react-native-reanimated react-native-gesture-handler
 ```
 
 #### Install with expo
 ```
-$ npx expo install react-native-reanimated react-native-gesture-handler @gorhom/portal
+$ npx expo install react-native-reanimated react-native-gesture-handler
 ```
 
 <br/>
@@ -61,8 +61,6 @@ $ npx expo install react-native-reanimated react-native-gesture-handler @gorhom/
 > **React Native Gesture Handler** needs extra installation steps, please follow their [guide](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
 >
 > **React Native Reanimated** needs extra installation steps, please follow their [guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
->
-> **React Native Portal** needs extra installation steps, please follow their [guide](https://github.com/gorhom/react-native-portal?tab=readme-ov-file#react-native-gesture-handler)
 
 <br/><br/><br/>
 
@@ -100,7 +98,7 @@ export default function App() {
 }
 ```
 
-- [Responsive](docs/responsive.md)
+- [Responsive](docs/Responsive.md)
 <br/>Auto switch between detached/attached based on screensize
 - [Advanced usage](docs/Advanced.md)
 <br/>useSheetModal hook and get access to internal methods/state
@@ -195,4 +193,3 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute
 
 - [React Native Reanimated](https://github.com/software-mansion/react-native-reanimated)
 - [React Native Gesture Handler](https://github.com/software-mansion/react-native-gesture-handler)
-- [React Native Portal](https://github.com/gorhom/react-native-portal)

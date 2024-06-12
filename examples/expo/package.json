@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",
-    "@gorhom/portal": "^1.0.14",
     "@react-native-segmented-control/segmented-control": "2.5.2",
     "babel-plugin-module-resolver": "^5.0.2",
     "expo": "~51.0.12",
