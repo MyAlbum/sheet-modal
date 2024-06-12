@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.1.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.1)
+
+#### Added
+- Added missing `Advanced` documentation
+
+#### Removed
+- Removed Gorhom Portal dependencies in examples
+
 ## [v1.1.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.0)
 
 #### Changes
