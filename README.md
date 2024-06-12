@@ -100,7 +100,7 @@ export default function App() {
 }
 ```
 
-- [Responsive](docs/responsive.md)
+- [Responsive](docs/Responsive.md)
 <br/>Auto switch between detached/attached based on screensize
 - [Advanced usage](docs/Advanced.md)
 <br/>useSheetModal hook and get access to internal methods/state
