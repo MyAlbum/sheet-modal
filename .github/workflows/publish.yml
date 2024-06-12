@@ -1,10 +1,22 @@
 name: Publish package
 on:
   create:
+  workflow_dispatch:
+    inputs:
+      npm: 
+        description: 'Publish to npm'
+        required: false
+        default: 'true'
+      github: 
+        description: 'Publish to GitHub'
+        required: false
+        default: 'true'
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: |
+      startsWith(github.ref, 'refs/tags/') ||
+      github.event.inputs.npm == 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,7 +43,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
   publish-github:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: |
+      startsWith(github.ref, 'refs/tags/') ||
+      github.event.inputs.github == 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
