@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.2](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.2)
+#### Fixed
+- Fixed Portal bug
+
 ## [v1.1.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.1)
 
 #### Added
