@@ -1,4 +1,4 @@
-import React, { Fragment, PropsWithChildren, useEffect, useState } from "react";
+import React, { Fragment, PropsWithChildren, useEffect, useMemo } from "react";
 import { Portal, portalHosts } from "./lib/portalHosts";
 
 type Props = {
@@ -7,21 +7,19 @@ type Props = {
 
 function PortalComponent(_props: PropsWithChildren<Props>) {
   const props = { host: "default", ..._props };
+  const portal = useMemo(() => {
+    const portalInstance = new Portal(props.children);
+    const host = portalHosts.getHost(props.host!);
 
-  const [portal] = useState(
-    (() => {
-      const portalInstance = new Portal(props.children);
-      const host = portalHosts.getHost(props.host!);
+    if (!host) {
+      throw new Error(`PortalHost with name ${props.host} does not exist`);
+    } else {
+      host.addPortal(portalInstance);
+    }
 
-      if (!host) {
-        throw new Error(`PortalHost with name ${props.host} does not exist`);
-      } else {
-        host.addPortal(portalInstance);
-      }
-
-      return portalInstance;
-    })()
-  );
+    return portalInstance;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.host]);
 
   useEffect(() => {
     return () => {
