@@ -34,7 +34,7 @@ import useMount from "../hooks/useMount";
 import useKey from "../hooks/useKey";
 import useBackHandler from "../hooks/useBackHandler";
 import { WindowContext } from "../hooks/useWindowDimensions";
-import { LayoutChangeEvent, View } from "react-native";
+import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
 import sheetModalStack from "../lib/sheetModalStack";
 import PortalComponent from "./Portal/Portal";
 
@@ -62,6 +62,22 @@ const SheetModalInstance = forwardRef<
   const snapPointIndex = useSharedValue(-1);
   const _isClosed = useSharedValue(false);
   const skippedContentLayout = useSharedValue<ContentLayout | null>(null);
+
+  const borderHeight = useMemo(() => {
+    const containerStyle: ViewStyle = config.containerStyle
+      ? (StyleSheet.flatten(config.containerStyle) as {})
+      : {};
+
+    const borderTop = containerStyle
+      ? containerStyle.borderTopWidth || containerStyle.borderWidth || 0
+      : 0;
+
+    const borderBottom = containerStyle
+      ? containerStyle.borderBottomWidth || containerStyle.borderWidth || 0
+      : 0;
+
+    return borderTop + borderBottom;
+  }, [config.containerStyle]);
 
   const isClosed = useCallback(() => {
     return _isClosed.value;
@@ -227,13 +243,14 @@ const SheetModalInstance = forwardRef<
     const offsetYSpacing = config.detached
       ? config.offset[0] * 2
       : config.offset[0];
+
+    const neededHeight = contentLayout.value.height
+      ? contentLayout.value.height + borderHeight
+      : 0;
     const convertConfig = {
       windowHeight: window.value.height,
-      maxHeight: Math.min(
-        window.value.height - offsetYSpacing,
-        contentLayout.value.height
-      ),
-      minHeight: Math.min(contentLayout.value.height, config.minHeight),
+      maxHeight: Math.min(window.value.height - offsetYSpacing, neededHeight),
+      minHeight: Math.min(neededHeight, config.minHeight),
     };
     const _snapPoints = convertSnapPoints(config.snapPoints, convertConfig);
 
@@ -290,6 +307,7 @@ const SheetModalInstance = forwardRef<
     config.autoResize,
     window,
     contentLayout,
+    borderHeight,
     snapPoints,
     y,
     snapPointIndex,
