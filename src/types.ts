@@ -49,6 +49,12 @@ export type SheetModalProps = {
   withBackdrop?: boolean;
 
   /**
+   * Trap focus inside the sheet modal
+   * Defaults to true
+   */
+  withFocusTrap?: boolean;
+
+  /**
    * Array of snappoints for the sheet modal, in pixels (number) or percentage (string). If a snapPoint is greater than the content height, the sheet modal will not expand beyond the actual content size.
    * Defaults to [350, "70%"]
    */
@@ -130,6 +136,7 @@ export type SheetModalStore = SheetModalMethods & {
     contentLayout: SharedValue<{ width: number; height: number }>;
     isPanning: SharedValue<boolean>;
     isClosed: SharedValue<boolean>;
+    isActive: SharedValue<boolean>;
   };
 
   /**

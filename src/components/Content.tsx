@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { PropsWithChildren, useCallback, useState } from "react";
 import useSheetModal from "../hooks/useSheetModal";
 import { Platform, PointerEvent, View } from "react-native";
 import Animated, {
@@ -14,6 +14,7 @@ import HandleWrapper from "./HandleWrapper";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
 import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes";
+import FocusTrap from "./FocusTrap";
 
 const SheetModalContent = (props: PropsWithChildren) => {
   const store = useSheetModal();
@@ -155,6 +156,20 @@ const SheetModalContent = (props: PropsWithChildren) => {
     [store.state.isPanning]
   );
 
+  const [active, setActive] = useState(false);
+  useAnimatedReaction(
+    () =>
+      store.state.visibilityPercentage.value === 1 &&
+      store.state.isActive.value,
+    (v) => {
+      if (v) {
+        setActive(true);
+      } else {
+        setActive(false);
+      }
+    }
+  );
+
   return (
     <View
       ref={containerRef}
@@ -178,37 +193,45 @@ const SheetModalContent = (props: PropsWithChildren) => {
         ]}
         onPointerMove={onPointerMove}
       >
-        <View
-          style={{
-            flex: 1,
-
-            // @ts-ignore
-            borderRadius: store.config.containerStyle?.borderRadius ?? 0,
-            overflow: "hidden",
+        <FocusTrap
+          active={store.config.withFocusTrap && active}
+          focusTrapOptions={{
+            allowOutsideClick: true,
+            preventScroll: true,
           }}
         >
-          <Animated.ScrollView
+          <View
             style={{
-              width: "100%",
-            }}
-            onContentSizeChange={store.onContentLayout}
-            ref={scrollRef}
-            alwaysBounceVertical={false}
-            showsVerticalScrollIndicator={false}
-          >
-            <GestureDetector gesture={pan}>
-              <View>{props.children}</View>
-            </GestureDetector>
-          </Animated.ScrollView>
+              flex: 1,
 
-          <GestureDetector gesture={topbarPan}>
-            <View style={store.config.headerStyle}>
-              <HandleWrapper />
-              {store.config.withClosebutton &&
-                store.config.closeButtonComponent?.()}
-            </View>
-          </GestureDetector>
-        </View>
+              // @ts-ignore
+              borderRadius: store.config.containerStyle?.borderRadius ?? 0,
+              overflow: "hidden",
+            }}
+          >
+            <Animated.ScrollView
+              style={{
+                width: "100%",
+              }}
+              onContentSizeChange={store.onContentLayout}
+              ref={scrollRef}
+              alwaysBounceVertical={false}
+              showsVerticalScrollIndicator={false}
+            >
+              <GestureDetector gesture={pan}>
+                <View>{props.children}</View>
+              </GestureDetector>
+            </Animated.ScrollView>
+
+            <GestureDetector gesture={topbarPan}>
+              <View style={store.config.headerStyle}>
+                <HandleWrapper />
+                {store.config.withClosebutton &&
+                  store.config.closeButtonComponent?.()}
+              </View>
+            </GestureDetector>
+          </View>
+        </FocusTrap>
       </Animated.View>
     </View>
   );

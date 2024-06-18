@@ -57,6 +57,7 @@ export const overDragResistanceFactor = 5;
 export const defaultProps: Required<SheetModalProps> = {
   withClosebutton: true,
   withBackdrop: true,
+  withFocusTrap: true,
   panDownToClose: true,
   panContent: true,
   autoResize: true,

@@ -35,8 +35,8 @@ import useKey from "../hooks/useKey";
 import useBackHandler from "../hooks/useBackHandler";
 import { WindowContext } from "../hooks/useWindowDimensions";
 import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
-import sheetModalStack from "../lib/sheetModalStack";
 import PortalComponent from "./Portal/Portal";
+import { useStackItem } from "../hooks/useStackItem/useStackItem";
 
 const SheetModalInstance = forwardRef<
   SheetModalInstanceMethods,
@@ -44,11 +44,11 @@ const SheetModalInstance = forwardRef<
 >((_props, ref) => {
   const height = useSharedValue(0);
   const id = useId();
+  const stackItem = useStackItem(id);
   const config = useSheetModalConfigInternal(_props);
   const _prevDetached = useRef(config.detached);
   const _prevPosition = useRef(config.position);
   const _prevWindowHeight = useRef(0);
-
   const contentLayout = useSharedValue<ContentLayout>({
     width: 0,
     height: 0,
@@ -157,17 +157,24 @@ const SheetModalInstance = forwardRef<
     [config.detached, config.position, config.offset, window]
   );
 
+  useAnimatedReaction(
+    () => visibilityPercentage.value,
+    (v, prevV) => {
+      if (v < 1 && prevV === 1) {
+        runOnJS(stackItem.remove)();
+      }
+    },
+    [visibilityPercentage]
+  );
+
   const snapToIndex = useCallback(
     (index: number = 0, animate: boolean = true) => {
       if (_isClosed.value) {
         return;
       }
 
-      if (index > -1) {
-        sheetModalStack.push(id);
-      }
-
       snapPointIndex.value = index;
+      stackItem.push();
 
       mount(() => {
         cancelAnimation(height);
@@ -208,8 +215,8 @@ const SheetModalInstance = forwardRef<
     [
       _isClosed,
       snapPointIndex,
+      stackItem,
       mount,
-      id,
       height,
       visibilityPercentage,
       y,
@@ -226,7 +233,6 @@ const SheetModalInstance = forwardRef<
     _isClosed.value = true;
     cancelAnimation(y);
     cancelAnimation(visibilityPercentage);
-    sheetModalStack.remove(id);
 
     visibilityPercentage.value = withSpring(0, AniConfig);
     y.value = withSpring(config.closeY, AniConfig, () => {
@@ -236,7 +242,7 @@ const SheetModalInstance = forwardRef<
       visibilityPercentage.value = 0;
       runOnJS(unmount)();
     });
-  }, [_isClosed, y, visibilityPercentage, id, config.closeY, unmount]);
+  }, [_isClosed, y, visibilityPercentage, config.closeY, unmount]);
 
   const updateSnapPoints = useCallback(() => {
     // Update snapPoints using window size and layout
@@ -316,10 +322,7 @@ const SheetModalInstance = forwardRef<
   ]);
 
   useKey("Escape", (e) => {
-    if (
-      !store.state.visibilityPercentage.value ||
-      sheetModalStack.getTop() !== id
-    ) {
+    if (!store.state.visibilityPercentage.value || !stackItem.isActive.value) {
       return;
     }
 
@@ -366,6 +369,7 @@ const SheetModalInstance = forwardRef<
         y,
         visibilityPercentage,
         contentLayout,
+        isActive: stackItem.isActive,
       },
 
       close,
@@ -382,29 +386,30 @@ const SheetModalInstance = forwardRef<
     isPanning,
     _isClosed,
     snapPoints,
+    snapPointIndex,
     height,
     y,
     visibilityPercentage,
     contentLayout,
-    onContentLayout,
+    stackItem,
     close,
-    getYForHeight,
     snapToIndex,
-    snapPointIndex,
+    onContentLayout,
+    getYForHeight,
   ]);
 
   useBackHandler(
     useCallback(() => {
       if (
         !store.state.visibilityPercentage.value ||
-        sheetModalStack.getTop() !== id
+        !stackItem.isActive.value
       ) {
         return false;
       }
 
       close();
       return true;
-    }, [close, id, store])
+    }, [close, stackItem.isActive, store.state.visibilityPercentage])
   );
 
   if (!isMounted) {
