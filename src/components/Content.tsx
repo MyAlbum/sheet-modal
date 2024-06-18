@@ -197,7 +197,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
           active={store.config.withFocusTrap && active}
           focusTrapOptions={{
             allowOutsideClick: true,
-            preventScroll: true,
           }}
         >
           <View
