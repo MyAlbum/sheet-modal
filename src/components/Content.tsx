@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useCallback, useState } from "react";
 import useSheetModal from "../hooks/useSheetModal";
 import { Platform, PointerEvent, View } from "react-native";
 import Animated, {
+  runOnJS,
   useAnimatedReaction,
   useAnimatedRef,
   useScrollViewOffset,
@@ -163,11 +164,12 @@ const SheetModalContent = (props: PropsWithChildren) => {
       store.state.isActive.value,
     (v) => {
       if (v) {
-        setActive(true);
+        runOnJS(setActive)(true);
       } else {
-        setActive(false);
+        runOnJS(setActive)(false);
       }
-    }
+    },
+    [store.state.isActive, store.state.visibilityPercentage]
   );
 
   return (
