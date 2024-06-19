@@ -1,6 +1,16 @@
 # Changelog
 
-## [v1.1.4](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.4)
+## [v1.3.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.3.0)
+#### Added
+- onClosed prop (triggered after close animation is finished)
+- onOpened prop (triggered after opening animation is finished)
+
+#### Fixed
+- fixed an issue causing issues detecting top-most modal
+- closeButton focusRing fix (web)
+- always keep visibilityPercentage between 0 and 1
+
+## [v1.2.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.2.0)
 #### Added
 - Support for withFocusTrap (web) using focus-trap-react
 

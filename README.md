@@ -125,6 +125,8 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `detached` | `boolean` | `false` | Detach the sheet modal from the bottom of the screen |
 | `position` | `["bottom" \| "center" \| "top", "left" \| "center" \| "right"]` | `["center", "center"]` | Position of the sheet modal, [vertical, horizontal] <br/><br/> *Attached mode ignores vertical position* |
 | `offset` | `[number, number]` | `[50, 30]` | Offset from the screen, [vertical, horizontal] |
+| `onClosed` | `function` | `undefined` | Optional callback triggered after closing animation ended
+| `onOpened` | `function` | `undefined` | Optional callback triggered after opening animation ended
 
 
 

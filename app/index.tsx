@@ -95,6 +95,12 @@ function Content(): React.JSX.Element {
             ref={attachedSheetModalRef}
             snapPoints={snapPoints}
             detached={false}
+            onClosed={() => {
+              console.log("closed");
+            }}
+            onOpened={() => {
+              console.log("opened");
+            }}
           >
             <SheetModalContent title={"Sheet modal attached to bottom"} />
           </SheetModal>
