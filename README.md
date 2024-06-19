@@ -113,6 +113,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | --- | --- | --- | --- |
 | `closeOnEscape` | `boolean` | `true` | Close the sheet modal when pressing the escape key on the web |
 | `withClosebutton` | `boolean` | `true` | Render a close button in the header |
+| `withFocusTrap` | `boolean` | `true` | Trap focus inside Modal (web)
 | `withBackdrop` | `boolean` | `true` | Render a backdrop behind the sheet modal |
 | `snapPoints` | `Array<number \| string>` | `["100%"]` | Array of snappoints for the sheet modal, in pixels (number) or percentage (string).<br/><br/>If a snapPoint is greater than the content height, the sheet modal will not expand beyond the actual content size. |
 | `snapPointIndex` | `number` | `-1` | Initial snap index. Provide -1 to initiate sheet in closed state |
@@ -193,3 +194,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute
 
 - [React Native Reanimated](https://github.com/software-mansion/react-native-reanimated)
 - [React Native Gesture Handler](https://github.com/software-mansion/react-native-gesture-handler)
+- [focus-trap-react](https://github.com/focus-trap/focus-trap-react)
