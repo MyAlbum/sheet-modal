@@ -87,6 +87,9 @@ export const defaultProps: Required<SheetModalProps> = {
   handleStyle: styleSheet.handle,
 
   closeY: -50,
+
+  onClosed: () => {},
+  onOpened: () => {},
 };
 
 export const defaultAttachedOffset: Required<SheetModalProps>["offset"] = [
