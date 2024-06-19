@@ -1,6 +1,10 @@
 # Changelog
 
-## [v1.1.3](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.2)
+## [v1.1.4](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.4)
+#### Added
+- Support for withFocusTrap (web) using focus-trap-react
+
+## [v1.1.3](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.1.3)
 #### Fixed
 - Fixed height calculations when using borders in containerStyle
 
