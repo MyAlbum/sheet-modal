@@ -72,6 +72,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
     paddingHorizontal: 16,
+    marginVertical: 5,
   },
   circle: {
     alignItems: "center",

@@ -106,6 +106,7 @@ function Content(): React.JSX.Element {
             position={["bottom", "left"]}
             offset={[50, 30]}
             withBackdrop={false}
+            withFocusTrap={false}
           >
             <SheetModalContent title={"Floating sheet modal"} />
           </SheetModal>
@@ -126,6 +127,7 @@ function Content(): React.JSX.Element {
             withBackdrop={false}
             snapPointIndex={0}
             animateOnMount={false}
+            withFocusTrap={false}
           >
             <SheetModalContent title={"This modal is opened on mount"} />
           </SheetModal>
