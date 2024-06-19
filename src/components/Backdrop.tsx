@@ -39,7 +39,6 @@ function SheetModalBackdrop() {
         },
         style,
       ]}
-
       testID={`${store.id}-backdrop`}
     >
       {store.config.backdropComponent?.()}
