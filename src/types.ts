@@ -15,6 +15,8 @@ export type SheetModalProps = {
   handleComponent?: () => ReactNode;
   backdropComponent?: () => ReactNode;
   closeButtonComponent?: () => ReactNode;
+  onClosed?: () => void;
+  onOpened?: () => void;
 
   containerStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   headerStyle?: StyleProp<ViewStyle>;

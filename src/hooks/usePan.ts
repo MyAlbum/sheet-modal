@@ -174,7 +174,11 @@ function usePan(panConfig: PanConfig) {
       if (!store.state.isPanning.value && !isFinishingPan.value) {
         return;
       }
-      store.state.visibilityPercentage.value = Math.min(1, y / 100);
+
+      const newV = Math.max(0, Math.min(1, y / 100));
+      if (newV !== store.state.visibilityPercentage.value) {
+        store.state.visibilityPercentage.value = newV;
+      }
     },
     [store.state.y]
   );

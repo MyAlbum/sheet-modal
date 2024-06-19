@@ -35,24 +35,19 @@ export default function SheetModalCloseButton() {
     <Pressable
       onPress={onPress}
       android_ripple={{ foreground: true, borderless: true }}
-      style={stylesheet.container}
+      style={circleStyle}
       hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
     >
-      <View style={circleStyle}>
-        <View style={[stylesheet.x, stylesheet.x1, ...iconStyle]} />
-        <View style={[stylesheet.x, stylesheet.x2, ...iconStyle]} />
-      </View>
+      <View style={[stylesheet.x, stylesheet.x1, ...iconStyle]} />
+      <View style={[stylesheet.x, stylesheet.x2, ...iconStyle]} />
     </Pressable>
   );
 }
 
 const stylesheet = StyleSheet.create({
-  container: {
+  circle: {
     top: 15,
     right: 15,
-    overflow: "hidden",
-  },
-  circle: {
     width: 30,
     height: 30,
     borderRadius: 15,

@@ -37,6 +37,7 @@ import { WindowContext } from "../hooks/useWindowDimensions";
 import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
 import PortalComponent from "./Portal/Portal";
 import { useStackItem } from "../hooks/useStackItem/useStackItem";
+import { useEventsToProps } from "../hooks/useEventsToProps";
 
 const SheetModalInstance = forwardRef<
   SheetModalInstanceMethods,
@@ -158,13 +159,13 @@ const SheetModalInstance = forwardRef<
   );
 
   useAnimatedReaction(
-    () => visibilityPercentage.value,
+    () => [visibilityPercentage.value, isPanning.value] as [number, boolean],
     (v, prevV) => {
-      if (v < 1 && prevV === 1) {
+      if (v[0] === 0 && prevV?.[0] && !isPanning.value) {
         runOnJS(stackItem.remove)();
       }
     },
-    [visibilityPercentage]
+    [visibilityPercentage, isPanning]
   );
 
   const snapToIndex = useCallback(
@@ -397,6 +398,8 @@ const SheetModalInstance = forwardRef<
     onContentLayout,
     getYForHeight,
   ]);
+
+  useEventsToProps(store);
 
   useBackHandler(
     useCallback(() => {
