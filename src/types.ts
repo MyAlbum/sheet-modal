@@ -118,8 +118,19 @@ export type SheetModalProps = {
 };
 
 export type SheetModalMethods = {
+  /**
+   * Close the sheet modal
+   */
   close: () => void;
+
+  /**
+   * Snap the sheet modal to a specific SnapPoint index
+   */
   snapToIndex: (index: number, animate?: boolean) => void;
+
+  /**
+   * Check if the sheet modal is closed
+   */
   isClosed: () => boolean;
 };
 
@@ -162,9 +173,19 @@ export type SheetModalStore = {
    */
   getYForHeight: (h: number) => number;
 
+  /**
+   * Set the focus on a node
+   */
   autoFocus: (node: unknown) => void;
 
+  /**
+   * Close the sheet modal
+   */
   close: SheetModalMethods["close"];
+
+  /**
+   * Snap the sheet modal to a specific SnapPoint index
+   */
   snapToIndex: SheetModalMethods["snapToIndex"];
 };
 
