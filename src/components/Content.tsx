@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useState } from "react";
+import React, { PropsWithChildren, useCallback, useMemo, useRef } from "react";
 import useSheetModal from "../hooks/useSheetModal";
 import { Platform, PointerEvent, View } from "react-native";
 import Animated, {
@@ -23,6 +23,11 @@ const SheetModalContent = (props: PropsWithChildren) => {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const containerRef = useAnimatedRef<View>();
+  const _setReadyForFocus = useRef<() => void>(() => {});
+
+  const setReadyForFocus = useCallback(() => {
+    _setReadyForFocus.current?.();
+  }, []);
 
   const onStartShouldSetPanResponder = useCallback(
     (gestureDirection: PanDirection) => {
@@ -157,20 +162,28 @@ const SheetModalContent = (props: PropsWithChildren) => {
     [store.state.isPanning]
   );
 
-  const [active, setActive] = useState(false);
   useAnimatedReaction(
     () =>
       store.state.visibilityPercentage.value === 1 &&
       store.state.isActive.value,
     (v) => {
       if (v) {
-        runOnJS(setActive)(true);
-      } else {
-        runOnJS(setActive)(false);
+        runOnJS(setReadyForFocus)();
       }
     },
     [store.state.isActive, store.state.visibilityPercentage]
   );
+
+  const focusTrapOptions = useMemo(() => {
+    return {
+      allowOutsideClick: true,
+      checkCanFocusTrap: () => {
+        return new Promise<void>((resolve) => {
+          _setReadyForFocus.current = resolve;
+        });
+      },
+    };
+  }, []);
 
   return (
     <View
@@ -196,10 +209,8 @@ const SheetModalContent = (props: PropsWithChildren) => {
         onPointerMove={onPointerMove}
       >
         <FocusTrap
-          active={store.config.withFocusTrap && active}
-          focusTrapOptions={{
-            allowOutsideClick: true,
-          }}
+          active={store.config.withFocusTrap}
+          focusTrapOptions={focusTrapOptions}
         >
           <View
             style={{

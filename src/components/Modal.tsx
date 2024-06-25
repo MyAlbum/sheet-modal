@@ -39,6 +39,10 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
       activeInstance?.close();
     }, []);
 
+    const isClosed = useCallback(() => {
+      return refs.current.at(-1)?.isClosed() ?? false;
+    }, []);
+
     const snapToIndex = useCallback(
       (index: number) => {
         if (index < 0) {
@@ -71,6 +75,7 @@ const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
     useImperativeHandle(ref, () => ({
       close,
       snapToIndex,
+      isClosed,
     }));
 
     return <>{instances}</>;

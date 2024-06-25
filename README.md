@@ -160,7 +160,8 @@ The methods below can be used in the `SheetModal` component
 | Method | Description |
 | --- | --- |
 | `snapToIndex: (index: number, animate?: boolean) => void` | Snap to a specific snap point |
-| `dismiss: () => void` | Dismiss the sheet modal |
+| `close: () => void` | Closes the sheet modal |
+| `autoFocus: (node: ReactNode) => void` | Sets the active focus on a node |
 
 <br/><br/><br/>
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.4.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.4.0)
+#### Added
+- `autoFocus` method in `SheetModalMethods` to focus a node in the sheet modal
+
 ## [v1.3.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.3.0)
 #### Added
 - onClosed prop (triggered after close animation is finished)
