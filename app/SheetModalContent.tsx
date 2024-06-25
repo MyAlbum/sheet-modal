@@ -1,7 +1,13 @@
 import React from "react";
 import { useSheetModal } from "../src";
 import { styles } from "./styles";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { snapPoints } from "./const";
 
 type Props = {
@@ -37,6 +43,8 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
           ))}
         </View>
       </ScrollView>
+
+      <TextInput placeholder="search" ref={currentModal.autoFocus} />
 
       <View style={styles.rectContainer}>
         {Array.from({ length: 200 }).map((_, index) => (

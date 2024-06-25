@@ -38,6 +38,7 @@ import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
 import PortalComponent from "./Portal/Portal";
 import { useStackItem } from "../hooks/useStackItem/useStackItem";
 import { useEventsToProps } from "../hooks/useEventsToProps";
+import useAutoFocus from "../hooks/useAutoFocus";
 
 const SheetModalInstance = forwardRef<
   SheetModalInstanceMethods,
@@ -350,6 +351,11 @@ const SheetModalInstance = forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const autoFocus = useAutoFocus({
+    visibilityPercentage,
+    isActive: stackItem.isActive,
+  });
+
   useImperativeHandle(ref, () => ({
     close,
     snapToIndex,
@@ -375,6 +381,7 @@ const SheetModalInstance = forwardRef<
 
       close,
       snapToIndex,
+      autoFocus,
 
       onContentLayout,
       getNextSnapPointIndex,
@@ -395,6 +402,7 @@ const SheetModalInstance = forwardRef<
     stackItem,
     close,
     snapToIndex,
+    autoFocus,
     onContentLayout,
     getYForHeight,
   ]);

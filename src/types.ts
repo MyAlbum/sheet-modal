@@ -120,11 +120,12 @@ export type SheetModalProps = {
 export type SheetModalMethods = {
   close: () => void;
   snapToIndex: (index: number, animate?: boolean) => void;
+  isClosed: () => boolean;
 };
 
 export type SheetModalConfig = Required<SheetModalProps>;
 
-export type SheetModalStore = SheetModalMethods & {
+export type SheetModalStore = {
   id: string;
 
   config: SheetModalConfig;
@@ -160,6 +161,11 @@ export type SheetModalStore = SheetModalMethods & {
    * returns the y position for a given SnapPoint index
    */
   getYForHeight: (h: number) => number;
+
+  autoFocus: (node: unknown) => void;
+
+  close: SheetModalMethods["close"];
+  snapToIndex: SheetModalMethods["snapToIndex"];
 };
 
 export type ContentLayout = {
