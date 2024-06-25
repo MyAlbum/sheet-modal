@@ -1,6 +1,7 @@
 import { useCallback, useRef } from "react";
 import {
   SharedValue,
+  runOnJS,
   useAnimatedReaction,
   useSharedValue,
 } from "react-native-reanimated";
@@ -55,7 +56,7 @@ function useAutoFocus(config: Config) {
       const prevFocusReady = prev ? prev[0] && prev[1] >= minVisibility : false;
 
       if (focusReady && !prevFocusReady) {
-        handleFocus();
+        runOnJS(handleFocus)();
       }
     },
     [isActive, visibilityPercentage]
