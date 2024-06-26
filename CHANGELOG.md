@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.4.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.4.1)
+### Changed
+- Updated `react-native` in bare example
+- Updated `expo` in expo example
+- Moved `focus-trap-react` to `devDependencies` and `peerDependencies
+- Focus trap does not initially focus the first focusable element anymore
+
 ## [v1.4.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.4.0)
 #### Added
 - `autoFocus` method in `SheetModalMethods` to focus a node in the sheet modal
