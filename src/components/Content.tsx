@@ -15,7 +15,7 @@ import HandleWrapper from "./HandleWrapper";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
 import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes";
-import FocusTrap from "./FocusTrap";
+import FocusTrap, { FocusTrapOptions } from "./FocusTrap";
 
 const SheetModalContent = (props: PropsWithChildren) => {
   const store = useSheetModal();
@@ -174,9 +174,10 @@ const SheetModalContent = (props: PropsWithChildren) => {
     [store.state.isActive, store.state.visibilityPercentage]
   );
 
-  const focusTrapOptions = useMemo(() => {
+  const focusTrapOptions = useMemo<FocusTrapOptions>(() => {
     return {
       allowOutsideClick: true,
+      initialFocus: false,
       checkCanFocusTrap: () => {
         return new Promise<void>((resolve) => {
           _setReadyForFocus.current = resolve;

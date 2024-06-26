@@ -1953,6 +1953,7 @@ __metadata:
   peerDependencies:
     "@types/react": "*"
     "@types/react-native": "*"
+    focus-trap-react: "*"
     react: "*"
     react-native: "*"
     react-native-gesture-handler: ">=1.10.1"

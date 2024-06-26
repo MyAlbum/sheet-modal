@@ -14,12 +14,13 @@
     "@expo/metro-runtime": "~3.2.1",
     "@react-native-segmented-control/segmented-control": "2.5.2",
     "babel-plugin-module-resolver": "^5.0.2",
-    "expo": "~51.0.12",
+    "expo": "~51.0.15",
     "expo-constants": "~16.0.2",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.16",
     "expo-screen-orientation": "~7.0.5",
     "expo-status-bar": "~1.12.1",
+    "focus-trap-react": "^10.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.2",
@@ -30,7 +31,7 @@
     "react-native-web": "~0.19.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.6"
+    "@babel/core": "^7.24.7"
   },
   "private": true,
   "packageManager": "yarn@4.1.1"
