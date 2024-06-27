@@ -111,7 +111,6 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `closeOnEscape` | `boolean` | `true` | Close the sheet modal when pressing the escape key on the web |
 | `withClosebutton` | `boolean` | `true` | Render a close button in the header |
 | `withFocusTrap` | `boolean` | `true` | Trap focus inside Modal (web)
 | `withBackdrop` | `boolean` | `true` | Render a backdrop behind the sheet modal |
