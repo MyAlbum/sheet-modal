@@ -5,7 +5,6 @@ import Animated, {
   runOnJS,
   useAnimatedReaction,
   useAnimatedRef,
-  useScrollViewOffset,
 } from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
 import { FlexAlignType } from "react-native";
@@ -20,8 +19,6 @@ import FocusTrap, { FocusTrapOptions } from "./FocusTrap";
 const SheetModalContent = (props: PropsWithChildren) => {
   const store = useSheetModal();
   const window = useWindowDimensions();
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
   const containerRef = useAnimatedRef<View>();
   const _setReadyForFocus = useRef<() => void>(() => {});
 
@@ -40,7 +37,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
       const canPanUp = store.state.height.value < relevantSnapPoints.at(-1)!;
       const canScroll =
         store.state.height.value < store.state.contentLayout.value.height;
-      const isScrolledAtTop = scrollOffset.value <= 0;
+      const isScrolledAtTop = true; //scrollOffset.value <= 0;
 
       if (gestureDirection === "up") {
         if (!canPanUp) {
@@ -55,7 +52,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
       }
     },
     [
-      scrollOffset,
       store.state.contentLayout,
       store.state.height,
       store.state.snapPoints,
@@ -111,6 +107,11 @@ const SheetModalContent = (props: PropsWithChildren) => {
       const visibility =
         store.state.y.value <= store.config.closeY ? "hidden" : "visible";
 
+      const width = Math.min(
+        store.state.contentLayout.value.width,
+        window.value.width - 2 * horizontalOffset
+      );
+
       if (store.config.detached) {
         // DETACHED
         return {
@@ -125,6 +126,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: horizontalOffset,
           marginRight: horizontalOffset,
           height: store.state.height.value,
+          width,
           visibility,
         };
       } else {
@@ -136,7 +138,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: alignSelf === "flex-start" ? horizontalOffset : 0,
           marginRight: alignSelf === "flex-end" ? horizontalOffset : 0,
           height: store.state.height.value,
-          maxWidth: window.value.width - 2 * horizontalOffset,
+          width,
           visibility,
         };
       }
@@ -222,19 +224,19 @@ const SheetModalContent = (props: PropsWithChildren) => {
               overflow: "hidden",
             }}
           >
-            <Animated.ScrollView
+            <View
               style={{
                 width: "100%",
+                height: "100%",
               }}
-              onContentSizeChange={store.onContentLayout}
-              ref={scrollRef}
-              alwaysBounceVertical={false}
-              showsVerticalScrollIndicator={false}
+              onLayout={(e) => {
+                store.onContentLayout(e.nativeEvent.layout.width, 2000);
+              }}
             >
               <GestureDetector gesture={pan}>
-                <View>{props.children}</View>
+                <View style={{ height: "100%" }}>{props.children}</View>
               </GestureDetector>
-            </Animated.ScrollView>
+            </View>
 
             <GestureDetector gesture={topbarPan}>
               <View style={store.config.headerStyle}>

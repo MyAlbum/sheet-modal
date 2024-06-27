@@ -202,6 +202,7 @@ export type ContentAnimationStyle = {
   marginLeft: number;
   marginRight: number;
   height?: number;
+  width: number;
   maxWidth?: number;
   visibility: "hidden" | "visible";
 };
