@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.0.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.0.0)
+### Removed
+- Removed `closeOnEscape`. Upon careful consideration we have determined that integrating this feature is too dependent on the user's specific implementation.
+
 ## [v1.4.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v1.4.1)
 ### Changed
 - Updated `react-native` in bare example

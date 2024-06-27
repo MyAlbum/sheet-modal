@@ -31,7 +31,6 @@ import {
 } from "../lib/utils";
 import useSheetModalConfigInternal from "../hooks/useSheetModalInternal";
 import useMount from "../hooks/useMount";
-import useKey from "../hooks/useKey";
 import useBackHandler from "../hooks/useBackHandler";
 import { WindowContext } from "../hooks/useWindowDimensions";
 import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
@@ -322,17 +321,6 @@ const SheetModalInstance = forwardRef<
     getYForHeight,
     height,
   ]);
-
-  useKey("Escape", (e) => {
-    if (!store.state.visibilityPercentage.value || !stackItem.isActive.value) {
-      return;
-    }
-
-    if (store.config.closeOnEscape) {
-      close();
-      e.stopImmediatePropagation();
-    }
-  });
 
   useAnimatedReaction(
     () => [contentLayout.value, window.value],

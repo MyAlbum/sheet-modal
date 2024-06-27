@@ -33,12 +33,6 @@ export type SheetModalProps = {
   animateOnMount?: boolean;
 
   /**
-   * Close the sheet modal when pressing the escape key on the web
-   * Defaults to true
-   */
-  closeOnEscape?: boolean;
-
-  /**
    * Render a close button in the header
    * Defaults to true
    */

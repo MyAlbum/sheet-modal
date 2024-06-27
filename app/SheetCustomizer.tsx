@@ -26,7 +26,6 @@ export default function SheetCustomizer() {
   }, [snapPointText]);
 
   const [autoResize, setAutoResize] = React.useState(true);
-  const [closeOnEscape, setCloseOnEscape] = React.useState(true);
   const [closeY, setCloseY] = React.useState(-50);
   const [detached, setDetached] = React.useState(false);
   const [minHeight, setMinHeight] = React.useState(50);
@@ -54,11 +53,6 @@ export default function SheetCustomizer() {
       <View style={styles.option}>
         <Text>Auto resize</Text>
         <Switch value={autoResize} onValueChange={setAutoResize} />
-      </View>
-
-      <View style={styles.option}>
-        <Text>Close on escape</Text>
-        <Switch value={closeOnEscape} onValueChange={setCloseOnEscape} />
       </View>
 
       <View style={styles.option}>
@@ -167,7 +161,6 @@ export default function SheetCustomizer() {
         ref={customSheetModalRef}
         snapPoints={snapPoints}
         autoResize={autoResize}
-        closeOnEscape={closeOnEscape}
         closeY={closeY}
         detached={detached}
         minHeight={minHeight}
