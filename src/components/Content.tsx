@@ -1,11 +1,16 @@
 import React, { PropsWithChildren, useCallback, useMemo, useRef } from "react";
 import useSheetModal from "../hooks/useSheetModal";
-import { Platform, PointerEvent, View } from "react-native";
+import {
+  LayoutChangeEvent,
+  Platform,
+  PointerEvent,
+  View,
+  ViewStyle,
+} from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedReaction,
   useAnimatedRef,
-  useScrollViewOffset,
 } from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
 import { FlexAlignType } from "react-native";
@@ -20,8 +25,6 @@ import FocusTrap, { FocusTrapOptions } from "./FocusTrap";
 const SheetModalContent = (props: PropsWithChildren) => {
   const store = useSheetModal();
   const window = useWindowDimensions();
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
   const containerRef = useAnimatedRef<View>();
   const _setReadyForFocus = useRef<() => void>(() => {});
 
@@ -40,7 +43,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
       const canPanUp = store.state.height.value < relevantSnapPoints.at(-1)!;
       const canScroll =
         store.state.height.value < store.state.contentLayout.value.height;
-      const isScrolledAtTop = scrollOffset.value <= 0;
+      const isScrolledAtTop = true; //scrollOffset.value <= 0;
 
       if (gestureDirection === "up") {
         if (!canPanUp) {
@@ -55,7 +58,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
       }
     },
     [
-      scrollOffset,
       store.state.contentLayout,
       store.state.height,
       store.state.snapPoints,
@@ -111,32 +113,30 @@ const SheetModalContent = (props: PropsWithChildren) => {
       const visibility =
         store.state.y.value <= store.config.closeY ? "hidden" : "visible";
 
+      const width = Math.min(
+        store.state.contentLayout.value.width,
+        window.value.width - 2 * horizontalOffset
+      );
+
       if (store.config.detached) {
         // DETACHED
         return {
           transform,
           alignSelf,
-          // @ts-ignore
-          // eslint-disable-next-line prettier/prettier
-          borderBottomLeftRadius: store.config.containerStyle?.borderBottomLeftRadius ?? store.config.containerStyle?.borderRadius ?? 16,
-          // @ts-ignore
-          // eslint-disable-next-line prettier/prettier
-          borderBottomRightRadius: store.config.containerStyle?.borderBottomRightRadius ?? store.config.containerStyle?.borderRadius ?? 16,
           marginLeft: horizontalOffset,
           marginRight: horizontalOffset,
           height: store.state.height.value,
+          width,
           visibility,
         };
       } else {
         return {
           transform,
           alignSelf,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
           marginLeft: alignSelf === "flex-start" ? horizontalOffset : 0,
           marginRight: alignSelf === "flex-end" ? horizontalOffset : 0,
           height: store.state.height.value,
-          maxWidth: window.value.width - 2 * horizontalOffset,
+          width,
           visibility,
         };
       }
@@ -150,7 +150,45 @@ const SheetModalContent = (props: PropsWithChildren) => {
     horizontalPosition,
     store.state.y,
     store.state.height,
+    store.state.contentLayout,
   ]);
+
+  const measureStyle = useStableAnimatedStyle(() => {
+    "worklet";
+
+    const getStyle = (): ViewStyle => {
+      // Width should be undefined at first render
+      const width =
+        store.state.contentLayout.value.width > 0
+          ? Math.min(
+              store.state.contentLayout.value.width,
+              window.value.width - 2 * horizontalOffset
+            )
+          : undefined;
+
+      // Don't add height, RN messes up onContentLayout on the childnodes if u do
+      return {
+        width,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        pointerEvents: "none",
+        opacity: 0,
+        overflow: "hidden",
+      };
+    };
+
+    return getStyle() as DefaultStyle;
+  }, [window, store.state.contentLayout, store.config.minHeight]);
+
+  // @ts-ignore
+  // eslint-disable-next-line prettier/prettier
+  const borderBottomLeftRadius = !store.config.detached ? 0 : store.config.containerStyle?.borderBottomLeftRadius ?? store.config.containerStyle?.borderRadius ?? 16;
+
+  // @ts-ignore
+  // eslint-disable-next-line prettier/prettier
+  const borderBottomRightRadius = !store.config.detached ? 0 : store.config.containerStyle?.borderBottomRightRadius ?? store.config.containerStyle?.borderRadius ?? 16;
+
 
   const onPointerMove = useCallback(
     (e: PointerEvent) => {
@@ -186,6 +224,25 @@ const SheetModalContent = (props: PropsWithChildren) => {
     };
   }, []);
 
+  const onContentLayout = useCallback(
+    (e: LayoutChangeEvent) => {
+      store.onContentLayout(
+        e.nativeEvent.layout.width,
+        e.nativeEvent.layout.height
+      );
+    },
+    [store]
+  );
+
+  const measureRef = useCallback((ref: any) => {
+    if (!ref || Platform.OS !== "web") {
+      return;
+    }
+
+    // Prevent focus, but React Native For Web doesn't support inert attribute
+    (ref as unknown as HTMLElement).setAttribute("inert", "true");
+  }, []);
+
   return (
     <View
       ref={containerRef}
@@ -197,11 +254,19 @@ const SheetModalContent = (props: PropsWithChildren) => {
       }}
       testID={`${store.id}-content`}
     >
+      <Animated.View style={measureStyle} aria-hidden={true} ref={measureRef}>
+        <View style={{ flex: 1 }} onLayout={onContentLayout}>
+          {props.children}
+        </View>
+      </Animated.View>
+
       <Animated.View
         style={[
           store.config.containerStyle,
           style,
           {
+            borderBottomRightRadius,
+            borderBottomLeftRadius,
             position: "absolute",
             top: 0,
             minHeight: store.config.minHeight,
@@ -219,22 +284,14 @@ const SheetModalContent = (props: PropsWithChildren) => {
 
               // @ts-ignore
               borderRadius: store.config.containerStyle?.borderRadius ?? 0,
+              borderBottomRightRadius,
+              borderBottomLeftRadius,
               overflow: "hidden",
             }}
           >
-            <Animated.ScrollView
-              style={{
-                width: "100%",
-              }}
-              onContentSizeChange={store.onContentLayout}
-              ref={scrollRef}
-              alwaysBounceVertical={false}
-              showsVerticalScrollIndicator={false}
-            >
-              <GestureDetector gesture={pan}>
-                <View>{props.children}</View>
-              </GestureDetector>
-            </Animated.ScrollView>
+            <GestureDetector gesture={pan}>
+              <View style={{ flex: 1 }}>{props.children}</View>
+            </GestureDetector>
 
             <GestureDetector gesture={topbarPan}>
               <View style={store.config.headerStyle}>

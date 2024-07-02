@@ -50,7 +50,7 @@ function Content(): React.JSX.Element {
   }, []);
 
   const openDetachedModal = useCallback(() => {
-    detachedSheetModalRef.current?.snapToIndex(1);
+    detachedSheetModalRef.current?.snapToIndex(0);
   }, []);
 
   const openResponsiveModal = useCallback(() => {
@@ -126,7 +126,7 @@ function Content(): React.JSX.Element {
           </SheetModal>
 
           <SheetModal
-            snapPoints={detachedSnapPoints}
+            snapPoints={["50%", "80%", "100%"]}
             detached={true}
             position={["bottom", "left"]}
             offset={[50, 30]}
@@ -134,6 +134,8 @@ function Content(): React.JSX.Element {
             snapPointIndex={0}
             animateOnMount={false}
             withFocusTrap={false}
+            autoResize={false}
+            panDownToClose={false}
           >
             <SheetModalContent title={"This modal is opened on mount"} />
           </SheetModal>

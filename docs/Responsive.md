@@ -3,7 +3,7 @@ Auto switch between attached/detached mode based on screensize.
 
 ```tsx
 import React, { useRef } from 'react';
-import { SheetModal, SheetModalMethods } from '@myalbum/sheet-modal';
+import { SheetModal, SheetModalMethods, ScrollView } from '@myalbum/sheet-modal';
 import { useWindowDimensions, Pressable, Text, View } from "react-native";
 
 function ResponsiveExample() {
@@ -36,34 +36,36 @@ function ResponsiveExample() {
         position={isDetached ? ["bottom", "left"] : ["bottom", "center"]}
         withBackdrop={!isDetached}
       >
-        <View
-          style={{
-            width: isDetached ? 350 : 500,
-            maxWidth: isDetached ? 500 : "100%",
-          }}
-        >
+        <ScrollView>
           <View
             style={{
-              flex: 1,
-              margin: 20,
-              gap: 1,
-              borderRadius: 10,
-              overflow: "hidden",
+              width: isDetached ? 350 : 500,
+              maxWidth: isDetached ? 500 : "100%",
             }}
           >
-            {
-              Array.from({length: 40}).map((_, index) => (
-                <View
-                  key={`item-${index}`}
-                  style={{
-                    padding: 20,
-                    backgroundColor: '#211D25',
-                  }}
-                />
-              ))
-            }
+            <View
+              style={{
+                flex: 1,
+                margin: 20,
+                gap: 1,
+                borderRadius: 10,
+                overflow: "hidden",
+              }}
+            >
+              {
+                Array.from({length: 40}).map((_, index) => (
+                  <View
+                    key={`item-${index}`}
+                    style={{
+                      padding: 20,
+                      backgroundColor: '#211D25',
+                    }}
+                  />
+                ))
+              }
+            </View>
           </View>
-        </View>
+        <ScrollView>
       </SheetModal>
     </>
   )

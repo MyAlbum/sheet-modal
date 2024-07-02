@@ -135,9 +135,9 @@ function usePan(panConfig: PanConfig) {
           direction === "up" ? nextSnapPointIndex : prevSnapPointIndex;
         const mode = newSnapPointIndex < 0 ? "close" : "resize";
 
-        const onComplete = (finished?: boolean) => {
+        const onComplete = () => {
           "worklet";
-          if (finished && store.state.y.value === 0) {
+          if (store.state.y.value <= store.config.closeY) {
             store.state.visibilityPercentage.value = 0;
           }
 

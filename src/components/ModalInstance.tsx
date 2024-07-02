@@ -162,10 +162,13 @@ const SheetModalInstance = forwardRef<
     () => [visibilityPercentage.value, isPanning.value] as [number, boolean],
     (v, prevV) => {
       if (v[0] === 0 && prevV?.[0] && !isPanning.value) {
+        // Close when visibilityPercentage is 0 and not panning
+        _isClosed.value = true;
         runOnJS(stackItem.remove)();
+        runOnJS(unmount)();
       }
     },
-    [visibilityPercentage, isPanning]
+    [visibilityPercentage, isPanning, stackItem, unmount]
   );
 
   const snapToIndex = useCallback(
@@ -241,9 +244,8 @@ const SheetModalInstance = forwardRef<
 
       y.value = config.closeY;
       visibilityPercentage.value = 0;
-      runOnJS(unmount)();
     });
-  }, [_isClosed, y, visibilityPercentage, config.closeY, unmount]);
+  }, [_isClosed, y, visibilityPercentage, config.closeY]);
 
   const updateSnapPoints = useCallback(() => {
     // Update snapPoints using window size and layout
@@ -254,10 +256,16 @@ const SheetModalInstance = forwardRef<
     const neededHeight = contentLayout.value.height
       ? contentLayout.value.height + borderHeight
       : 0;
+
+    const availableWindowHeight = window.value.height - offsetYSpacing;
     const convertConfig = {
       windowHeight: window.value.height,
-      maxHeight: Math.min(window.value.height - offsetYSpacing, neededHeight),
-      minHeight: Math.min(neededHeight, config.minHeight),
+      maxHeight: config.autoResize
+        ? Math.min(availableWindowHeight, neededHeight)
+        : availableWindowHeight,
+      minHeight: config.autoResize
+        ? Math.min(neededHeight, config.minHeight)
+        : config.minHeight,
     };
     const _snapPoints = convertSnapPoints(config.snapPoints, convertConfig);
 

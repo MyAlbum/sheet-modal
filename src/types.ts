@@ -197,11 +197,10 @@ export type PanDirection = "up" | "down";
 export type ContentAnimationStyle = {
   transform: any;
   alignSelf: FlexAlignType;
-  borderBottomLeftRadius: number;
-  borderBottomRightRadius: number;
   marginLeft: number;
   marginRight: number;
   height?: number;
+  width: number;
   maxWidth?: number;
   visibility: "hidden" | "visible";
 };

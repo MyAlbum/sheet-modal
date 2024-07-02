@@ -9,7 +9,10 @@ export const styles = StyleSheet.create({
   sheet: {
     maxWidth: "100%",
     width: 500,
-    paddingVertical: 35,
+    paddingTop: 35,
+    flexDirection: "column",
+    flexGrow: 0,
+    height: "100%",
   },
   flex: {
     flex: 1,
