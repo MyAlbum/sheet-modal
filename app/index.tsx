@@ -126,7 +126,7 @@ function Content(): React.JSX.Element {
           </SheetModal>
 
           <SheetModal
-            snapPoints={["100%"]}
+            snapPoints={["50%", "80%", "100%"]}
             detached={true}
             position={["bottom", "left"]}
             offset={[50, 30]}

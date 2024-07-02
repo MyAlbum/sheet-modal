@@ -70,7 +70,7 @@ Below a simple usage example
 
 ```tsx
 import React, { useCallback, useRef } from 'react';
-import { SheetModal, SheetModalMethods } from '@myalbum/sheet-modal';
+import { SheetModal, SheetModalMethods, ScrollView } from '@myalbum/sheet-modal';
 
 export default function App() {
   const sheetModalRef = useRef<SheetModalMethods>(null);
@@ -87,11 +87,11 @@ export default function App() {
       />
       <SheetModal
         ref={sheetModalRef}
-        snapPoints={[0, 200, 400]}
+        snapPoints={[200, "100%"]}
       >
-        <View style={styles.container}>
+        <ScrollView>
           <Text>Sheet modal content</Text>
-        </View>
+        </ScrollView>
       </SheetModal>
     </View>
   );
