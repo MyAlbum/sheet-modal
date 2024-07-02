@@ -164,10 +164,11 @@ const SheetModalContent = (props: PropsWithChildren) => {
         width,
         position: "absolute",
         top: 0,
-        left: -1000,
-        minHeight: store.config.minHeight,
+        height: 0,
+        left: 0,
         pointerEvents: "none",
         opacity: 0,
+        overflow: "hidden",
       };
     };
 
@@ -228,6 +229,19 @@ const SheetModalContent = (props: PropsWithChildren) => {
       }}
       testID={`${store.id}-content`}
     >
+      <Animated.View style={measureStyle} aria-hidden={true}>
+        <View
+          onLayout={(e) => {
+            store.onContentLayout(
+              e.nativeEvent.layout.width,
+              e.nativeEvent.layout.height
+            );
+          }}
+        >
+          {props.children}
+        </View>
+      </Animated.View>
+
       <Animated.View
         style={[
           store.config.containerStyle,
@@ -270,19 +284,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
             </GestureDetector>
           </View>
         </FocusTrap>
-      </Animated.View>
-
-      <Animated.View style={measureStyle}>
-        <View
-          onLayout={(e) => {
-            store.onContentLayout(
-              e.nativeEvent.layout.width,
-              e.nativeEvent.layout.height
-            );
-          }}
-        >
-          {props.children}
-        </View>
       </Animated.View>
     </View>
   );
