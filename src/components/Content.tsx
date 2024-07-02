@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useCallback, useMemo, useRef } from "react";
 import useSheetModal from "../hooks/useSheetModal";
-import { Platform, PointerEvent, View } from "react-native";
+import { Platform, PointerEvent, View, ViewStyle } from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedReaction,
@@ -117,12 +117,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
         return {
           transform,
           alignSelf,
-          // @ts-ignore
-          // eslint-disable-next-line prettier/prettier
-          borderBottomLeftRadius: store.config.containerStyle?.borderBottomLeftRadius ?? store.config.containerStyle?.borderRadius ?? 16,
-          // @ts-ignore
-          // eslint-disable-next-line prettier/prettier
-          borderBottomRightRadius: store.config.containerStyle?.borderBottomRightRadius ?? store.config.containerStyle?.borderRadius ?? 16,
           marginLeft: horizontalOffset,
           marginRight: horizontalOffset,
           height: store.state.height.value,
@@ -133,8 +127,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
         return {
           transform,
           alignSelf,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
           marginLeft: alignSelf === "flex-start" ? horizontalOffset : 0,
           marginRight: alignSelf === "flex-end" ? horizontalOffset : 0,
           height: store.state.height.value,
@@ -152,7 +144,44 @@ const SheetModalContent = (props: PropsWithChildren) => {
     horizontalPosition,
     store.state.y,
     store.state.height,
+    store.state.contentLayout,
   ]);
+
+  const measureStyle = useStableAnimatedStyle(() => {
+    "worklet";
+
+    const getStyle = (): ViewStyle => {
+      // Width should be undefined at first render
+      const width =
+        store.state.contentLayout.value.width > 0
+          ? Math.min(
+              store.state.contentLayout.value.width,
+              window.value.width - 2 * horizontalOffset
+            )
+          : undefined;
+
+      return {
+        width,
+        position: "absolute",
+        top: 0,
+        left: -1000,
+        minHeight: store.config.minHeight,
+        pointerEvents: "none",
+        opacity: 0,
+      };
+    };
+
+    return getStyle() as DefaultStyle;
+  }, [window, store.state.contentLayout, store.config.minHeight]);
+
+  // @ts-ignore
+  // eslint-disable-next-line prettier/prettier
+  const borderBottomLeftRadius = !store.config.detached ? 0 : store.config.containerStyle?.borderBottomLeftRadius ?? store.config.containerStyle?.borderRadius ?? 16;
+
+  // @ts-ignore
+  // eslint-disable-next-line prettier/prettier
+  const borderBottomRightRadius = !store.config.detached ? 0 : store.config.containerStyle?.borderBottomRightRadius ?? store.config.containerStyle?.borderRadius ?? 16;
+
 
   const onPointerMove = useCallback(
     (e: PointerEvent) => {
@@ -204,6 +233,8 @@ const SheetModalContent = (props: PropsWithChildren) => {
           store.config.containerStyle,
           style,
           {
+            borderBottomRightRadius,
+            borderBottomLeftRadius,
             position: "absolute",
             top: 0,
             minHeight: store.config.minHeight,
@@ -221,22 +252,14 @@ const SheetModalContent = (props: PropsWithChildren) => {
 
               // @ts-ignore
               borderRadius: store.config.containerStyle?.borderRadius ?? 0,
+              borderBottomRightRadius,
+              borderBottomLeftRadius,
               overflow: "hidden",
             }}
           >
-            <View
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-              onLayout={(e) => {
-                store.onContentLayout(e.nativeEvent.layout.width, 2000);
-              }}
-            >
-              <GestureDetector gesture={pan}>
-                <View style={{ height: "100%" }}>{props.children}</View>
-              </GestureDetector>
-            </View>
+            <GestureDetector gesture={pan}>
+              <View>{props.children}</View>
+            </GestureDetector>
 
             <GestureDetector gesture={topbarPan}>
               <View style={store.config.headerStyle}>
@@ -247,6 +270,19 @@ const SheetModalContent = (props: PropsWithChildren) => {
             </GestureDetector>
           </View>
         </FocusTrap>
+      </Animated.View>
+
+      <Animated.View style={measureStyle}>
+        <View
+          onLayout={(e) => {
+            store.onContentLayout(
+              e.nativeEvent.layout.width,
+              e.nativeEvent.layout.height
+            );
+          }}
+        >
+          {props.children}
+        </View>
       </Animated.View>
     </View>
   );

@@ -1,13 +1,7 @@
 import React from "react";
-import { useSheetModal } from "../src";
+import { ScrollView, useSheetModal } from "../src";
 import { styles } from "./styles";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { snapPoints } from "./const";
 
 type Props = {
@@ -18,9 +12,20 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
   const currentModal = useSheetModal();
 
   return (
-    <View style={styles.sheet}>
+    <View
+      style={[
+        styles.sheet,
+        {
+          height: "100%",
+        },
+      ]}
+    >
       <Text style={{ padding: 16 }}>{props.title}</Text>
-      <ScrollView style={{ minHeight: 300 }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 35,
+        }}
+      >
         <ScrollView
           horizontal
           style={styles.scrollView}
