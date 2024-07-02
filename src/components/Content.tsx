@@ -1,6 +1,12 @@
 import React, { PropsWithChildren, useCallback, useMemo, useRef } from "react";
 import useSheetModal from "../hooks/useSheetModal";
-import { Platform, PointerEvent, View, ViewStyle } from "react-native";
+import {
+  LayoutChangeEvent,
+  Platform,
+  PointerEvent,
+  View,
+  ViewStyle,
+} from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedReaction,
@@ -160,11 +166,11 @@ const SheetModalContent = (props: PropsWithChildren) => {
             )
           : undefined;
 
+      // Don't add height, RN messes up onContentLayout on the childnodes if u do
       return {
         width,
         position: "absolute",
         top: 0,
-        height: 0,
         left: 0,
         pointerEvents: "none",
         opacity: 0,
@@ -218,6 +224,25 @@ const SheetModalContent = (props: PropsWithChildren) => {
     };
   }, []);
 
+  const onContentLayout = useCallback(
+    (e: LayoutChangeEvent) => {
+      store.onContentLayout(
+        e.nativeEvent.layout.width,
+        e.nativeEvent.layout.height
+      );
+    },
+    [store]
+  );
+
+  const measureRef = useCallback((ref: any) => {
+    if (!ref || Platform.OS !== "web") {
+      return;
+    }
+
+    // Prevent focus, but React Native For Web doesn't support inert attribute
+    (ref as unknown as HTMLElement).setAttribute("inert", "true");
+  }, []);
+
   return (
     <View
       ref={containerRef}
@@ -229,15 +254,8 @@ const SheetModalContent = (props: PropsWithChildren) => {
       }}
       testID={`${store.id}-content`}
     >
-      <Animated.View style={measureStyle} aria-hidden={true}>
-        <View
-          onLayout={(e) => {
-            store.onContentLayout(
-              e.nativeEvent.layout.width,
-              e.nativeEvent.layout.height
-            );
-          }}
-        >
+      <Animated.View style={measureStyle} aria-hidden={true} ref={measureRef}>
+        <View style={{ flex: 1 }} onLayout={onContentLayout}>
           {props.children}
         </View>
       </Animated.View>
