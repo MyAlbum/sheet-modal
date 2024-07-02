@@ -258,7 +258,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
             }}
           >
             <GestureDetector gesture={pan}>
-              <View>{props.children}</View>
+              <View style={{ flex: 1 }}>{props.children}</View>
             </GestureDetector>
 
             <GestureDetector gesture={topbarPan}>
