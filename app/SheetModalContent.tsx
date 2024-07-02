@@ -25,6 +25,7 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
         contentContainerStyle={{
           paddingBottom: 35,
         }}
+        alwaysBounceVertical={false}
       >
         <ScrollView
           horizontal

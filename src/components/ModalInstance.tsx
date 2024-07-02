@@ -256,10 +256,16 @@ const SheetModalInstance = forwardRef<
     const neededHeight = contentLayout.value.height
       ? contentLayout.value.height + borderHeight
       : 0;
+
+    const availableWindowHeight = window.value.height - offsetYSpacing;
     const convertConfig = {
       windowHeight: window.value.height,
-      maxHeight: Math.min(window.value.height - offsetYSpacing, neededHeight),
-      minHeight: Math.min(neededHeight, config.minHeight),
+      maxHeight: config.autoResize
+        ? Math.min(availableWindowHeight, neededHeight)
+        : availableWindowHeight,
+      minHeight: config.autoResize
+        ? Math.min(neededHeight, config.minHeight)
+        : config.minHeight,
     };
     const _snapPoints = convertSnapPoints(config.snapPoints, convertConfig);
 
