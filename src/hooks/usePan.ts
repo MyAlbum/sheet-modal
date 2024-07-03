@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Gesture } from "react-native-gesture-handler";
 import {
   useSharedValue,
@@ -10,7 +10,7 @@ import useSheetModal from "./useSheetModal";
 import { AniConfig, overDragResistanceFactor } from "../constants";
 import { PanConfig } from "../types";
 import useWindowDimensions from "./useWindowDimensions";
-import { Keyboard } from "react-native";
+import { Keyboard, Platform } from "react-native";
 
 function usePan(panConfig: PanConfig) {
   const store = useSheetModal();
@@ -19,9 +19,47 @@ function usePan(panConfig: PanConfig) {
   const isFinishingPan = useSharedValue(false);
   const isActive = useSharedValue(false);
   const window = useWindowDimensions();
+  const initialUserSelect = useRef<any>(undefined);
 
   const dismissKeyboard = useCallback(() => {
     Keyboard.dismiss();
+  }, []);
+
+  const preventTextSelection = useCallback((state: boolean) => {
+    if (Platform.OS !== "web") {
+      return;
+    }
+
+    if (state) {
+      if (initialUserSelect.current === undefined) {
+        // Save the initial user select value
+        initialUserSelect.current =
+          document.body.style.getPropertyValue("user-select") ||
+          document.body.style.getPropertyValue("-webkit-user-select");
+      }
+
+      document.body.style.setProperty("-webkit-user-select", "none");
+      document.body.style.setProperty("user-select", "none");
+    } else {
+      if (!initialUserSelect.current || initialUserSelect.current === "") {
+        // No initial user select value, remove the property
+        document.body.style.removeProperty("user-select");
+        document.body.style.removeProperty("-webkit-user-select");
+      } else {
+        // Restore the initial user select value
+        document.body.style.setProperty(
+          "-webkit-user-select",
+          initialUserSelect.current
+        );
+        document.body.style.setProperty(
+          "user-select",
+          initialUserSelect.current
+        );
+      }
+
+      // We don't need the initial value anymore
+      initialUserSelect.current = undefined;
+    }
   }, []);
 
   const pan = useMemo(() => {
@@ -32,6 +70,18 @@ function usePan(panConfig: PanConfig) {
       .onBegin((e) => {
         startPos.value = { x: e.absoluteX, y: e.absoluteY };
         oldY.value = store.state.y.value;
+
+        const relativeStartY =
+          startPos.value.y - (window.value.height - store.state.y.value);
+
+        const shouldStart = panConfig.onStartShouldSetPanResponder({
+          direction: "unknown", // We haven't moved yet
+          startY: relativeStartY,
+        });
+
+        if (shouldStart) {
+          runOnJS(preventTextSelection)(true);
+        }
       })
       .onTouchesMove((e, state) => {
         "worklet";
@@ -119,6 +169,7 @@ function usePan(panConfig: PanConfig) {
       })
       .onFinalize(() => {
         isActive.value = false;
+        runOnJS(preventTextSelection)(false);
       })
       .onEnd((e) => {
         "worklet";
@@ -191,6 +242,7 @@ function usePan(panConfig: PanConfig) {
     startPos,
     oldY,
     store,
+    preventTextSelection,
     isActive,
     window,
     panConfig,

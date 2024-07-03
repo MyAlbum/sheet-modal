@@ -197,7 +197,7 @@ export type PanData = {
   startY: number;
 };
 
-export type PanDirection = "up" | "down";
+export type PanDirection = "up" | "down" | "unknown";
 
 export type ContentAnimationStyle = {
   transform: any;
