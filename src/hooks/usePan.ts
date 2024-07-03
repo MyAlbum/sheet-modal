@@ -64,7 +64,7 @@ function usePan(panConfig: PanConfig) {
 
   const pan = useMemo(() => {
     return Gesture.Pan()
-      .manualActivation(true)
+      .manualActivation(false)
       .maxPointers(1)
       .activeCursor("grabbing")
       .onBegin((e) => {
@@ -83,7 +83,7 @@ function usePan(panConfig: PanConfig) {
           runOnJS(preventTextSelection)(true);
         }
       })
-      .onTouchesMove((e, state) => {
+      .onTouchesMove((e, stateManager) => {
         "worklet";
         if (!e.allTouches[0] || isActive.value) {
           return;
@@ -92,6 +92,7 @@ function usePan(panConfig: PanConfig) {
         const moveY = startPos.value.y - e.allTouches[0].absoluteY;
         const moveX = startPos.value.x - e.allTouches[0].absoluteX;
         if (Math.abs(moveY) < 5 && Math.abs(moveX) < 5) {
+          // We need to move at least 5 pixels in either direction
           return;
         }
 
@@ -109,10 +110,10 @@ function usePan(panConfig: PanConfig) {
         ) {
           // Prevent scroll
           isActive.value = true;
-          state.activate();
         } else {
+          // Horizontal gesture, don't start the pan
           isActive.value = false;
-          state.fail();
+          stateManager.fail();
         }
       })
       .onChange((e) => {
