@@ -31,10 +31,10 @@ const styleSheet = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 50,
     flexDirection: "column",
     alignItems: "flex-end",
     transform: "translate3d(0,0,0)",
+    pointerEvents: "none",
   },
 
   handle: {
@@ -44,7 +44,6 @@ const styleSheet = StyleSheet.create({
     width: 35,
     alignSelf: "center",
     borderRadius: 100,
-    position: "absolute",
   },
 });
 

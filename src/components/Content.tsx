@@ -15,7 +15,7 @@ import Animated, {
 import { GestureDetector } from "react-native-gesture-handler";
 import { FlexAlignType } from "react-native";
 import usePan from "../hooks/usePan";
-import { ContentAnimationStyle, PanDirection } from "../types";
+import { ContentAnimationStyle, PanData } from "../types";
 import HandleWrapper from "./HandleWrapper";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
@@ -33,9 +33,12 @@ const SheetModalContent = (props: PropsWithChildren) => {
   }, []);
 
   const onStartShouldSetPanResponder = useCallback(
-    (gestureDirection: PanDirection) => {
+    (data: PanData) => {
       "worklet";
       if (!store.config.panContent) {
+        if (data.startY < 50) {
+          return true;
+        }
         return false;
       }
 
@@ -45,7 +48,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
         store.state.height.value < store.state.contentLayout.value.height;
       const isScrolledAtTop = true; //scrollOffset.value <= 0;
 
-      if (gestureDirection === "up") {
+      if (data.direction === "up") {
         if (!canPanUp) {
           // Sheet is at max snap point, allow pan if we can't scroll
           return !canScroll;
@@ -67,15 +70,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
 
   const pan = usePan({
     onStartShouldSetPanResponder,
-  });
-
-  const onTopBarPanStartShouldSetPanResponder = useCallback(() => {
-    "worklet";
-    return true;
-  }, []);
-
-  const topbarPan = usePan({
-    onStartShouldSetPanResponder: onTopBarPanStartShouldSetPanResponder,
   });
 
   const horizontalPosition = store.config.position[1];
@@ -293,13 +287,12 @@ const SheetModalContent = (props: PropsWithChildren) => {
               <View style={{ flex: 1 }}>{props.children}</View>
             </GestureDetector>
 
-            <GestureDetector gesture={topbarPan}>
-              <View style={store.config.headerStyle}>
-                <HandleWrapper />
-                {store.config.withClosebutton &&
-                  store.config.closeButtonComponent?.()}
-              </View>
-            </GestureDetector>
+            <View style={store.config.headerStyle}>
+              <HandleWrapper />
+            </View>
+
+            {store.config.withClosebutton &&
+              store.config.closeButtonComponent?.()}
           </View>
         </FocusTrap>
       </Animated.View>

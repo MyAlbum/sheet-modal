@@ -8,6 +8,7 @@ import {
 import useSheetModal from "./useSheetModal";
 import { AniConfig, overDragResistanceFactor } from "../constants";
 import { PanConfig } from "../types";
+import useWindowDimensions from "./useWindowDimensions";
 
 function usePan(panConfig: PanConfig) {
   const store = useSheetModal();
@@ -15,6 +16,7 @@ function usePan(panConfig: PanConfig) {
   const oldY = useSharedValue(0);
   const isFinishingPan = useSharedValue(false);
   const isActive = useSharedValue(false);
+  const window = useWindowDimensions();
 
   const pan = useMemo(() => {
     return Gesture.Pan()
@@ -37,9 +39,18 @@ function usePan(panConfig: PanConfig) {
           return;
         }
 
+        // Start Y position within the sheet modal
+        const relativeStartY =
+          startPos.value.y - (window.value.height - store.state.y.value);
+
         const gestureDirection =
           e.allTouches[0].absoluteY - startPos.value.y > 0 ? "down" : "up";
-        if (panConfig.onStartShouldSetPanResponder(gestureDirection)) {
+        if (
+          panConfig.onStartShouldSetPanResponder({
+            direction: gestureDirection,
+            startY: relativeStartY,
+          })
+        ) {
           // Prevent scroll
           isActive.value = true;
           state.activate();
@@ -166,7 +177,7 @@ function usePan(panConfig: PanConfig) {
             break;
         }
       });
-  }, [isActive, startPos, oldY, store, panConfig, isFinishingPan]);
+  }, [startPos, oldY, store, isActive, window, panConfig, isFinishingPan]);
 
   useAnimatedReaction(
     () => store.state.y.value,

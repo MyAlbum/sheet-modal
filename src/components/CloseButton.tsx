@@ -52,6 +52,8 @@ const stylesheet = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     overflow: "hidden",
+    position: "absolute",
+    transform: "translate3d(0,0,0)",
   },
   x: {
     position: "absolute",

@@ -189,7 +189,12 @@ export type ContentLayout = {
 };
 
 export type PanConfig = {
-  onStartShouldSetPanResponder: (gestureDirection: PanDirection) => boolean;
+  onStartShouldSetPanResponder: (data: PanData) => boolean;
+};
+
+export type PanData = {
+  direction: PanDirection;
+  startY: number;
 };
 
 export type PanDirection = "up" | "down";
