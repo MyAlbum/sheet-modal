@@ -1,14 +1,16 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Gesture } from "react-native-gesture-handler";
 import {
   useSharedValue,
   withSpring,
   useAnimatedReaction,
+  runOnJS,
 } from "react-native-reanimated";
 import useSheetModal from "./useSheetModal";
 import { AniConfig, overDragResistanceFactor } from "../constants";
 import { PanConfig } from "../types";
 import useWindowDimensions from "./useWindowDimensions";
+import { Keyboard } from "react-native";
 
 function usePan(panConfig: PanConfig) {
   const store = useSheetModal();
@@ -17,6 +19,10 @@ function usePan(panConfig: PanConfig) {
   const isFinishingPan = useSharedValue(false);
   const isActive = useSharedValue(false);
   const window = useWindowDimensions();
+
+  const dismissKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
 
   const pan = useMemo(() => {
     return Gesture.Pan()
@@ -148,7 +154,7 @@ function usePan(panConfig: PanConfig) {
 
         const onComplete = () => {
           "worklet";
-          if (store.state.y.value <= store.config.closeY) {
+          if (mode === "close") {
             store.state.visibilityPercentage.value = 0;
           }
 
@@ -160,6 +166,10 @@ function usePan(panConfig: PanConfig) {
 
         switch (mode) {
           case "close":
+            if (store.state.isActive.value) {
+              runOnJS(dismissKeyboard)();
+            }
+
             store.state.y.value = withSpring(
               store.config.closeY,
               AniConfig,
@@ -177,7 +187,16 @@ function usePan(panConfig: PanConfig) {
             break;
         }
       });
-  }, [startPos, oldY, store, isActive, window, panConfig, isFinishingPan]);
+  }, [
+    startPos,
+    oldY,
+    store,
+    isActive,
+    window,
+    panConfig,
+    isFinishingPan,
+    dismissKeyboard,
+  ]);
 
   useAnimatedReaction(
     () => store.state.y.value,

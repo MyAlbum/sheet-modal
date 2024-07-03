@@ -33,7 +33,13 @@ import useSheetModalConfigInternal from "../hooks/useSheetModalInternal";
 import useMount from "../hooks/useMount";
 import useBackHandler from "../hooks/useBackHandler";
 import { WindowContext } from "../hooks/useWindowDimensions";
-import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
+import {
+  Keyboard,
+  LayoutChangeEvent,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
 import PortalComponent from "./Portal/Portal";
 import { useStackItem } from "../hooks/useStackItem/useStackItem";
 import { useEventsToProps } from "../hooks/useEventsToProps";
@@ -238,6 +244,11 @@ const SheetModalInstance = forwardRef<
     cancelAnimation(y);
     cancelAnimation(visibilityPercentage);
 
+    if (stackItem.isActive.value) {
+      // If this modal is the current active modal, dismiss keyboard
+      Keyboard.dismiss();
+    }
+
     visibilityPercentage.value = withSpring(0, AniConfig);
     y.value = withSpring(config.closeY, AniConfig, () => {
       "worklet";
@@ -245,7 +256,7 @@ const SheetModalInstance = forwardRef<
       y.value = config.closeY;
       visibilityPercentage.value = 0;
     });
-  }, [_isClosed, y, visibilityPercentage, config.closeY]);
+  }, [_isClosed, y, visibilityPercentage, stackItem.isActive, config.closeY]);
 
   const updateSnapPoints = useCallback(() => {
     // Update snapPoints using window size and layout
