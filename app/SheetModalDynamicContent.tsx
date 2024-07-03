@@ -1,13 +1,7 @@
 import React from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
-import { useSheetModal } from "../src";
+import { useSheetModal, ScrollView } from "../src";
 
 export default function SheetModalDynamicContent(): React.JSX.Element {
   const currentModal = useSheetModal();
