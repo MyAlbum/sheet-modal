@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]()
+### Summary
+Examples were updated to the latest release of `react-native` and `expo` and bridgeless mode was enabled in the bare project.
+
 ## [v2.1.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.1.0)
 ### Summary
 Allow for more complext layout designs. By default modals are not scrollable, you need to implement this yourself with the new `SheetModal.ScrollView` component.
