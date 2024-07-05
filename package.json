@@ -1,6 +1,6 @@
 {
   "name": "@myalbum/sheet-modal",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "An interactive sheet modal, fully customizable & performance focused",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -32,6 +32,7 @@
     "format": "yarn lint --fix",
     "lint": "eslint src --ext .ts,.tsx",
     "build": "bob build",
+    "bare-prepare": "cd examples/bare && yarn prepare-ios",
     "bare": "cd examples/bare && yarn start",
     "expo": "cd examples/expo && yarn start",
     "bootstrap": "yarn && yarn build && yarn install-bare && yarn install-expo",

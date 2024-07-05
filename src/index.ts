@@ -12,7 +12,7 @@ export type {
   Offset,
   Position,
   SheetModalMethods,
-  SheetModalProps,
+  SheetModalConfig,
   SheetModalStore,
   SnapPoint,
 } from "./types";

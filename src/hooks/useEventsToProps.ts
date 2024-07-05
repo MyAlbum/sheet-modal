@@ -1,27 +1,31 @@
 import { runOnJS, useAnimatedReaction } from "react-native-reanimated";
 import { SheetModalStore } from "../types";
+import { useCallback } from "react";
 
-export function useEventsToProps(modal: SheetModalStore) {
+export function useEventsToProps(store: SheetModalStore) {
+  const onClosed = useCallback(() => {
+    store.config.value.onClosed?.();
+  }, [store.config]);
+
+  const onOpened = useCallback(() => {
+    store.config.value.onOpened?.();
+  }, [store.config]);
+
   useAnimatedReaction(
-    () => [modal.state.visibilityPercentage.value, modal.state.isPanning.value],
+    () => [store.state.visibilityPercentage.value, store.state.isPanning.value],
     (current, prev) => {
       const [v, p] = current as [number, boolean];
 
       if (!p && v <= 0 && prev?.[0]) {
         //closed
-        if (modal.config.onClosed !== undefined) {
-          runOnJS(modal.config.onClosed)();
-        }
+        runOnJS(onClosed)();
       }
 
       if (!p && v === 1 && prev?.[0] !== 1) {
         //opened
-
-        if (modal.config.onOpened !== undefined) {
-          runOnJS(modal.config.onOpened)();
-        }
+        runOnJS(onOpened)();
       }
     },
-    [modal.state.visibilityPercentage, modal.state.isPanning]
+    [store.state.visibilityPercentage, store.state.isPanning]
   );
 }

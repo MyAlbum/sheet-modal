@@ -15,27 +15,32 @@ import Animated, {
 import { GestureDetector } from "react-native-gesture-handler";
 import { FlexAlignType } from "react-native";
 import usePan from "../hooks/usePan";
-import { ContentAnimationStyle, PanDirection } from "../types";
+import { ContentAnimationStyle, PanData } from "../types";
 import HandleWrapper from "./HandleWrapper";
-import useWindowDimensions from "../hooks/useWindowDimensions";
 import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
 import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes";
 import FocusTrap, { FocusTrapOptions } from "./FocusTrap";
+import useSharedState from "../hooks/useSharedState";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const SheetModalContent = (props: PropsWithChildren) => {
   const store = useSheetModal();
   const window = useWindowDimensions();
   const containerRef = useAnimatedRef<View>();
   const _setReadyForFocus = useRef<() => void>(() => {});
+  const config = useSharedState(store.config);
 
   const setReadyForFocus = useCallback(() => {
     _setReadyForFocus.current?.();
   }, []);
 
   const onStartShouldSetPanResponder = useCallback(
-    (gestureDirection: PanDirection) => {
+    (data: PanData) => {
       "worklet";
-      if (!store.config.panContent) {
+      if (!store.config.value.panContent) {
+        if (data.startY < 50) {
+          return true;
+        }
         return false;
       }
 
@@ -45,7 +50,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
         store.state.height.value < store.state.contentLayout.value.height;
       const isScrolledAtTop = true; //scrollOffset.value <= 0;
 
-      if (gestureDirection === "up") {
+      if (data.direction === "up") {
         if (!canPanUp) {
           // Sheet is at max snap point, allow pan if we can't scroll
           return !canScroll;
@@ -58,10 +63,10 @@ const SheetModalContent = (props: PropsWithChildren) => {
       }
     },
     [
-      store.state.contentLayout,
-      store.state.height,
-      store.state.snapPoints,
-      store.config.panContent,
+      store.config.value.panContent,
+      store.state.snapPoints.value,
+      store.state.height.value,
+      store.state.contentLayout.value.height,
     ]
   );
 
@@ -69,17 +74,8 @@ const SheetModalContent = (props: PropsWithChildren) => {
     onStartShouldSetPanResponder,
   });
 
-  const onTopBarPanStartShouldSetPanResponder = useCallback(() => {
-    "worklet";
-    return true;
-  }, []);
-
-  const topbarPan = usePan({
-    onStartShouldSetPanResponder: onTopBarPanStartShouldSetPanResponder,
-  });
-
-  const horizontalPosition = store.config.position[1];
-  const horizontalOffset = store.config.offset[1];
+  const horizontalPosition = store.config.value.position[1];
+  const horizontalOffset = store.config.value.offset[1];
 
   useAnimatedReaction(
     () => store.state.isClosed.value,
@@ -111,14 +107,14 @@ const SheetModalContent = (props: PropsWithChildren) => {
           : "flex-end";
       const transform = [{ translateY: -store.state.y.value }];
       const visibility =
-        store.state.y.value <= store.config.closeY ? "hidden" : "visible";
+        store.state.y.value <= store.config.value.closeY ? "hidden" : "visible";
 
       const width = Math.min(
         store.state.contentLayout.value.width,
         window.value.width - 2 * horizontalOffset
       );
 
-      if (store.config.detached) {
+      if (store.config.value.detached) {
         // DETACHED
         return {
           transform,
@@ -145,7 +141,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
     return getStyle() as DefaultStyle;
   }, [
     window,
-    store.config.containerStyle,
+    store.config.value.containerStyle,
     horizontalOffset,
     horizontalPosition,
     store.state.y,
@@ -179,15 +175,15 @@ const SheetModalContent = (props: PropsWithChildren) => {
     };
 
     return getStyle() as DefaultStyle;
-  }, [window, store.state.contentLayout, store.config.minHeight]);
+  }, [window, store.state.contentLayout, store.config.value.minHeight]);
 
   // @ts-ignore
   // eslint-disable-next-line prettier/prettier
-  const borderBottomLeftRadius = !store.config.detached ? 0 : store.config.containerStyle?.borderBottomLeftRadius ?? store.config.containerStyle?.borderRadius ?? 16;
+  const borderBottomLeftRadius = !config.detached ? 0 : config.containerStyle?.borderBottomLeftRadius ?? config.containerStyle?.borderRadius ?? 16;
 
   // @ts-ignore
   // eslint-disable-next-line prettier/prettier
-  const borderBottomRightRadius = !store.config.detached ? 0 : store.config.containerStyle?.borderBottomRightRadius ?? store.config.containerStyle?.borderRadius ?? 16;
+  const borderBottomRightRadius = !config.detached ? 0 : config.containerStyle?.borderBottomRightRadius ?? config.containerStyle?.borderRadius ?? 16;
 
 
   const onPointerMove = useCallback(
@@ -216,6 +212,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
     return {
       allowOutsideClick: true,
       initialFocus: false,
+      escapeDeactivates: false,
       checkCanFocusTrap: () => {
         return new Promise<void>((resolve) => {
           _setReadyForFocus.current = resolve;
@@ -262,20 +259,20 @@ const SheetModalContent = (props: PropsWithChildren) => {
 
       <Animated.View
         style={[
-          store.config.containerStyle,
+          store.config.value.containerStyle,
           style,
           {
             borderBottomRightRadius,
             borderBottomLeftRadius,
             position: "absolute",
             top: 0,
-            minHeight: store.config.minHeight,
+            minHeight: store.config.value.minHeight,
           },
         ]}
         onPointerMove={onPointerMove}
       >
         <FocusTrap
-          active={store.config.withFocusTrap}
+          active={config.withFocusTrap}
           focusTrapOptions={focusTrapOptions}
         >
           <View
@@ -293,13 +290,11 @@ const SheetModalContent = (props: PropsWithChildren) => {
               <View style={{ flex: 1 }}>{props.children}</View>
             </GestureDetector>
 
-            <GestureDetector gesture={topbarPan}>
-              <View style={store.config.headerStyle}>
-                <HandleWrapper />
-                {store.config.withClosebutton &&
-                  store.config.closeButtonComponent?.()}
-              </View>
-            </GestureDetector>
+            <View style={store.config.value.headerStyle}>
+              <HandleWrapper />
+            </View>
+
+            {config.withClosebutton && config.closeButtonComponent?.()}
           </View>
         </FocusTrap>
       </Animated.View>

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import useSheetModal from "../hooks/useSheetModal";
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
+import useSharedState from "../hooks/useSharedState";
 
 function HandleWrapper() {
   const store = useSheetModal();
   const [showHandle, setShowHandle] = useState(false);
+  const config = useSharedState(store.config);
 
   useAnimatedReaction(
     () => store.state.snapPoints.value,
@@ -14,7 +16,7 @@ function HandleWrapper() {
     [store.state.snapPoints]
   );
 
-  return showHandle && store.config.handleComponent?.();
+  return showHandle && config.handleComponent?.();
 }
 
 export default HandleWrapper;

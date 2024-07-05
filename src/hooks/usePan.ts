@@ -1,13 +1,16 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Gesture } from "react-native-gesture-handler";
 import {
   useSharedValue,
   withSpring,
   useAnimatedReaction,
+  runOnJS,
 } from "react-native-reanimated";
 import useSheetModal from "./useSheetModal";
 import { AniConfig, overDragResistanceFactor } from "../constants";
 import { PanConfig } from "../types";
+import useWindowDimensions from "./useWindowDimensions";
+import { Keyboard, Platform } from "react-native";
 
 function usePan(panConfig: PanConfig) {
   const store = useSheetModal();
@@ -15,17 +18,72 @@ function usePan(panConfig: PanConfig) {
   const oldY = useSharedValue(0);
   const isFinishingPan = useSharedValue(false);
   const isActive = useSharedValue(false);
+  const window = useWindowDimensions();
+  const initialUserSelect = useRef<any>(undefined);
+
+  const dismissKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
+
+  const preventTextSelection = useCallback((state: boolean) => {
+    if (Platform.OS !== "web") {
+      return;
+    }
+
+    if (state) {
+      if (initialUserSelect.current === undefined) {
+        // Save the initial user select value
+        initialUserSelect.current =
+          document.body.style.getPropertyValue("user-select") ||
+          document.body.style.getPropertyValue("-webkit-user-select");
+      }
+
+      document.body.style.setProperty("-webkit-user-select", "none");
+      document.body.style.setProperty("user-select", "none");
+    } else {
+      if (!initialUserSelect.current || initialUserSelect.current === "") {
+        // No initial user select value, remove the property
+        document.body.style.removeProperty("user-select");
+        document.body.style.removeProperty("-webkit-user-select");
+      } else {
+        // Restore the initial user select value
+        document.body.style.setProperty(
+          "-webkit-user-select",
+          initialUserSelect.current
+        );
+        document.body.style.setProperty(
+          "user-select",
+          initialUserSelect.current
+        );
+      }
+
+      // We don't need the initial value anymore
+      initialUserSelect.current = undefined;
+    }
+  }, []);
 
   const pan = useMemo(() => {
     return Gesture.Pan()
-      .manualActivation(true)
+      .manualActivation(false)
       .maxPointers(1)
       .activeCursor("grabbing")
       .onBegin((e) => {
         startPos.value = { x: e.absoluteX, y: e.absoluteY };
         oldY.value = store.state.y.value;
+
+        const relativeStartY =
+          startPos.value.y - (window.value.height - store.state.y.value);
+
+        const shouldStart = panConfig.onStartShouldSetPanResponder({
+          direction: "unknown", // We haven't moved yet
+          startY: relativeStartY,
+        });
+
+        if (shouldStart) {
+          runOnJS(preventTextSelection)(true);
+        }
       })
-      .onTouchesMove((e, state) => {
+      .onTouchesMove((e, stateManager) => {
         "worklet";
         if (!e.allTouches[0] || isActive.value) {
           return;
@@ -34,18 +92,28 @@ function usePan(panConfig: PanConfig) {
         const moveY = startPos.value.y - e.allTouches[0].absoluteY;
         const moveX = startPos.value.x - e.allTouches[0].absoluteX;
         if (Math.abs(moveY) < 5 && Math.abs(moveX) < 5) {
+          // We need to move at least 5 pixels in either direction
           return;
         }
 
+        // Start Y position within the sheet modal
+        const relativeStartY =
+          startPos.value.y - (window.value.height - store.state.y.value);
+
         const gestureDirection =
           e.allTouches[0].absoluteY - startPos.value.y > 0 ? "down" : "up";
-        if (panConfig.onStartShouldSetPanResponder(gestureDirection)) {
+        if (
+          panConfig.onStartShouldSetPanResponder({
+            direction: gestureDirection,
+            startY: relativeStartY,
+          })
+        ) {
           // Prevent scroll
           isActive.value = true;
-          state.activate();
         } else {
+          // Horizontal gesture, don't start the pan
           isActive.value = false;
-          state.fail();
+          stateManager.fail();
         }
       })
       .onChange((e) => {
@@ -76,15 +144,15 @@ function usePan(panConfig: PanConfig) {
           changeY = changeY / overDragResistanceFactor;
         } else if (yTooLow) {
           // out of bounds (smaller than min)
-          if (!store.config.panDownToClose) {
+          if (!store.config.value.panDownToClose) {
             changeY = changeY / overDragResistanceFactor;
           }
         }
 
         // if detached and centered double the changeY so it feels more natural
         if (
-          store.config.position[0] === "center" &&
-          store.config.detached &&
+          store.config.value.position[0] === "center" &&
+          store.config.value.detached &&
           !yTooLow
         ) {
           changeY = changeY * 2;
@@ -102,6 +170,7 @@ function usePan(panConfig: PanConfig) {
       })
       .onFinalize(() => {
         isActive.value = false;
+        runOnJS(preventTextSelection)(false);
       })
       .onEnd((e) => {
         "worklet";
@@ -116,7 +185,7 @@ function usePan(panConfig: PanConfig) {
         const relevantSnapPoints = store.state.snapPoints.value;
         const direction = e.velocityY < 0 ? "up" : "down";
         const prevSnapPointIndex = Math.max(
-          store.config.panDownToClose ? -1 : 0,
+          store.config.value.panDownToClose ? -1 : 0,
           store.getPreviousSnapPointIndex(
             relevantSnapPoints,
             store.state.height.value
@@ -137,7 +206,7 @@ function usePan(panConfig: PanConfig) {
 
         const onComplete = () => {
           "worklet";
-          if (store.state.y.value <= store.config.closeY) {
+          if (mode === "close") {
             store.state.visibilityPercentage.value = 0;
           }
 
@@ -149,8 +218,12 @@ function usePan(panConfig: PanConfig) {
 
         switch (mode) {
           case "close":
+            if (store.state.isActive.value) {
+              runOnJS(dismissKeyboard)();
+            }
+
             store.state.y.value = withSpring(
-              store.config.closeY,
+              store.config.value.closeY,
               AniConfig,
               onComplete
             );
@@ -166,7 +239,17 @@ function usePan(panConfig: PanConfig) {
             break;
         }
       });
-  }, [isActive, startPos, oldY, store, panConfig, isFinishingPan]);
+  }, [
+    startPos,
+    oldY,
+    store,
+    preventTextSelection,
+    isActive,
+    window,
+    panConfig,
+    isFinishingPan,
+    dismissKeyboard,
+  ]);
 
   useAnimatedReaction(
     () => store.state.y.value,

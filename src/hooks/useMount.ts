@@ -1,15 +1,16 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   useAnimatedReaction,
   SharedValue,
   runOnJS,
+  useSharedValue,
 } from "react-native-reanimated";
 
 function useMount(
   snapPoints: SharedValue<number[]>,
   contentLayout: SharedValue<{ width: number; height: number }>
 ) {
-  const [isMounted, setIsMounted] = useState(true);
+  const isMounted = useSharedValue(true);
   const onContentLayoutCallbacks = useRef<() => void>(() => {});
 
   const handleContentLayoutCallbacks = useCallback(() => {
@@ -41,8 +42,8 @@ function useMount(
   );
 
   const unmount = useCallback(() => {
-    setIsMounted(false);
-  }, []);
+    isMounted.value = false;
+  }, [isMounted]);
 
   return useMemo(() => {
     return {

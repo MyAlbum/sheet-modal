@@ -136,6 +136,7 @@ function Content(): React.JSX.Element {
             withFocusTrap={false}
             autoResize={false}
             panDownToClose={false}
+            panContent={false}
           >
             <SheetModalContent title={"This modal is opened on mount"} />
           </SheetModal>

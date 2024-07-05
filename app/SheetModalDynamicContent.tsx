@@ -1,13 +1,7 @@
 import React from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
-import { useSheetModal } from "../src";
+import { useSheetModal, ScrollView } from "../src";
 
 export default function SheetModalDynamicContent(): React.JSX.Element {
   const currentModal = useSheetModal();
@@ -35,13 +29,13 @@ export default function SheetModalDynamicContent(): React.JSX.Element {
             <TouchableOpacity
               key={`sheet-circle-${index}`}
               onPress={() => {
-                if (index < currentModal.config.snapPoints.length) {
+                if (index < currentModal.config.value.snapPoints.length) {
                   currentModal.snapToIndex(index);
                 }
               }}
               style={styles.circle}
             >
-              {index < currentModal.config.snapPoints.length && (
+              {index < currentModal.config.value.snapPoints.length && (
                 <Text style={{ color: "white" }}>Snap {index}</Text>
               )}
             </TouchableOpacity>

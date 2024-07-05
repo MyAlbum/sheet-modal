@@ -6,16 +6,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  SheetModalMethods,
-  SheetModalInstanceMethods,
-  SheetModalWithChildren,
-} from "../types";
+import { SheetModalMethods, SheetModalWithChildren } from "../types";
 import SheetModalInstance from "./ModalInstance";
 
 const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
   (_props, ref) => {
-    const refs = useRef<Array<SheetModalInstanceMethods | null>>([]);
+    const refs = useRef<Array<SheetModalMethods | null>>([]);
     const [instances, setInstances] = useState<ReactElement[]>(
       (() => {
         if (_props.snapPointIndex !== undefined && _props.snapPointIndex >= 0) {

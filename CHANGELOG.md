@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.2.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.2.0)
+### Summary
+Examples were updated to the latest release of `react-native` and `expo`. Performance fixes.
+
+### Changed
+- Fixed Reanimated warnings
+- config is now a SharedValue
+- Improved pan detection when at the top of the modal
+- Fixed clicks not recognised at the top of the modal
+- Focustrap isn't cancelled anymore on `escape`
+
+### Added
+- Prevent text selection when panning on Web
+
 ## [v2.1.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.1.0)
 ### Summary
 Allow for more complext layout designs. By default modals are not scrollable, you need to implement this yourself with the new `SheetModal.ScrollView` component.
