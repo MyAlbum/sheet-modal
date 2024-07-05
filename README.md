@@ -24,9 +24,9 @@ An interactive sheet modal, fully customizable, performance focused
 - [Props](#props)
 - [Methods](#methods)
 - [Examples](#examples)
+- [Known issues](#known-issues)
 - [License](#license)
 - [Contributing](#contributing)
-
 
 <br/><br/>
 
@@ -62,7 +62,7 @@ $ npx expo install react-native-reanimated react-native-gesture-handler
 >
 > **React Native Reanimated** needs extra installation steps, please follow their [guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
 
-<br/><br/><br/>
+<br/>
 
 ## Usage
 
@@ -103,7 +103,7 @@ export default function App() {
 - [Advanced usage](docs/Advanced.md)
 <br/>useSheetModal hook and get access to internal methods/state
 
-<br/><br/><br/>
+<br/>
 
 ## Props
 
@@ -127,9 +127,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `onClosed` | `function` | `undefined` | Optional callback triggered after closing animation ended
 | `onOpened` | `function` | `undefined` | Optional callback triggered after opening animation ended
 
-
-
-<br/><br/>
+<br/>
 
 ### Props for custom styling
 
@@ -140,7 +138,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `handleStyle` | Styling for the handle ||
 | `closeButtonStyle` | <pre>{<br>  iconColor: string<br>  backgroundColor: string<br>}</pre> Both are optional and will inherit from nested `SheetModalProvider`|
 
-<br/><br/>
+<br/>
 
 ### Props for custom components
 
@@ -150,7 +148,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `closeButtonComponent` | `() => ReactNode` | Custom close button component |
 | `handleComponent` | `() => ReactNode` | Custom handle component |
 
-<br/><br/><br/>
+<br/>
 
 ## Methods
 
@@ -162,7 +160,7 @@ The methods below can be used in the `SheetModal` component
 | `close: () => void` | Closes the sheet modal |
 | `autoFocus: (node: ReactNode) => void` | Sets the active focus on a node |
 
-<br/><br/><br/>
+<br/>
 
 ## Examples
 
@@ -183,7 +181,18 @@ After that you can run the examples:
 - `$ yarn expo` to start the expo example
 - `$ yarn bare` to start the bare react-native example
 
-<br/><br/><br/>
+<br/>
+
+## Known issues
+This package is compatible with React Native, but due to a bug in `react-native-reanimated` it can cause some issues when newarch/bridgeless is enabled.
+```cpp
+ReanimatedCommitMarker::ReanimatedCommitMarker() {
+ react_native_assert(reanimatedCommitFlag_ != true);
+ reanimatedCommitFlag_ = true;
+}
+```
+
+<br/>
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
