@@ -144,15 +144,15 @@ function usePan(panConfig: PanConfig) {
           changeY = changeY / overDragResistanceFactor;
         } else if (yTooLow) {
           // out of bounds (smaller than min)
-          if (!store.config.panDownToClose) {
+          if (!store.config.value.panDownToClose) {
             changeY = changeY / overDragResistanceFactor;
           }
         }
 
         // if detached and centered double the changeY so it feels more natural
         if (
-          store.config.position[0] === "center" &&
-          store.config.detached &&
+          store.config.value.position[0] === "center" &&
+          store.config.value.detached &&
           !yTooLow
         ) {
           changeY = changeY * 2;
@@ -185,7 +185,7 @@ function usePan(panConfig: PanConfig) {
         const relevantSnapPoints = store.state.snapPoints.value;
         const direction = e.velocityY < 0 ? "up" : "down";
         const prevSnapPointIndex = Math.max(
-          store.config.panDownToClose ? -1 : 0,
+          store.config.value.panDownToClose ? -1 : 0,
           store.getPreviousSnapPointIndex(
             relevantSnapPoints,
             store.state.height.value
@@ -223,7 +223,7 @@ function usePan(panConfig: PanConfig) {
             }
 
             store.state.y.value = withSpring(
-              store.config.closeY,
+              store.config.value.closeY,
               AniConfig,
               onComplete
             );

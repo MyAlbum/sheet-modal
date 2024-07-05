@@ -20,7 +20,7 @@ const ScrollView = forwardRef<Animated.ScrollView, ScrollViewProps>(
     const onStartShouldSetPanResponder = useCallback(
       (data: PanData) => {
         "worklet";
-        if (props.horizontal || !store.config.panContent) {
+        if (props.horizontal || !store.config.value.panContent) {
           // Don't pan if horizontal or panContent is disabled
           return false;
         }
@@ -44,12 +44,12 @@ const ScrollView = forwardRef<Animated.ScrollView, ScrollViewProps>(
         }
       },
       [
-        scrollOffset,
-        store.state.contentLayout,
-        store.state.height,
-        store.state.snapPoints,
-        store.config.panContent,
         props.horizontal,
+        store.config,
+        store.state.snapPoints,
+        store.state.height,
+        store.state.contentLayout,
+        scrollOffset,
       ]
     );
 

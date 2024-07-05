@@ -7,23 +7,25 @@ import {
   ViewStyle,
 } from "react-native";
 import useSheetModal from "../hooks/useSheetModal";
+import useSharedState from "../hooks/useSharedState";
 
 export default function SheetModalCloseButton() {
   const store = useSheetModal();
+  const config = useSharedState(store.config);
 
   const circleStyle: StyleProp<ViewStyle> = [stylesheet.circle];
-  if (store.config.closeButtonStyle?.backgroundColor) {
+  if (config.closeButtonStyle?.backgroundColor) {
     // @ts-ignore
     circleStyle.push({
-      backgroundColor: store.config.closeButtonStyle.backgroundColor,
+      backgroundColor: config.closeButtonStyle.backgroundColor,
     });
   }
 
   const iconStyle: StyleProp<ViewStyle> = [];
-  if (store.config.closeButtonStyle?.iconColor) {
+  if (config.closeButtonStyle?.iconColor) {
     // @ts-ignore
     iconStyle.push({
-      backgroundColor: store.config.closeButtonStyle?.iconColor,
+      backgroundColor: config.closeButtonStyle?.iconColor,
     });
   }
 

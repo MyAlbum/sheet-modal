@@ -29,13 +29,13 @@ export default function SheetModalDynamicContent(): React.JSX.Element {
             <TouchableOpacity
               key={`sheet-circle-${index}`}
               onPress={() => {
-                if (index < currentModal.config.snapPoints.length) {
+                if (index < currentModal.config.value.snapPoints.length) {
                   currentModal.snapToIndex(index);
                 }
               }}
               style={styles.circle}
             >
-              {index < currentModal.config.snapPoints.length && (
+              {index < currentModal.config.value.snapPoints.length && (
                 <Text style={{ color: "white" }}>Snap {index}</Text>
               )}
             </TouchableOpacity>

@@ -1,12 +1,10 @@
-import { PropsWithChildren, useContext, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { SheetModalDefaultsContext } from "../context";
-import { SheetModalConfig, SheetModalProps } from "../types";
+import { SheetModalConfig, SheetModalWithChildren } from "../types";
 import { defaultAttachedOffset, defaultProps } from "../constants";
 import useSheetModal from "./useSheetModal";
 
-function useSheetModalConfigInternal(
-  _props: PropsWithChildren<SheetModalProps>
-) {
+function useSheetModalConfigInternal(_props: SheetModalWithChildren) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { children, ...props } = _props;
   const store = useSheetModal();
