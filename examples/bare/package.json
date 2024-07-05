@@ -10,7 +10,7 @@
     "test": "jest",
     "update": "yarn upgrade-interactive",
     "bootstrap": "yarn install",
-    "prepare-ios": "cd ios && bundle install && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install"
+    "prepare-ios": "cd ios && bundle install && bundle exec pod install"
   },
   "dependencies": {
     "@react-native-segmented-control/segmented-control": "^2.5.2",
