@@ -1,6 +1,6 @@
 import SheetModalCloseButton from "./components/CloseButton";
 import SheetHandle from "./components/Handle";
-import { SheetModalProps } from "./types";
+import { SheetModalConfig } from "./types";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -53,7 +53,7 @@ export const detachBreakpoint = 500;
 // Factor to make it harder to pan when out of bounds
 export const overDragResistanceFactor = 5;
 
-export const defaultProps: Required<SheetModalProps> = {
+export const defaultProps: SheetModalConfig = {
   withClosebutton: true,
   withBackdrop: true,
   withFocusTrap: true,
@@ -90,6 +90,4 @@ export const defaultProps: Required<SheetModalProps> = {
   onOpened: () => {},
 };
 
-export const defaultAttachedOffset: Required<SheetModalProps>["offset"] = [
-  65, 0,
-];
+export const defaultAttachedOffset: SheetModalConfig["offset"] = [65, 0];

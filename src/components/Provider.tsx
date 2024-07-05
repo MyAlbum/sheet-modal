@@ -1,11 +1,11 @@
 import React, { PropsWithChildren, useCallback, useContext } from "react";
 import { SheetModalDefaultsContext } from "../context";
-import { SheetModalProps } from "../types";
+import { SheetModalConfig } from "../types";
 import { LayoutChangeEvent, View } from "react-native";
 import { WindowContext } from "../hooks/useWindowDimensions";
 import { useSharedValue } from "react-native-reanimated";
 
-function SheetModalProvider(_props: PropsWithChildren<SheetModalProps>) {
+function SheetModalProvider(_props: PropsWithChildren<SheetModalConfig>) {
   const parentContext = useContext(SheetModalDefaultsContext);
   const { children, ...props } = _props;
   const windowDimensions = useSharedValue({ width: 0, height: 0 });
