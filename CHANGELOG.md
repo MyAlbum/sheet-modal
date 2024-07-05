@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]()
+## [v2.2.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.2.0)
 ### Summary
 Examples were updated to the latest release of `react-native` and `expo`. Performance fixes.
 
