@@ -32,6 +32,7 @@
     "format": "yarn lint --fix",
     "lint": "eslint src --ext .ts,.tsx",
     "build": "bob build",
+    "bare-prepare": "cd examples/bare && yarn prepare-ios",
     "bare": "cd examples/bare && yarn start",
     "expo": "cd examples/expo && yarn start",
     "bootstrap": "yarn && yarn build && yarn install-bare && yarn install-expo",
