@@ -34,7 +34,15 @@ export const convertSnapPoints = (
     if (index === arr.length - 1) {
       return true;
     }
-    return _s < arr[index + 1]!;
+
+    const isValid = _s < arr[index + 1]!;
+    if (!isValid) {
+      console.warn(
+        `Invalid snap points detected. Snap points must be in ascending order.`
+      );
+    }
+
+    return isValid;
   });
 
   // Remove snap points larger than maxHeight
