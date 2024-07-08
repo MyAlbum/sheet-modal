@@ -9,6 +9,8 @@ export type Position = [
   x: "left" | "center" | "right"
 ];
 
+export type SheetModalProviderProps = Partial<SheetModalConfig>;
+
 export type SheetModalWithChildren = PropsWithChildren<
   Partial<SheetModalConfig>
 >;
