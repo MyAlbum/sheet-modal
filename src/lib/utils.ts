@@ -46,7 +46,20 @@ export const convertSnapPoints = (
   });
 
   // Remove snap points larger than maxHeight
-  s = s.filter((_s) => _s <= config.maxHeight);
+  let didRemoveMax = false;
+  s = s.filter((_s) => {
+    const isLargerThanMax = _s <= config.maxHeight;
+
+    if (isLargerThanMax) {
+      didRemoveMax = true;
+    }
+
+    return isLargerThanMax;
+  });
+
+  if (didRemoveMax) {
+    s.push(config.maxHeight);
+  }
 
   // Remove snap points smaller than minHeight
   let r = s.filter((_s) => _s >= config.minHeight);
