@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.2.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.2.1)
+### Summary
+SheetModalProvider props should be optional, this regression was fixed in this release.
+### Fixed
+- SheetModalProvider props are optional
+
 ## [v2.2.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.2.0)
 ### Summary
 Examples were updated to the latest release of `react-native` and `expo`. Performance fixes.
