@@ -1,82 +1,88 @@
-import React, {
-  ReactElement,
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import { SheetModalMethods, SheetModalWithChildren } from "../types";
-import SheetModalInstance from "./ModalInstance";
+import React, { ReactElement, forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { SheetModalMethods, SheetModalWithChildren } from '../types';
+import SheetModalInstance from './ModalInstance';
 
-const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>(
-  (_props, ref) => {
-    const refs = useRef<Array<SheetModalMethods | null>>([]);
-    const [instances, setInstances] = useState<ReactElement[]>(
-      (() => {
-        if (_props.snapPointIndex !== undefined && _props.snapPointIndex >= 0) {
-          return [
-            <SheetModalInstance
-              key={0}
-              {..._props}
-              ref={(r) => {
-                refs.current[0] = r;
-              }}
-            />,
-          ];
-        }
+const SheetModal = forwardRef<SheetModalMethods, SheetModalWithChildren>((props, ref) => {
+  const refs = useRef<Array<SheetModalMethods | null>>([]);
+  const [instances, setInstances] = useState<ReactElement[]>(
+    (() => {
+      const isVisibleOnMount = props.snapPointIndex !== undefined && props.snapPointIndex >= 0;
 
-        return [];
-      })()
-    );
+      if (isVisibleOnMount) {
+        return [
+          <SheetModalInstance
+            key={0}
+            {...props}
+            ref={(r) => {
+              refs.current[0] = r;
+            }}
+          />,
+        ];
+      }
 
-    const close = useCallback(() => {
+      return [];
+    })()
+  );
+
+  const close = useCallback(() => {
+    const activeInstance = refs.current.at(-1);
+    activeInstance?.close();
+  }, []);
+
+  const setProps = useCallback((newProps: SheetModalWithChildren) => {
+    const activeInstance = refs.current.at(-1);
+    activeInstance?.setProps(newProps);
+  }, []);
+
+  const isClosed = useCallback(() => {
+    return refs.current.at(-1)?.isClosed() ?? false;
+  }, []);
+
+  const snapToIndex = useCallback(
+    (index: number) => {
+      if (index < 0) {
+        console.warn(`Snap point index ${index} is out of range`);
+        return;
+      }
+
       const activeInstance = refs.current.at(-1);
-      activeInstance?.close();
-    }, []);
+      if (activeInstance && !activeInstance.isClosed()) {
+        activeInstance.snapToIndex(index);
+      } else {
+        setInstances((c) => [
+          ...c,
+          <SheetModalInstance
+            key={c.length + 1}
+            {...props}
+            ref={(r) => {
+              refs.current[c.length] = r;
+            }}
+            snapPointIndex={index}
+          />,
+        ]);
+      }
 
-    const isClosed = useCallback(() => {
-      return refs.current.at(-1)?.isClosed() ?? false;
-    }, []);
+      return null;
+    },
+    [props]
+  );
 
-    const snapToIndex = useCallback(
-      (index: number) => {
-        if (index < 0) {
-          console.warn(`Snap point index ${index} is out of range`);
-          return;
-        }
+  useEffect(() => {
+    const activeInstance = refs.current.at(-1);
+    if (activeInstance && !activeInstance.isClosed()) {
+      activeInstance.setProps(props);
+    }
+  }, [props]);
 
-        const activeInstance = refs.current.at(-1);
-        if (activeInstance && !activeInstance.isClosed()) {
-          activeInstance.snapToIndex(index);
-        } else {
-          setInstances((c) => [
-            ...c,
-            <SheetModalInstance
-              key={c.length + 1}
-              {..._props}
-              ref={(r) => {
-                refs.current[c.length] = r;
-              }}
-              snapPointIndex={index}
-            />,
-          ]);
-        }
+  useImperativeHandle(ref, () => ({
+    close,
+    snapToIndex,
+    isClosed,
+    setProps,
+  }));
 
-        return null;
-      },
-      [_props]
-    );
+  return <>{instances}</>;
+});
 
-    useImperativeHandle(ref, () => ({
-      close,
-      snapToIndex,
-      isClosed,
-    }));
-
-    return <>{instances}</>;
-  }
-);
-
-SheetModal.displayName = "SheetModal";
+SheetModal.displayName = 'SheetModal';
 export default SheetModal;

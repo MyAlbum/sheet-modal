@@ -19,34 +19,12 @@ import {
 import useBackHandler from "../hooks/useBackHandler";
 import useAutoFocus from "../hooks/useAutoFocus";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import usePropsToConfig from "../hooks/useSheetModalInternal";
 
-function useSheetModalInit(props: SheetModalConfig) {
+function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   const id = useId();
   const stackItem = useStackItem(id);
-  const config = useSharedValue<SheetModalConfig>({
-    closeY: props.closeY,
-    detached: props.detached,
-    position: props.position,
-    offset: props.offset,
-    autoResize: props.autoResize,
-    minHeight: props.minHeight,
-    snapPoints: props.snapPoints,
-    snapPointIndex: props.snapPointIndex,
-    containerStyle: props.containerStyle,
-    closeButtonStyle: props.closeButtonStyle,
-    headerStyle: props.headerStyle,
-    panContent: props.panContent,
-    withFocusTrap: props.withFocusTrap,
-    withClosebutton: props.withClosebutton,
-    withBackdrop: props.withBackdrop,
-    panDownToClose: props.panDownToClose,
-    closeButtonComponent: props.closeButtonComponent,
-    backdropComponent: props.backdropComponent,
-    handleComponent: props.handleComponent,
-    onClosed: props.onClosed,
-    onOpened: props.onOpened,
-    animateOnMount: props.animateOnMount,
-  });
+  const config = usePropsToConfig(incomingProps);
 
   // STATE
   const height = useSharedValue(0);
@@ -63,11 +41,9 @@ function useSheetModalInit(props: SheetModalConfig) {
 
   const skippedContentLayout = useSharedValue<ContentLayout | null>(null);
   const window = useWindowDimensions();
-
-  const _prevDetached = useRef(props.detached);
-  const _prevPosition = useRef(props.position);
+  const _prevDetached = useRef(config.value.detached);
+  const _prevPosition = useRef(config.value.position);
   const _prevWindowHeight = useRef(0);
-
   const { mount, isMounted, unmount } = useMount(snapPoints, contentLayout);
 
   const autoFocus = useAutoFocus({
@@ -220,6 +196,7 @@ function useSheetModalInit(props: SheetModalConfig) {
     });
   }, [config, isClosed, stackItem.isActive, visibilityPercentage, y]);
 
+  // Extra height caused by border
   const borderHeight = useMemo(() => {
     const containerStyle: ViewStyle = config.value.containerStyle
       ? (StyleSheet.flatten(config.value.containerStyle) as {})
@@ -236,8 +213,8 @@ function useSheetModalInit(props: SheetModalConfig) {
     return borderTop + borderBottom;
   }, [config.value.containerStyle]);
 
+  // Update snapPoints using window size and layout
   const updateSnapPoints = useCallback(() => {
-    // Update snapPoints using window size and layout
     const offsetYSpacing = config.value.detached
       ? config.value.offset[0] * 2
       : config.value.offset[0];
@@ -397,4 +374,4 @@ function useSheetModalInit(props: SheetModalConfig) {
   ]);
 }
 
-export default useSheetModalInit;
+export default useCreateSheetModalStore;

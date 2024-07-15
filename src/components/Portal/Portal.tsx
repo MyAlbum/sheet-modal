@@ -1,12 +1,13 @@
-import React, { Fragment, PropsWithChildren, useEffect, useMemo } from "react";
-import { Portal, portalHosts } from "./lib/portalHosts";
+import React, { Fragment, PropsWithChildren, useEffect, useMemo } from 'react';
+import { Portal, portalHosts } from './lib/portalHosts';
 
 type Props = {
   host?: string;
 };
 
 function PortalComponent(_props: PropsWithChildren<Props>) {
-  const props = { host: "default", ..._props };
+  const props = { host: 'default', ..._props };
+  const { children } = props;
   const portal = useMemo(() => {
     const portalInstance = new Portal(props.children);
     const host = portalHosts.getHost(props.host!);
@@ -28,8 +29,8 @@ function PortalComponent(_props: PropsWithChildren<Props>) {
   }, [portal]);
 
   useEffect(() => {
-    portal.setContent(<Fragment key={portal.id}>{props.children}</Fragment>);
-  }, [portal, props.children]);
+    portal.setContent(<Fragment key={portal.id}>{children}</Fragment>);
+  }, [portal, children]);
 
   return null;
 }

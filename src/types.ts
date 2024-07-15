@@ -127,6 +127,11 @@ export type SheetModalMethods = {
   snapToIndex: (index: number, animate?: boolean) => void;
 
   /**
+   * Set the props of the sheet modal
+   */
+  setProps: (props: SheetModalWithChildren) => void;
+
+  /**
    * Check if the sheet modal is closed
    */
   isClosed: () => boolean;

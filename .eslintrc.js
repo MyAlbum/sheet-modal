@@ -4,6 +4,13 @@ module.exports = {
   rules: {
     quotes: "off",
     "react-native/no-inline-styles": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        printWidth: 175,
+        semi: true,
+      },
+    ],
   },
   plugins: ["only-warn"],
   parserOptions: {

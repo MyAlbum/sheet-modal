@@ -1,67 +1,16 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { SheetModalDefaultsContext } from "../context";
 import { SheetModalConfig, SheetModalWithChildren } from "../types";
 import { defaultAttachedOffset, defaultProps } from "../constants";
-import useSheetModal from "./useSheetModal";
+import { useSharedValue } from "react-native-reanimated";
 
-function useSheetModalConfigInternal(_props: SheetModalWithChildren) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { children, ...props } = _props;
-  const store = useSheetModal();
+function usePropsToConfig(props: SheetModalWithChildren) {
   const context = useContext(SheetModalDefaultsContext);
-  const sheetModalConfig = useMemo<SheetModalConfig>(() => {
-    const dataStore = { ...defaultProps };
-
-    return new Proxy(dataStore, {
-      get(target, name) {
-        // @ts-ignore
-        return target[name];
-      },
-
-      set(target, name, value) {
-        // @ts-ignore
-        target[name] = value;
-        return true;
-      },
-    });
-  }, []);
-
-  const closeButtonStyle = useMemo(() => {
-    return {
-      ...(defaultProps.closeButtonStyle as {}),
-      ...(context.closeButtonStyle as {}),
-      ...(props.closeButtonStyle as {}),
-    };
-  }, [context.closeButtonStyle, props.closeButtonStyle]);
-
-  const containerStyle = useMemo(() => {
-    return {
-      ...(defaultProps.containerStyle as {}),
-      ...(context.containerStyle as {}),
-      ...(props.containerStyle as {}),
-    };
-  }, [context.containerStyle, props.containerStyle]);
-
-  const headerStyle = useMemo(() => {
-    return {
-      ...(defaultProps.headerStyle as {}),
-      ...(context.headerStyle as {}),
-      ...(props.headerStyle as {}),
-    };
-  }, [context.headerStyle, props.headerStyle]);
-
-  const handleStyle = useMemo(() => {
-    return {
-      ...(defaultProps.handleStyle as {}),
-      ...(context.handleStyle as {}),
-      ...(props.handleStyle as {}),
-    };
-  }, [context.handleStyle, props.handleStyle]);
 
   const returnValue = useMemo<SheetModalConfig>(() => {
     const userConfig = {
       ...context,
-      ...props,
+      ...sanitizeProps(props),
     };
 
     const config: SheetModalConfig = {
@@ -69,10 +18,29 @@ function useSheetModalConfigInternal(_props: SheetModalWithChildren) {
       ...userConfig,
     };
 
-    config.containerStyle = containerStyle;
-    config.headerStyle = headerStyle;
-    config.handleStyle = handleStyle;
-    config.closeButtonStyle = closeButtonStyle;
+    config.closeButtonStyle = {
+      ...(defaultProps.closeButtonStyle as {}),
+      ...(context.closeButtonStyle as {}),
+      ...(props.closeButtonStyle as {}),
+    };
+
+    config.containerStyle = {
+      ...(defaultProps.containerStyle as {}),
+      ...(context.containerStyle as {}),
+      ...(props.containerStyle as {}),
+    };
+
+    config.headerStyle = {
+      ...(defaultProps.headerStyle as {}),
+      ...(context.headerStyle as {}),
+      ...(props.headerStyle as {}),
+    };
+
+    config.handleStyle = {
+      ...(defaultProps.handleStyle as {}),
+      ...(context.handleStyle as {}),
+      ...(props.handleStyle as {}),
+    };
 
     if (userConfig.offset === undefined) {
       if (!config.detached) {
@@ -80,26 +48,56 @@ function useSheetModalConfigInternal(_props: SheetModalWithChildren) {
       }
     }
 
-    Object.assign(sheetModalConfig, config);
+    return config;
+  }, [context, props]);
 
-    return sheetModalConfig;
-  }, [
-    context,
-    props,
-    containerStyle,
-    headerStyle,
-    handleStyle,
-    closeButtonStyle,
-    sheetModalConfig,
-  ]);
+  const sharedProps = useSharedValue(returnValue);
 
-  if (Object.keys(store).length > 0) {
-    console.trace(
-      "SheetModalDefaultsProvider cannot be used within the sheetModal, use store.config instead"
-    );
-  }
+  useEffect(() => {
+    sharedProps.value = returnValue;
+  }, [returnValue, sharedProps]);
 
-  return returnValue;
+  return sharedProps;
 }
 
-export default useSheetModalConfigInternal;
+export default usePropsToConfig;
+
+function sanitizeProps(
+  props: Partial<SheetModalConfig>
+): Partial<SheetModalConfig> {
+  const allowedKeys = [
+    "closeY",
+    "detached",
+    "position",
+    "offset",
+    "autoResize",
+    "minHeight",
+    "snapPoints",
+    "snapPointIndex",
+    "containerStyle",
+    "closeButtonStyle",
+    "headerStyle",
+    "panContent",
+    "withFocusTrap",
+    "withClosebutton",
+    "withBackdrop",
+    "panDownToClose",
+    "closeButtonComponent",
+    "backdropComponent",
+    "handleComponent",
+    "onClosed",
+    "onOpened",
+    "animateOnMount",
+  ];
+
+  // Only allow keys that are in the allowedKeys array
+  const propsCopy = { ...props };
+  let key: keyof SheetModalConfig;
+  for (key in props) {
+    if (!allowedKeys.includes(key)) {
+      delete propsCopy[key];
+    }
+  }
+
+  return propsCopy;
+}
