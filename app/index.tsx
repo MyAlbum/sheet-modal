@@ -4,7 +4,7 @@ import {
   SheetModalMethods,
   SheetModalProvider,
 } from "../src";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   Pressable,
   SafeAreaView,
@@ -44,6 +44,20 @@ function Content(): React.JSX.Element {
   const attachedSheetModalRef = useRef<SheetModalMethods>(null);
   const detachedSheetModalRef = useRef<SheetModalMethods>(null);
   const responsiveSheetModalRef = useRef<SheetModalMethods>(null);
+
+  const getRandomText = () => Math.random().toString(36).substring(7);
+
+  const [randomText, setRandomText] = React.useState(getRandomText());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRandomText(getRandomText());
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const openAttachedModal = useCallback(() => {
     attachedSheetModalRef.current?.snapToIndex(0);
@@ -138,7 +152,10 @@ function Content(): React.JSX.Element {
             panDownToClose={false}
             panContent={false}
           >
-            <SheetModalContent title={"This modal is opened on mount"} />
+            <SheetModalContent
+              randomText={randomText}
+              title={"This modal is opened on mount"}
+            />
           </SheetModal>
         </View>
       </ScrollView>

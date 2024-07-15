@@ -6,6 +6,7 @@ import { snapPoints } from "./const";
 
 type Props = {
   title: string;
+  randomText?: string;
 };
 
 export default function SheetModalContent(props: Props): React.JSX.Element {
@@ -27,6 +28,7 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
         }}
         alwaysBounceVertical={false}
       >
+        <Text>{props.randomText}</Text>
         <ScrollView
           horizontal
           style={styles.scrollView}
