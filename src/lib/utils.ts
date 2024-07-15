@@ -12,9 +12,12 @@ export const convertSnapPoints = (snapPoints: SnapPoint[], config: convertSnapPo
     return [];
   }
 
+  const percentageSnappointIndices: Array<number> = [];
+
   // Convert percentage snap points to absolute values
-  let s = snapPoints.map((_s) => {
+  let s = snapPoints.map((_s, i) => {
     if (typeof _s === 'string') {
+      percentageSnappointIndices.push(i);
       const percentage = parseInt(_s.replace('%', ''), 10);
       return Math.min(config.maxHeight, config.windowHeight * (percentage / 100));
     } else {
@@ -34,7 +37,10 @@ export const convertSnapPoints = (snapPoints: SnapPoint[], config: convertSnapPo
 
     const isValid = _s < arr[index + 1]!;
     if (!isValid) {
-      console.warn(`Invalid snap points detected. Snap points must be in ascending order.`);
+      // Only warn if it's not a percentage snap point
+      if (!percentageSnappointIndices.includes(index)) {
+        console.warn(`Invalid snap points detected. Snap points must be in ascending order.`);
+      }
     }
 
     return isValid;
