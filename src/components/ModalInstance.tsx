@@ -25,6 +25,7 @@ const SheetModalInstance = forwardRef<SheetModalMethods, SheetModalWithChildren>
       store.snapToIndex(incomingProps.snapPointIndex, incomingProps.animateOnMount);
     }
 
+    // Run once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

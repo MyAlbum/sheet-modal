@@ -1,4 +1,4 @@
-import { SnapPoint } from "../types";
+import { SnapPoint } from '../types';
 
 type convertSnapPointsConfig = {
   windowHeight: number;
@@ -6,26 +6,23 @@ type convertSnapPointsConfig = {
   minHeight: number;
 };
 
-export const convertSnapPoints = (
-  snapPoints: SnapPoint[],
-  config: convertSnapPointsConfig
-) => {
+export const convertSnapPoints = (snapPoints: SnapPoint[], config: convertSnapPointsConfig) => {
+  // If maxHeight is 0, we don't need to calculate snap points
   if (config.maxHeight <= 0) {
     return [];
   }
 
+  // Convert percentage snap points to absolute values
   let s = snapPoints.map((_s) => {
-    if (typeof _s === "string") {
-      const percentage = parseInt(_s.replace("%", ""), 10);
-      return Math.min(
-        config.maxHeight,
-        config.windowHeight * (percentage / 100)
-      );
+    if (typeof _s === 'string') {
+      const percentage = parseInt(_s.replace('%', ''), 10);
+      return Math.min(config.maxHeight, config.windowHeight * (percentage / 100));
     } else {
       return _s;
     }
   });
 
+  // Remove non consecutive snap points
   s = s.filter((_s, index, arr) => {
     if (_s === 0) {
       return false;
@@ -37,9 +34,7 @@ export const convertSnapPoints = (
 
     const isValid = _s < arr[index + 1]!;
     if (!isValid) {
-      console.warn(
-        `Invalid snap points detected. Snap points must be in ascending order.`
-      );
+      console.warn(`Invalid snap points detected. Snap points must be in ascending order.`);
     }
 
     return isValid;
@@ -57,14 +52,16 @@ export const convertSnapPoints = (
     return isLargerThanMax;
   });
 
+  // Add maxHeight is snappoints larger than maxHeight were removed
   if (didRemoveMax) {
     s.push(config.maxHeight);
   }
 
   // Remove snap points smaller than minHeight
   let r = s.filter((_s) => _s >= config.minHeight);
+
+  // We removed some snap points smaller than minHeight, add minHeight as first snap point if it's not already there
   if (r.length < s.length && r[0] !== config.minHeight) {
-    // We removed some snap points smaller than minHeight, add minHeight as first snap point if it's not already there
     s.unshift(config.minHeight);
   }
 
@@ -75,25 +72,22 @@ export const convertSnapPoints = (
 };
 
 export const getNextSnapPointIndex = (_snapPoints: number[], _y: number) => {
-  "worklet";
+  'worklet';
 
   const filterValue = Math.min(_y, Math.max(..._snapPoints));
   return _snapPoints.findIndex((point) => {
     return point > filterValue;
-  }) as number;
+  });
 };
 
-export const getPreviousSnapPointIndex = (
-  _snapPoints: number[],
-  _y: number
-) => {
-  "worklet";
+export const getPreviousSnapPointIndex = (_snapPoints: number[], _y: number) => {
+  'worklet';
   const filterValue = Math.max(_y, Math.min(..._snapPoints));
   const snaps = [..._snapPoints].reverse();
 
   const reverseIndex = snaps.findIndex((point) => {
     return point < filterValue;
-  }) as number;
+  });
 
   if (reverseIndex === -1) {
     return -1;

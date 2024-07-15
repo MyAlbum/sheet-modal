@@ -2,7 +2,6 @@ import React, { PropsWithChildren, useCallback, useMemo, useRef } from 'react';
 import { FlexAlignType, LayoutChangeEvent, Platform, PointerEvent, View, ViewStyle } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedReaction, useAnimatedRef } from 'react-native-reanimated';
-import { DefaultStyle } from 'react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes';
 import usePan from '../hooks/usePan';
 import useSharedState from '../hooks/useSharedState';
 import useSheetModal from '../hooks/useSheetModal';
@@ -112,7 +111,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
       }
     };
 
-    return getStyle() as DefaultStyle;
+    return getStyle();
   }, [window, store.config.value.containerStyle, horizontalOffset, horizontalPosition, store.state.y, store.state.height, store.state.contentLayout]);
 
   const measureStyle = useStableAnimatedStyle(() => {
@@ -134,7 +133,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
       };
     };
 
-    return getStyle() as DefaultStyle;
+    return getStyle();
   }, [window, store.state.contentLayout, store.config.value.minHeight]);
 
   // @ts-ignore

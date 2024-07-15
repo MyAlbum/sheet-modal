@@ -176,9 +176,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   // Extra height caused by border
   const borderHeight = useMemo(() => {
     const containerStyle: ViewStyle = config.value.containerStyle ? (StyleSheet.flatten(config.value.containerStyle) as {}) : {};
-
     const borderTop = containerStyle ? containerStyle.borderTopWidth || containerStyle.borderWidth || 0 : 0;
-
     const borderBottom = containerStyle ? containerStyle.borderBottomWidth || containerStyle.borderWidth || 0 : 0;
 
     return borderTop + borderBottom;
@@ -187,9 +185,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   // Update snapPoints using window size and layout
   const updateSnapPoints = useCallback(() => {
     const offsetYSpacing = config.value.detached ? config.value.offset[0] * 2 : config.value.offset[0];
-
     const neededHeight = contentLayout.value.height ? contentLayout.value.height + borderHeight : 0;
-
     const availableWindowHeight = window.value.height - offsetYSpacing;
     const convertConfig = {
       windowHeight: window.value.height,
@@ -234,7 +230,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   }, [config, contentLayout, borderHeight, window, snapPoints, y, snapPointIndex, getYForHeight, height]);
 
   useAnimatedReaction(
-    () => [visibilityPercentage.value, isPanning.value] as [number, boolean],
+    () => [visibilityPercentage.value, isPanning.value] as const,
     (v, prevV) => {
       if (v[0] === 0 && prevV?.[0] && !isPanning.value) {
         // Close when visibilityPercentage is 0 and not panning

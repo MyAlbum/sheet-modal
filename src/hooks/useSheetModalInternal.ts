@@ -1,8 +1,8 @@
-import { useContext, useEffect, useMemo } from "react";
-import { SheetModalDefaultsContext } from "../context";
-import { SheetModalConfig, SheetModalWithChildren } from "../types";
-import { defaultAttachedOffset, defaultProps } from "../constants";
-import { useSharedValue } from "react-native-reanimated";
+import { useContext, useEffect, useMemo } from 'react';
+import { useSharedValue } from 'react-native-reanimated';
+import { defaultAttachedOffset, defaultProps } from '../constants';
+import { SheetModalDefaultsContext } from '../context';
+import { SheetModalConfig, SheetModalWithChildren } from '../types';
 
 function usePropsToConfig(props: SheetModalWithChildren) {
   const context = useContext(SheetModalDefaultsContext);
@@ -19,9 +19,9 @@ function usePropsToConfig(props: SheetModalWithChildren) {
     };
 
     config.closeButtonStyle = {
-      ...(defaultProps.closeButtonStyle as {}),
-      ...(context.closeButtonStyle as {}),
-      ...(props.closeButtonStyle as {}),
+      ...defaultProps.closeButtonStyle,
+      ...context.closeButtonStyle,
+      ...props.closeButtonStyle,
     };
 
     config.containerStyle = {
@@ -62,32 +62,30 @@ function usePropsToConfig(props: SheetModalWithChildren) {
 
 export default usePropsToConfig;
 
-function sanitizeProps(
-  props: Partial<SheetModalConfig>
-): Partial<SheetModalConfig> {
+function sanitizeProps(props: Partial<SheetModalConfig>): Partial<SheetModalConfig> {
   const allowedKeys = [
-    "closeY",
-    "detached",
-    "position",
-    "offset",
-    "autoResize",
-    "minHeight",
-    "snapPoints",
-    "snapPointIndex",
-    "containerStyle",
-    "closeButtonStyle",
-    "headerStyle",
-    "panContent",
-    "withFocusTrap",
-    "withClosebutton",
-    "withBackdrop",
-    "panDownToClose",
-    "closeButtonComponent",
-    "backdropComponent",
-    "handleComponent",
-    "onClosed",
-    "onOpened",
-    "animateOnMount",
+    'closeY',
+    'detached',
+    'position',
+    'offset',
+    'autoResize',
+    'minHeight',
+    'snapPoints',
+    'snapPointIndex',
+    'containerStyle',
+    'closeButtonStyle',
+    'headerStyle',
+    'panContent',
+    'withFocusTrap',
+    'withClosebutton',
+    'withBackdrop',
+    'panDownToClose',
+    'closeButtonComponent',
+    'backdropComponent',
+    'handleComponent',
+    'onClosed',
+    'onOpened',
+    'animateOnMount',
   ];
 
   // Only allow keys that are in the allowedKeys array

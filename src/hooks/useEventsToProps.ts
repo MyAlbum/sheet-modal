@@ -1,6 +1,6 @@
-import { runOnJS, useAnimatedReaction } from "react-native-reanimated";
-import { SheetModalStore } from "../types";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
+import { SheetModalStore } from '../types';
 
 export function useEventsToProps(store: SheetModalStore) {
   const onClosed = useCallback(() => {
@@ -12,9 +12,9 @@ export function useEventsToProps(store: SheetModalStore) {
   }, [store.config]);
 
   useAnimatedReaction(
-    () => [store.state.visibilityPercentage.value, store.state.isPanning.value],
+    () => [store.state.visibilityPercentage.value, store.state.isPanning.value] as const,
     (current, prev) => {
-      const [v, p] = current as [number, boolean];
+      const [v, p] = current;
 
       if (!p && v <= 0 && prev?.[0]) {
         //closed

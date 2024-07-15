@@ -1,4 +1,4 @@
-import { SharedValue } from "react-native-reanimated";
+import { SharedValue } from 'react-native-reanimated';
 
 type StackItem = {
   id: String;
@@ -12,7 +12,7 @@ export class FocusStack {
     return this.stackItems.some((v) => v.id === id && v.isActive.value);
   };
 
-  push = (id: StackItem["id"], isActive: SharedValue<boolean>) => {
+  push = (id: StackItem['id'], isActive: SharedValue<boolean>) => {
     this.stackItems = this.stackItems.filter((v) => v.id !== id);
 
     this.stackItems.push({

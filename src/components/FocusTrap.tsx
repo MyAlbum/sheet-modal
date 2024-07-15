@@ -1,8 +1,8 @@
-import React from "react";
-import { default as _FocusTrap } from "focus-trap-react";
+import { default as _FocusTrap } from 'focus-trap-react';
+import React from 'react';
 
 export type FocusTrapProps = _FocusTrap.Props;
-export type FocusTrapOptions = _FocusTrap.Props["focusTrapOptions"];
+export type FocusTrapOptions = _FocusTrap.Props['focusTrapOptions'];
 
 export default function FocusTrap(props: FocusTrapProps) {
   const { children, ...focusTrapOptions } = props;

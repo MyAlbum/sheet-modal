@@ -1,6 +1,6 @@
-import { useCallback } from "react";
-import { FocusStack } from "./store";
-import { useSharedValue } from "react-native-reanimated";
+import { useCallback } from 'react';
+import { useSharedValue } from 'react-native-reanimated';
+import { FocusStack } from './store';
 const stack = new FocusStack();
 
 export function useStackItem(id: string) {

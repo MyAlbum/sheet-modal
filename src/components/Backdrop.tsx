@@ -1,27 +1,26 @@
-import React from "react";
-import useSheetModal from "../hooks/useSheetModal";
-import Animated from "react-native-reanimated";
-import useStableAnimatedStyle from "../hooks/useStableAnimatedStyle";
-import useSharedState from "../hooks/useSharedState";
+import React from 'react';
+import Animated from 'react-native-reanimated';
+import useSharedState from '../hooks/useSharedState';
+import useSheetModal from '../hooks/useSheetModal';
+import useStableAnimatedStyle from '../hooks/useStableAnimatedStyle';
 
 function SheetModalBackdrop() {
   const store = useSheetModal();
   const config = useSharedState(store.config);
 
   const style = useStableAnimatedStyle(() => {
-    "worklet";
+    'worklet';
 
     if (store.state.visibilityPercentage.value === 0) {
       return {
-        display: "none",
+        display: 'none',
       };
     }
 
     return {
       opacity: store.state.visibilityPercentage.value,
-      pointerEvents:
-        store.state.visibilityPercentage.value > 0.3 ? "auto" : "none",
-      display: "flex",
+      pointerEvents: store.state.visibilityPercentage.value > 0.3 ? 'auto' : 'none',
+      display: 'flex',
     };
   }, [store.state.visibilityPercentage]);
 
@@ -37,7 +36,7 @@ function SheetModalBackdrop() {
           right: 0,
           top: 0,
           bottom: 0,
-          position: "absolute",
+          position: 'absolute',
         },
         style,
       ]}

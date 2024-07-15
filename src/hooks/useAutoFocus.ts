@@ -1,10 +1,5 @@
-import { useCallback, useRef } from "react";
-import {
-  SharedValue,
-  runOnJS,
-  useAnimatedReaction,
-  useSharedValue,
-} from "react-native-reanimated";
+import { useCallback, useRef } from 'react';
+import { SharedValue, runOnJS, useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
 
 const minVisibility = 0.1;
 
@@ -19,12 +14,7 @@ function useAutoFocus(config: Config) {
   const { visibilityPercentage, isActive } = config;
 
   const handleFocus = useCallback(() => {
-    if (
-      handled.value ||
-      !_ref.current ||
-      !isActive.value ||
-      visibilityPercentage.value < minVisibility
-    ) {
+    if (handled.value || !_ref.current || !isActive.value || visibilityPercentage.value < minVisibility) {
       return;
     }
 
@@ -50,7 +40,7 @@ function useAutoFocus(config: Config) {
   );
 
   useAnimatedReaction(
-    () => [isActive.value, visibilityPercentage.value] as [boolean, number],
+    () => [isActive.value, visibilityPercentage.value] as const,
     ([_isActive, v], prev) => {
       const focusReady = _isActive && v >= minVisibility;
       const prevFocusReady = prev ? prev[0] && prev[1] >= minVisibility : false;

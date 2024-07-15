@@ -1,8 +1,8 @@
-import SheetModalCloseButton from "./components/CloseButton";
-import SheetHandle from "./components/Handle";
-import { SheetModalConfig } from "./types";
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import SheetModalCloseButton from './components/CloseButton';
+import SheetHandle from './components/Handle';
+import { SheetModalConfig } from './types';
 
 // spring animation config used for snapping the sheet modal
 export const AniConfig = {
@@ -13,10 +13,10 @@ export const AniConfig = {
 
 const styleSheet = StyleSheet.create({
   container: {
-    backgroundColor: "#232323",
+    backgroundColor: '#232323',
     borderRadius: 16,
 
-    shadowColor: "black",
+    shadowColor: 'black',
     shadowOpacity: 0.25,
     shadowRadius: 25,
     shadowOffset: {
@@ -27,22 +27,22 @@ const styleSheet = StyleSheet.create({
   },
 
   header: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    flexDirection: "column",
-    alignItems: "flex-end",
-    transform: "translate3d(0,0,0)",
-    pointerEvents: "none",
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    transform: 'translate3d(0,0,0)',
+    pointerEvents: 'none',
   },
 
   handle: {
     height: 3,
     top: 5,
-    backgroundColor: "rgba(255, 255, 255, 0.6)",
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
     width: 35,
-    alignSelf: "center",
+    alignSelf: 'center',
     borderRadius: 100,
   },
 });
@@ -62,25 +62,23 @@ export const defaultProps: SheetModalConfig = {
   autoResize: true,
   animateOnMount: true,
 
-  snapPoints: ["100%"],
+  snapPoints: ['100%'],
   snapPointIndex: -1,
   offset: [50, 30],
   minHeight: 50,
-  position: ["center", "center"],
+  position: ['center', 'center'],
 
   detached: false,
 
-  backdropComponent: () => (
-    <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" }} />
-  ),
+  backdropComponent: () => <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />,
   handleComponent: () => <SheetHandle />,
   closeButtonComponent: () => <SheetModalCloseButton />,
 
   containerStyle: styleSheet.container,
   headerStyle: styleSheet.header,
   closeButtonStyle: {
-    iconColor: "rgba(155, 155, 155, 1)",
-    backgroundColor: "#353738",
+    iconColor: 'rgba(155, 155, 155, 1)',
+    backgroundColor: '#353738',
   },
   handleStyle: styleSheet.handle,
 
@@ -90,4 +88,4 @@ export const defaultProps: SheetModalConfig = {
   onOpened: () => {},
 };
 
-export const defaultAttachedOffset: SheetModalConfig["offset"] = [65, 0];
+export const defaultAttachedOffset: SheetModalConfig['offset'] = [65, 0];
