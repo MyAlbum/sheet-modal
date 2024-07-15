@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo, useRef } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 import { defaultAttachedOffset, defaultProps } from '../constants';
 import { SheetModalDefaultsContext } from '../context';
@@ -6,6 +6,7 @@ import { SheetModalConfig, SheetModalWithChildren } from '../types';
 
 function usePropsToConfig(props: SheetModalWithChildren) {
   const context = useContext(SheetModalDefaultsContext);
+  const lastReturnValue = useRef<SheetModalConfig>();
 
   const returnValue = useMemo<SheetModalConfig>(() => {
     const userConfig = {
@@ -48,7 +49,34 @@ function usePropsToConfig(props: SheetModalWithChildren) {
       }
     }
 
-    return config;
+    // check if any key is changed
+    let hasChanged = false;
+    let key: keyof SheetModalConfig;
+    for (key in config) {
+      if (!lastReturnValue.current) {
+        hasChanged = true;
+        break;
+      } else if (lastReturnValue.current[key] !== config[key]) {
+        if (typeof config[key] === 'object') {
+          if (JSON.stringify(lastReturnValue.current[key]) !== JSON.stringify(config[key])) {
+            hasChanged = true;
+            break;
+          }
+        } else {
+          hasChanged = true;
+        }
+      }
+
+      if (hasChanged) {
+        break;
+      }
+    }
+
+    if (hasChanged) {
+      lastReturnValue.current = config;
+    }
+
+    return lastReturnValue.current!;
   }, [context, props]);
 
   const sharedProps = useSharedValue(returnValue);

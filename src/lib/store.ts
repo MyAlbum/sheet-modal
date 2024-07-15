@@ -243,11 +243,11 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   );
 
   useAnimatedReaction(
-    () => [contentLayout.value, config.value.detached, window.value],
+    () => [contentLayout.value, config.value, window.value] as const,
     () => {
       runOnJS(updateSnapPoints)();
     },
-    [contentLayout, window, updateSnapPoints]
+    [contentLayout, window, config, updateSnapPoints]
   );
 
   useBackHandler(
