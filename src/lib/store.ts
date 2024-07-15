@@ -1,25 +1,15 @@
-import { useCallback, useId, useMemo, useRef } from "react";
-import { Keyboard, StyleSheet, ViewStyle } from "react-native";
-import {
-  cancelAnimation,
-  runOnJS,
-  useAnimatedReaction,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
-import useMount from "../hooks/useMount";
-import { useStackItem } from "../hooks/useStackItem/useStackItem";
-import { ContentLayout, SheetModalConfig, SheetModalStore } from "../types";
-import { AniConfig } from "../constants";
-import {
-  convertSnapPoints,
-  getNextSnapPointIndex,
-  getPreviousSnapPointIndex,
-} from "./utils";
-import useBackHandler from "../hooks/useBackHandler";
-import useAutoFocus from "../hooks/useAutoFocus";
-import useWindowDimensions from "../hooks/useWindowDimensions";
-import usePropsToConfig from "../hooks/useSheetModalInternal";
+import { useCallback, useId, useMemo, useRef } from 'react';
+import { Keyboard, StyleSheet, ViewStyle } from 'react-native';
+import { cancelAnimation, runOnJS, useAnimatedReaction, useSharedValue, withSpring } from 'react-native-reanimated';
+import { AniConfig } from '../constants';
+import useAutoFocus from '../hooks/useAutoFocus';
+import useBackHandler from '../hooks/useBackHandler';
+import useMount from '../hooks/useMount';
+import usePropsToConfig from '../hooks/useSheetModalInternal';
+import { useStackItem } from '../hooks/useStackItem/useStackItem';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { ContentLayout, SheetModalConfig, SheetModalStore } from '../types';
+import { convertSnapPoints, getNextSnapPointIndex, getPreviousSnapPointIndex } from './utils';
 
 function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   const id = useId();
@@ -77,10 +67,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
         return;
       }
 
-      if (
-        contentLayout.value.height === _height &&
-        contentLayout.value.width === _width
-      ) {
+      if (contentLayout.value.height === _height && contentLayout.value.width === _width) {
         return;
       }
 
@@ -95,15 +82,15 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
 
   const getYForHeight = useCallback(
     (h: number) => {
-      "worklet";
+      'worklet';
 
       let newY = 0;
       if (config.value.detached) {
-        if (config.value.position[0] === "center") {
+        if (config.value.position[0] === 'center') {
           newY = window.value.height / 2 + h / 2;
-        } else if (config.value.position[0] === "bottom") {
+        } else if (config.value.position[0] === 'bottom') {
           newY = h + config.value.offset[0];
-        } else if (config.value.position[0] === "top") {
+        } else if (config.value.position[0] === 'top') {
           newY = window.value.height - config.value.offset[0];
         }
       } else {
@@ -137,7 +124,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
 
         const newY = getYForHeight(newH);
         const onPresented = (finished?: boolean) => {
-          "worklet";
+          'worklet';
           if (!finished) {
             return;
           }
@@ -160,17 +147,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
         }
       });
     },
-    [
-      isClosed,
-      snapPointIndex,
-      stackItem,
-      mount,
-      height,
-      visibilityPercentage,
-      y,
-      snapPoints,
-      getYForHeight,
-    ]
+    [isClosed, snapPointIndex, stackItem, mount, height, visibilityPercentage, y, snapPoints, getYForHeight]
   );
 
   const close = useCallback(() => {
@@ -189,7 +166,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
 
     visibilityPercentage.value = withSpring(0, AniConfig);
     y.value = withSpring(config.value.closeY, AniConfig, () => {
-      "worklet";
+      'worklet';
 
       y.value = config.value.closeY;
       visibilityPercentage.value = 0;
@@ -198,56 +175,34 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
 
   // Extra height caused by border
   const borderHeight = useMemo(() => {
-    const containerStyle: ViewStyle = config.value.containerStyle
-      ? (StyleSheet.flatten(config.value.containerStyle) as {})
-      : {};
+    const containerStyle: ViewStyle = config.value.containerStyle ? (StyleSheet.flatten(config.value.containerStyle) as {}) : {};
 
-    const borderTop = containerStyle
-      ? containerStyle.borderTopWidth || containerStyle.borderWidth || 0
-      : 0;
+    const borderTop = containerStyle ? containerStyle.borderTopWidth || containerStyle.borderWidth || 0 : 0;
 
-    const borderBottom = containerStyle
-      ? containerStyle.borderBottomWidth || containerStyle.borderWidth || 0
-      : 0;
+    const borderBottom = containerStyle ? containerStyle.borderBottomWidth || containerStyle.borderWidth || 0 : 0;
 
     return borderTop + borderBottom;
   }, [config.value.containerStyle]);
 
   // Update snapPoints using window size and layout
   const updateSnapPoints = useCallback(() => {
-    const offsetYSpacing = config.value.detached
-      ? config.value.offset[0] * 2
-      : config.value.offset[0];
+    const offsetYSpacing = config.value.detached ? config.value.offset[0] * 2 : config.value.offset[0];
 
-    const neededHeight = contentLayout.value.height
-      ? contentLayout.value.height + borderHeight
-      : 0;
+    const neededHeight = contentLayout.value.height ? contentLayout.value.height + borderHeight : 0;
 
     const availableWindowHeight = window.value.height - offsetYSpacing;
     const convertConfig = {
       windowHeight: window.value.height,
-      maxHeight: config.value.autoResize
-        ? Math.min(availableWindowHeight, neededHeight)
-        : availableWindowHeight,
-      minHeight: config.value.autoResize
-        ? Math.min(neededHeight, config.value.minHeight)
-        : config.value.minHeight,
+      maxHeight: config.value.autoResize ? Math.min(availableWindowHeight, neededHeight) : availableWindowHeight,
+      minHeight: config.value.autoResize ? Math.min(neededHeight, config.value.minHeight) : config.value.minHeight,
     };
-    const _snapPoints = convertSnapPoints(
-      config.value.snapPoints,
-      convertConfig
-    );
+    const _snapPoints = convertSnapPoints(config.value.snapPoints, convertConfig);
 
     // Detect changes
-    const snapPointsChanged =
-      _snapPoints.length !== snapPoints.value.length ||
-      !_snapPoints.every((point, i) => point === snapPoints.value[i]);
+    const snapPointsChanged = _snapPoints.length !== snapPoints.value.length || !_snapPoints.every((point, i) => point === snapPoints.value[i]);
     const detachedChanged = config.value.detached !== _prevDetached.current;
-    const windowHeightChanged =
-      window.value.height !== _prevWindowHeight.current;
-    const positionChanged = config.value.position.some(
-      (v, i) => v !== _prevPosition.current[i]
-    );
+    const windowHeightChanged = window.value.height !== _prevWindowHeight.current;
+    const positionChanged = config.value.position.some((v, i) => v !== _prevPosition.current[i]);
 
     _prevDetached.current = config.value.detached;
     _prevWindowHeight.current = window.value.height;
@@ -263,13 +218,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
       return;
     }
 
-    if (
-      (snapPointsChanged ||
-        detachedChanged ||
-        windowHeightChanged ||
-        positionChanged) &&
-      y.value > 0
-    ) {
+    if ((snapPointsChanged || detachedChanged || windowHeightChanged || positionChanged) && y.value > 0) {
       // Only update height if snap points or detached snap point changed
       const animated = !windowHeightChanged;
       const newHeight = _snapPoints[snapPointIndex.value] || _snapPoints[0];
@@ -282,17 +231,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
         y.value = newY;
       }
     }
-  }, [
-    config,
-    contentLayout,
-    borderHeight,
-    window,
-    snapPoints,
-    y,
-    snapPointIndex,
-    getYForHeight,
-    height,
-  ]);
+  }, [config, contentLayout, borderHeight, window, snapPoints, y, snapPointIndex, getYForHeight, height]);
 
   useAnimatedReaction(
     () => [visibilityPercentage.value, isPanning.value] as [number, boolean],
@@ -308,7 +247,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   );
 
   useAnimatedReaction(
-    () => [contentLayout.value, window.value],
+    () => [contentLayout.value, config.value.detached, window.value],
     () => {
       runOnJS(updateSnapPoints)();
     },

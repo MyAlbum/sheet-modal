@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PortalHost, SheetModal, SheetModalMethods, SheetModalProvider } from '../src';
+import { detachedSnapPoints, snapPoints } from './const';
+import SheetCustomizer from './SheetCustomizer';
 import SheetModalContent from './SheetModalContent';
 import { closeButtonStyle, styles } from './styles';
 
@@ -38,7 +40,7 @@ function Content(): React.JSX.Element {
   useEffect(() => {
     const interval = setInterval(() => {
       setRandomText(getRandomText());
-    }, 1000);
+    }, 2000);
 
     return () => {
       clearInterval(interval);
@@ -90,6 +92,43 @@ function Content(): React.JSX.Element {
             </Pressable>
           </View>
           <View style={styles.hairline} />
+          <View>
+            <SheetCustomizer />
+          </View>
+
+          <SheetModal
+            ref={attachedSheetModalRef}
+            snapPoints={snapPoints}
+            detached={false}
+            onClosed={() => {
+              console.log('closed');
+            }}
+            onOpened={() => {
+              console.log('opened');
+            }}
+          >
+            <SheetModalContent title={'Sheet modal attached to bottom'} />
+          </SheetModal>
+
+          <SheetModal
+            ref={detachedSheetModalRef}
+            snapPoints={detachedSnapPoints}
+            detached={true}
+            position={['bottom', 'left']}
+            offset={[50, 30]}
+            withBackdrop={false}
+            withFocusTrap={false}
+          >
+            <SheetModalContent title={'Floating sheet modal'} />
+          </SheetModal>
+
+          <SheetModal
+            ref={responsiveSheetModalRef}
+            snapPoints={isDetached ? detachedSnapPoints : snapPoints}
+            detached={isDetached}
+          >
+            <SheetModalContent title={'Responsive sheet modal'} />
+          </SheetModal>
 
           <SheetModal
             snapPoints={['50%', '80%', '100%']}
@@ -104,10 +143,8 @@ function Content(): React.JSX.Element {
             panDownToClose={false}
             panContent={false}
           >
-            <SheetModalContent
-              randomText={randomText}
-              title={'This modal is opened on mount'}
-            />
+            <Text>{randomText}</Text>
+            <SheetModalContent title={'This modal is opened on mount'} />
           </SheetModal>
         </View>
       </ScrollView>

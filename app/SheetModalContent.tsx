@@ -1,12 +1,11 @@
-import React from "react";
-import { ScrollView, useSheetModal } from "../src";
-import { styles } from "./styles";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import { snapPoints } from "./const";
+import React from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, useSheetModal } from '../src';
+import { snapPoints } from './const';
+import { styles } from './styles';
 
 type Props = {
   title: string;
-  randomText?: string;
 };
 
 export default function SheetModalContent(props: Props): React.JSX.Element {
@@ -17,7 +16,7 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
       style={[
         styles.sheet,
         {
-          height: "100%",
+          height: '100%',
         },
       ]}
     >
@@ -28,7 +27,6 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
         }}
         alwaysBounceVertical={false}
       >
-        <Text>{props.randomText}</Text>
         <ScrollView
           horizontal
           style={styles.scrollView}
@@ -45,19 +43,23 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
                 }}
                 style={styles.circle}
               >
-                {index < snapPoints.length && (
-                  <Text style={{ color: "white" }}>Snap {index}</Text>
-                )}
+                {index < snapPoints.length && <Text style={{ color: 'white' }}>Snap {index}</Text>}
               </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
 
-        <TextInput placeholder="search" ref={currentModal.autoFocus} />
+        <TextInput
+          placeholder="search"
+          ref={currentModal.autoFocus}
+        />
 
         <View style={styles.rectContainer}>
           {Array.from({ length: 200 }).map((_, index) => (
-            <View style={styles.rect} key={index}>
+            <View
+              style={styles.rect}
+              key={index}
+            >
               <Text>Item {index}</Text>
             </View>
           ))}

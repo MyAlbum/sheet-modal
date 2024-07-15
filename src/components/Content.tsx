@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { PropsWithChildren, useCallback, useMemo, useRef } from 'react';
 import { FlexAlignType, LayoutChangeEvent, Platform, PointerEvent, View, ViewStyle } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedReaction, useAnimatedRef } from 'react-native-reanimated';
@@ -138,11 +138,9 @@ const SheetModalContent = (props: PropsWithChildren) => {
   }, [window, store.state.contentLayout, store.config.value.minHeight]);
 
   // @ts-ignore
-
   const borderBottomLeftRadius = !config.detached ? 0 : config.containerStyle?.borderBottomLeftRadius ?? config.containerStyle?.borderRadius ?? 16;
 
   // @ts-ignore
-
   const borderBottomRightRadius = !config.detached ? 0 : config.containerStyle?.borderBottomRightRadius ?? config.containerStyle?.borderRadius ?? 16;
 
   const onPointerMove = useCallback(
@@ -193,10 +191,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
     // Prevent focus, but React Native For Web doesn't support inert attribute
     (ref as unknown as HTMLElement).setAttribute('inert', 'true');
   }, []);
-
-  useEffect(() => {
-    console.log('children2');
-  }, [props.children]);
 
   return (
     <View

@@ -1,18 +1,18 @@
 module.exports = {
   root: true,
-  extends: "@react-native",
+  extends: '@react-native',
   rules: {
-    quotes: "off",
-    "react-native/no-inline-styles": "off",
-    "prettier/prettier": [
-      "error",
+    quotes: 'off',
+    'react-native/no-inline-styles': 'off',
+    'prettier/prettier': [
+      'error',
       {
         printWidth: 175,
         semi: true,
       },
     ],
   },
-  plugins: ["only-warn"],
+  plugins: ['only-warn'],
   parserOptions: {
     requireConfigFile: false,
   },
