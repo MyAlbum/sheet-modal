@@ -1,13 +1,7 @@
-import React, { useCallback } from "react";
-import {
-  View,
-  Pressable,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-} from "react-native";
-import useSheetModal from "../hooks/useSheetModal";
-import useSharedState from "../hooks/useSharedState";
+import React, { useCallback } from 'react';
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import useSharedState from '../hooks/useSharedState';
+import useSheetModal from '../hooks/useSheetModal';
 
 export default function SheetModalCloseButton() {
   const store = useSheetModal();
@@ -53,24 +47,24 @@ const stylesheet = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    overflow: "hidden",
-    position: "absolute",
-    transform: "translate3d(0,0,0)",
+    overflow: 'hidden',
+    position: 'absolute',
+    transform: 'translate3d(0,0,0)',
   },
   x: {
-    position: "absolute",
+    position: 'absolute',
     width: 1.5,
     height: 12,
     borderRadius: 1,
-    pointerEvents: "none",
+    pointerEvents: 'none',
   },
   x1: {
-    transform: [{ rotate: "45deg" }],
+    transform: [{ rotate: '45deg' }],
     top: 9,
     left: 14,
   },
   x2: {
-    transform: [{ rotate: "-45deg" }],
+    transform: [{ rotate: '-45deg' }],
     top: 9,
     left: 14,
   },

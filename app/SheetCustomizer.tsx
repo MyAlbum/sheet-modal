@@ -1,12 +1,12 @@
-import React from "react";
-import { SheetModal, Offset, Position, SheetModalMethods } from "../src";
-import { styles } from "./styles";
-import SegmentedControl from "@react-native-segmented-control/segmented-control";
-import { Pressable, Switch, Text, TextInput, View } from "react-native";
-import SheetModalDynamicContent from "./SheetModalDynamicContent";
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import React from 'react';
+import { Pressable, Switch, Text, TextInput, View } from 'react-native';
+import { Offset, Position, SheetModal, SheetModalMethods } from '../src';
+import SheetModalDynamicContent from './SheetModalDynamicContent';
+import { styles } from './styles';
 
-const positionVertical = ["top", "center", "bottom"];
-const positionHorizontal = ["left", "center", "right"];
+const positionVertical = ['top', 'center', 'bottom'];
+const positionHorizontal = ['left', 'center', 'right'];
 
 export default function SheetCustomizer() {
   const customSheetModalRef = React.useRef<SheetModalMethods>(null);
@@ -15,10 +15,10 @@ export default function SheetCustomizer() {
     customSheetModalRef.current?.snapToIndex(0);
   }, []);
 
-  const [snapPointText, setSnapPointsText] = React.useState("300, 70%");
+  const [snapPointText, setSnapPointsText] = React.useState('300, 70%');
   const snapPoints = React.useMemo(() => {
-    return snapPointText.split(",").map((point) => {
-      if (point.includes("%")) {
+    return snapPointText.split(',').map((point) => {
+      if (point.includes('%')) {
         return point;
       }
       return parseInt(point, 10);
@@ -32,10 +32,7 @@ export default function SheetCustomizer() {
   const [offset, setOffset] = React.useState<Offset>([50, 30]);
   const [panContent, setPanContent] = React.useState(true);
   const [panDownToClose, setPanDownToClose] = React.useState(true);
-  const [position, setPosition] = React.useState<Position>([
-    "center",
-    "center",
-  ]);
+  const [position, setPosition] = React.useState<Position>(['center', 'center']);
   const [withBackDrop, setWithBackdrop] = React.useState(true);
   const [withCloseButton, setWithCloseButton] = React.useState(true);
 
@@ -52,7 +49,10 @@ export default function SheetCustomizer() {
 
       <View style={styles.option}>
         <Text>Auto resize</Text>
-        <Switch value={autoResize} onValueChange={setAutoResize} />
+        <Switch
+          value={autoResize}
+          onValueChange={setAutoResize}
+        />
       </View>
 
       <View style={styles.option}>
@@ -66,7 +66,10 @@ export default function SheetCustomizer() {
 
       <View style={styles.option}>
         <Text>Detached</Text>
-        <Switch value={detached} onValueChange={setDetached} />
+        <Switch
+          value={detached}
+          onValueChange={setDetached}
+        />
       </View>
 
       <View style={styles.option}>
@@ -83,17 +86,13 @@ export default function SheetCustomizer() {
         <View style={styles.row}>
           <TextInput
             value={offset[0].toString()}
-            onChangeText={(text) =>
-              setOffset((o) => [parseInt(text, 10), o[1]])
-            }
+            onChangeText={(text) => setOffset((o) => [parseInt(text, 10), o[1]])}
             style={{ ...styles.input, width: 50 }}
           />
           <Text> , </Text>
           <TextInput
             value={offset[1].toString()}
-            onChangeText={(text) =>
-              setOffset((o) => [o[0], parseInt(text, 10)])
-            }
+            onChangeText={(text) => setOffset((o) => [o[0], parseInt(text, 10)])}
             style={{ ...styles.input, width: 50 }}
           />
         </View>
@@ -101,12 +100,18 @@ export default function SheetCustomizer() {
 
       <View style={styles.option}>
         <Text>Pan content</Text>
-        <Switch value={panContent} onValueChange={setPanContent} />
+        <Switch
+          value={panContent}
+          onValueChange={setPanContent}
+        />
       </View>
 
       <View style={styles.option}>
         <Text>Pan down to close</Text>
-        <Switch value={panDownToClose} onValueChange={setPanDownToClose} />
+        <Switch
+          value={panDownToClose}
+          onValueChange={setPanDownToClose}
+        />
       </View>
 
       <View
@@ -114,7 +119,7 @@ export default function SheetCustomizer() {
           ...styles.option,
           ...{
             opacity: detached ? 1 : 0.4,
-            pointerEvents: detached ? "auto" : "none",
+            pointerEvents: detached ? 'auto' : 'none',
           },
         }}
       >
@@ -142,12 +147,18 @@ export default function SheetCustomizer() {
 
       <View style={styles.option}>
         <Text>With back drop</Text>
-        <Switch value={withBackDrop} onValueChange={setWithBackdrop} />
+        <Switch
+          value={withBackDrop}
+          onValueChange={setWithBackdrop}
+        />
       </View>
 
       <View style={styles.option}>
         <Text>With close button</Text>
-        <Switch value={withCloseButton} onValueChange={setWithCloseButton} />
+        <Switch
+          value={withCloseButton}
+          onValueChange={setWithCloseButton}
+        />
       </View>
 
       <Pressable

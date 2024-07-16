@@ -1,19 +1,14 @@
-import { AnimatedStyle, SharedValue } from "react-native-reanimated";
-import { PropsWithChildren, ReactNode } from "react";
-import { FlexAlignType, StyleProp, ViewStyle } from "react-native";
+import { PropsWithChildren, ReactNode } from 'react';
+import { FlexAlignType, StyleProp, ViewStyle } from 'react-native';
+import { AnimatedStyle, SharedValue } from 'react-native-reanimated';
 
 export type SnapPoint = string | number;
 export type Offset = [y: number, x: number];
-export type Position = [
-  y: "bottom" | "center" | "top",
-  x: "left" | "center" | "right"
-];
+export type Position = [y: 'bottom' | 'center' | 'top', x: 'left' | 'center' | 'right'];
 
 export type SheetModalProviderProps = Partial<SheetModalConfig>;
 
-export type SheetModalWithChildren = PropsWithChildren<
-  Partial<SheetModalConfig>
->;
+export type SheetModalWithChildren = PropsWithChildren<Partial<SheetModalConfig>>;
 
 export type SheetModalConfig = {
   /**
@@ -50,8 +45,8 @@ export type SheetModalConfig = {
   headerStyle: StyleProp<ViewStyle>;
   handleStyle?: StyleProp<ViewStyle>;
   closeButtonStyle?: {
-    iconColor?: StyleProp<ViewStyle["backgroundColor"]>;
-    backgroundColor?: StyleProp<ViewStyle["backgroundColor"]>;
+    iconColor?: StyleProp<ViewStyle['backgroundColor']>;
+    backgroundColor?: StyleProp<ViewStyle['backgroundColor']>;
   };
 
   /**
@@ -127,6 +122,11 @@ export type SheetModalMethods = {
   snapToIndex: (index: number, animate?: boolean) => void;
 
   /**
+   * Set the props of the sheet modal
+   */
+  setProps: (props: SheetModalWithChildren) => void;
+
+  /**
    * Check if the sheet modal is closed
    */
   isClosed: () => boolean;
@@ -178,12 +178,12 @@ export type SheetModalStore = {
   /**
    * Close the sheet modal
    */
-  close: SheetModalMethods["close"];
+  close: SheetModalMethods['close'];
 
   /**
    * Snap the sheet modal to a specific SnapPoint index
    */
-  snapToIndex: SheetModalMethods["snapToIndex"];
+  snapToIndex: SheetModalMethods['snapToIndex'];
 };
 
 export type ContentLayout = {
@@ -200,7 +200,7 @@ export type PanData = {
   startY: number;
 };
 
-export type PanDirection = "up" | "down" | "unknown";
+export type PanDirection = 'up' | 'down' | 'unknown';
 
 export type ContentAnimationStyle = {
   transform: any;
@@ -210,5 +210,5 @@ export type ContentAnimationStyle = {
   height?: number;
   width: number;
   maxWidth?: number;
-  visibility: "hidden" | "visible";
+  visibility: 'hidden' | 'visible';
 };

@@ -1,52 +1,20 @@
-import { useCallback, useId, useMemo, useRef } from "react";
-import { Keyboard, StyleSheet, ViewStyle } from "react-native";
-import {
-  cancelAnimation,
-  runOnJS,
-  useAnimatedReaction,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
-import useMount from "../hooks/useMount";
-import { useStackItem } from "../hooks/useStackItem/useStackItem";
-import { ContentLayout, SheetModalConfig, SheetModalStore } from "../types";
-import { AniConfig } from "../constants";
-import {
-  convertSnapPoints,
-  getNextSnapPointIndex,
-  getPreviousSnapPointIndex,
-} from "./utils";
-import useBackHandler from "../hooks/useBackHandler";
-import useAutoFocus from "../hooks/useAutoFocus";
-import useWindowDimensions from "../hooks/useWindowDimensions";
+import { useCallback, useId, useMemo, useRef } from 'react';
+import { Keyboard, StyleSheet, ViewStyle } from 'react-native';
+import { cancelAnimation, runOnJS, useAnimatedReaction, useSharedValue, withSpring } from 'react-native-reanimated';
+import { AniConfig } from '../constants';
+import useAutoFocus from '../hooks/useAutoFocus';
+import useBackHandler from '../hooks/useBackHandler';
+import useMount from '../hooks/useMount';
+import usePropsToConfig from '../hooks/useSheetModalInternal';
+import { useStackItem } from '../hooks/useStackItem/useStackItem';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { ContentLayout, SheetModalConfig, SheetModalStore } from '../types';
+import { convertSnapPoints, getNextSnapPointIndex, getPreviousSnapPointIndex } from './utils';
 
-function useSheetModalInit(props: SheetModalConfig) {
+function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
   const id = useId();
   const stackItem = useStackItem(id);
-  const config = useSharedValue<SheetModalConfig>({
-    closeY: props.closeY,
-    detached: props.detached,
-    position: props.position,
-    offset: props.offset,
-    autoResize: props.autoResize,
-    minHeight: props.minHeight,
-    snapPoints: props.snapPoints,
-    snapPointIndex: props.snapPointIndex,
-    containerStyle: props.containerStyle,
-    closeButtonStyle: props.closeButtonStyle,
-    headerStyle: props.headerStyle,
-    panContent: props.panContent,
-    withFocusTrap: props.withFocusTrap,
-    withClosebutton: props.withClosebutton,
-    withBackdrop: props.withBackdrop,
-    panDownToClose: props.panDownToClose,
-    closeButtonComponent: props.closeButtonComponent,
-    backdropComponent: props.backdropComponent,
-    handleComponent: props.handleComponent,
-    onClosed: props.onClosed,
-    onOpened: props.onOpened,
-    animateOnMount: props.animateOnMount,
-  });
+  const config = usePropsToConfig(incomingProps);
 
   // STATE
   const height = useSharedValue(0);
@@ -63,11 +31,9 @@ function useSheetModalInit(props: SheetModalConfig) {
 
   const skippedContentLayout = useSharedValue<ContentLayout | null>(null);
   const window = useWindowDimensions();
-
-  const _prevDetached = useRef(props.detached);
-  const _prevPosition = useRef(props.position);
+  const _prevDetached = useRef(config.value.detached);
+  const _prevPosition = useRef(config.value.position);
   const _prevWindowHeight = useRef(0);
-
   const { mount, isMounted, unmount } = useMount(snapPoints, contentLayout);
 
   const autoFocus = useAutoFocus({
@@ -101,10 +67,7 @@ function useSheetModalInit(props: SheetModalConfig) {
         return;
       }
 
-      if (
-        contentLayout.value.height === _height &&
-        contentLayout.value.width === _width
-      ) {
+      if (contentLayout.value.height === _height && contentLayout.value.width === _width) {
         return;
       }
 
@@ -119,15 +82,15 @@ function useSheetModalInit(props: SheetModalConfig) {
 
   const getYForHeight = useCallback(
     (h: number) => {
-      "worklet";
+      'worklet';
 
       let newY = 0;
       if (config.value.detached) {
-        if (config.value.position[0] === "center") {
+        if (config.value.position[0] === 'center') {
           newY = window.value.height / 2 + h / 2;
-        } else if (config.value.position[0] === "bottom") {
+        } else if (config.value.position[0] === 'bottom') {
           newY = h + config.value.offset[0];
-        } else if (config.value.position[0] === "top") {
+        } else if (config.value.position[0] === 'top') {
           newY = window.value.height - config.value.offset[0];
         }
       } else {
@@ -161,7 +124,7 @@ function useSheetModalInit(props: SheetModalConfig) {
 
         const newY = getYForHeight(newH);
         const onPresented = (finished?: boolean) => {
-          "worklet";
+          'worklet';
           if (!finished) {
             return;
           }
@@ -184,17 +147,7 @@ function useSheetModalInit(props: SheetModalConfig) {
         }
       });
     },
-    [
-      isClosed,
-      snapPointIndex,
-      stackItem,
-      mount,
-      height,
-      visibilityPercentage,
-      y,
-      snapPoints,
-      getYForHeight,
-    ]
+    [isClosed, snapPointIndex, stackItem, mount, height, visibilityPercentage, y, snapPoints, getYForHeight]
   );
 
   const close = useCallback(() => {
@@ -213,64 +166,39 @@ function useSheetModalInit(props: SheetModalConfig) {
 
     visibilityPercentage.value = withSpring(0, AniConfig);
     y.value = withSpring(config.value.closeY, AniConfig, () => {
-      "worklet";
+      'worklet';
 
       y.value = config.value.closeY;
       visibilityPercentage.value = 0;
     });
   }, [config, isClosed, stackItem.isActive, visibilityPercentage, y]);
 
+  // Extra height caused by border
   const borderHeight = useMemo(() => {
-    const containerStyle: ViewStyle = config.value.containerStyle
-      ? (StyleSheet.flatten(config.value.containerStyle) as {})
-      : {};
-
-    const borderTop = containerStyle
-      ? containerStyle.borderTopWidth || containerStyle.borderWidth || 0
-      : 0;
-
-    const borderBottom = containerStyle
-      ? containerStyle.borderBottomWidth || containerStyle.borderWidth || 0
-      : 0;
+    const containerStyle: ViewStyle = config.value.containerStyle ? (StyleSheet.flatten(config.value.containerStyle) as {}) : {};
+    const borderTop = containerStyle ? containerStyle.borderTopWidth || containerStyle.borderWidth || 0 : 0;
+    const borderBottom = containerStyle ? containerStyle.borderBottomWidth || containerStyle.borderWidth || 0 : 0;
 
     return borderTop + borderBottom;
   }, [config.value.containerStyle]);
 
+  // Update snapPoints using window size and layout
   const updateSnapPoints = useCallback(() => {
-    // Update snapPoints using window size and layout
-    const offsetYSpacing = config.value.detached
-      ? config.value.offset[0] * 2
-      : config.value.offset[0];
-
-    const neededHeight = contentLayout.value.height
-      ? contentLayout.value.height + borderHeight
-      : 0;
-
+    const offsetYSpacing = config.value.detached ? config.value.offset[0] * 2 : config.value.offset[0];
+    const neededHeight = contentLayout.value.height ? contentLayout.value.height + borderHeight : 0;
     const availableWindowHeight = window.value.height - offsetYSpacing;
     const convertConfig = {
       windowHeight: window.value.height,
-      maxHeight: config.value.autoResize
-        ? Math.min(availableWindowHeight, neededHeight)
-        : availableWindowHeight,
-      minHeight: config.value.autoResize
-        ? Math.min(neededHeight, config.value.minHeight)
-        : config.value.minHeight,
+      maxHeight: config.value.autoResize ? Math.min(availableWindowHeight, neededHeight) : availableWindowHeight,
+      minHeight: config.value.autoResize ? Math.min(neededHeight, config.value.minHeight) : config.value.minHeight,
     };
-    const _snapPoints = convertSnapPoints(
-      config.value.snapPoints,
-      convertConfig
-    );
+    const _snapPoints = convertSnapPoints(config.value.snapPoints, convertConfig);
 
     // Detect changes
-    const snapPointsChanged =
-      _snapPoints.length !== snapPoints.value.length ||
-      !_snapPoints.every((point, i) => point === snapPoints.value[i]);
+    const snapPointsChanged = _snapPoints.length !== snapPoints.value.length || !_snapPoints.every((point, i) => point === snapPoints.value[i]);
     const detachedChanged = config.value.detached !== _prevDetached.current;
-    const windowHeightChanged =
-      window.value.height !== _prevWindowHeight.current;
-    const positionChanged = config.value.position.some(
-      (v, i) => v !== _prevPosition.current[i]
-    );
+    const windowHeightChanged = window.value.height !== _prevWindowHeight.current;
+    const positionChanged = config.value.position.some((v, i) => v !== _prevPosition.current[i]);
 
     _prevDetached.current = config.value.detached;
     _prevWindowHeight.current = window.value.height;
@@ -286,13 +214,7 @@ function useSheetModalInit(props: SheetModalConfig) {
       return;
     }
 
-    if (
-      (snapPointsChanged ||
-        detachedChanged ||
-        windowHeightChanged ||
-        positionChanged) &&
-      y.value > 0
-    ) {
+    if ((snapPointsChanged || detachedChanged || windowHeightChanged || positionChanged) && y.value > 0) {
       // Only update height if snap points or detached snap point changed
       const animated = !windowHeightChanged;
       const newHeight = _snapPoints[snapPointIndex.value] || _snapPoints[0];
@@ -305,20 +227,10 @@ function useSheetModalInit(props: SheetModalConfig) {
         y.value = newY;
       }
     }
-  }, [
-    config,
-    contentLayout,
-    borderHeight,
-    window,
-    snapPoints,
-    y,
-    snapPointIndex,
-    getYForHeight,
-    height,
-  ]);
+  }, [config, contentLayout, borderHeight, window, snapPoints, y, snapPointIndex, getYForHeight, height]);
 
   useAnimatedReaction(
-    () => [visibilityPercentage.value, isPanning.value] as [number, boolean],
+    () => [visibilityPercentage.value, isPanning.value] as const,
     (v, prevV) => {
       if (v[0] === 0 && prevV?.[0] && !isPanning.value) {
         // Close when visibilityPercentage is 0 and not panning
@@ -331,11 +243,11 @@ function useSheetModalInit(props: SheetModalConfig) {
   );
 
   useAnimatedReaction(
-    () => [contentLayout.value, window.value],
+    () => [contentLayout.value, config.value, window.value] as const,
     () => {
       runOnJS(updateSnapPoints)();
     },
-    [contentLayout, window, updateSnapPoints]
+    [contentLayout, window, config, updateSnapPoints]
   );
 
   useBackHandler(
@@ -397,4 +309,4 @@ function useSheetModalInit(props: SheetModalConfig) {
   ]);
 }
 
-export default useSheetModalInit;
+export default useCreateSheetModalStore;

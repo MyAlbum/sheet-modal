@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 let portalId = 0;
 
@@ -64,6 +64,7 @@ export class Portal {
 
   setContent = (content: ReactNode) => {
     this.content = content;
+    this.host?.update();
   };
 
   remove = () => {

@@ -1,13 +1,11 @@
-import React, { PropsWithChildren, useCallback, useContext } from "react";
-import { SheetModalDefaultsContext } from "../context";
-import { SheetModalProviderProps } from "../types";
-import { LayoutChangeEvent, View } from "react-native";
-import { WindowContext } from "../hooks/useWindowDimensions";
-import { useSharedValue } from "react-native-reanimated";
+import React, { PropsWithChildren, useCallback, useContext } from 'react';
+import { LayoutChangeEvent, View } from 'react-native';
+import { useSharedValue } from 'react-native-reanimated';
+import { SheetModalDefaultsContext } from '../context';
+import { WindowContext } from '../hooks/useWindowDimensions';
+import { SheetModalProviderProps } from '../types';
 
-function SheetModalProvider(
-  _props: PropsWithChildren<SheetModalProviderProps>
-) {
+function SheetModalProvider(_props: PropsWithChildren<SheetModalProviderProps>) {
   const parentContext = useContext(SheetModalDefaultsContext);
   const { children, ...props } = _props;
   const windowDimensions = useSharedValue({ width: 0, height: 0 });
@@ -32,18 +30,16 @@ function SheetModalProvider(
       <View
         onLayout={onWindowResize}
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          pointerEvents: "none",
+          pointerEvents: 'none',
         }}
       />
 
-      <WindowContext.Provider value={windowDimensions}>
-        {children}
-      </WindowContext.Provider>
+      <WindowContext.Provider value={windowDimensions}>{children}</WindowContext.Provider>
     </SheetModalDefaultsContext.Provider>
   );
 }

@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
-import useSheetModal from "../hooks/useSheetModal";
-import useSharedState from "../hooks/useSharedState";
+import React from 'react';
+import { View } from 'react-native';
+import useSharedState from '../hooks/useSharedState';
+import useSheetModal from '../hooks/useSheetModal';
 
 function SheetHandle() {
   const store = useSheetModal();

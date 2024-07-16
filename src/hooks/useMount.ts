@@ -1,15 +1,7 @@
-import { useCallback, useMemo, useRef } from "react";
-import {
-  useAnimatedReaction,
-  SharedValue,
-  runOnJS,
-  useSharedValue,
-} from "react-native-reanimated";
+import { useCallback, useMemo, useRef } from 'react';
+import { SharedValue, runOnJS, useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
 
-function useMount(
-  snapPoints: SharedValue<number[]>,
-  contentLayout: SharedValue<{ width: number; height: number }>
-) {
+function useMount(snapPoints: SharedValue<number[]>, contentLayout: SharedValue<{ width: number; height: number }>) {
   const isMounted = useSharedValue(true);
   const onContentLayoutCallbacks = useRef<() => void>(() => {});
 
@@ -30,8 +22,7 @@ function useMount(
 
   const mount = useCallback(
     (cb: () => void) => {
-      const hasLayout =
-        snapPoints.value.length > 0 && contentLayout.value.height > 0;
+      const hasLayout = snapPoints.value.length > 0 && contentLayout.value.height > 0;
       if (hasLayout) {
         return cb();
       }

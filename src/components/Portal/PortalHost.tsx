@@ -1,18 +1,12 @@
-import React, {
-  Fragment,
-  PropsWithChildren,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
-import { portalHosts } from "./lib/portalHosts";
+import React, { Fragment, PropsWithChildren, ReactNode, useEffect, useState } from 'react';
+import { portalHosts } from './lib/portalHosts';
 
 type Props = {
   name?: string;
 };
 
 function PortalHost(_props: PropsWithChildren<Props>) {
-  const props = { name: "default", ..._props };
+  const props = { name: 'default', ..._props };
   const [host] = useState(portalHosts.addHost(props.name!));
   const [content, setContent] = useState<Array<ReactNode>>([]);
 

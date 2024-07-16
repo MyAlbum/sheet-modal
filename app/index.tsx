@@ -1,23 +1,11 @@
-import {
-  PortalHost,
-  SheetModal,
-  SheetModalMethods,
-  SheetModalProvider,
-} from "../src";
-import React, { useCallback, useRef } from "react";
-import {
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-  useWindowDimensions,
-} from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { closeButtonStyle, styles } from "./styles";
-import { detachedSnapPoints, snapPoints } from "./const";
-import SheetModalContent from "./SheetModalContent";
-import SheetCustomizer from "./SheetCustomizer";
+import React, { useCallback, useEffect, useRef } from 'react';
+import { Pressable, SafeAreaView, ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { PortalHost, SheetModal, SheetModalMethods, SheetModalProvider } from '../src';
+import { detachedSnapPoints, snapPoints } from './const';
+import SheetCustomizer from './SheetCustomizer';
+import SheetModalContent from './SheetModalContent';
+import { closeButtonStyle, styles } from './styles';
 
 function App(): React.JSX.Element {
   return (
@@ -45,6 +33,20 @@ function Content(): React.JSX.Element {
   const detachedSheetModalRef = useRef<SheetModalMethods>(null);
   const responsiveSheetModalRef = useRef<SheetModalMethods>(null);
 
+  const getRandomText = () => Math.random().toString(36).substring(7);
+
+  const [randomText, setRandomText] = React.useState(getRandomText());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRandomText(getRandomText());
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const openAttachedModal = useCallback(() => {
     attachedSheetModalRef.current?.snapToIndex(0);
   }, []);
@@ -59,7 +61,10 @@ function Content(): React.JSX.Element {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 20 }}
+      >
         <View style={{ ...styles.flex, ...styles.center }}>
           <View>
             <Pressable
@@ -96,25 +101,25 @@ function Content(): React.JSX.Element {
             snapPoints={snapPoints}
             detached={false}
             onClosed={() => {
-              console.log("closed");
+              console.log('closed');
             }}
             onOpened={() => {
-              console.log("opened");
+              console.log('opened');
             }}
           >
-            <SheetModalContent title={"Sheet modal attached to bottom"} />
+            <SheetModalContent title={'Sheet modal attached to bottom'} />
           </SheetModal>
 
           <SheetModal
             ref={detachedSheetModalRef}
             snapPoints={detachedSnapPoints}
             detached={true}
-            position={["bottom", "left"]}
+            position={['bottom', 'left']}
             offset={[50, 30]}
             withBackdrop={false}
             withFocusTrap={false}
           >
-            <SheetModalContent title={"Floating sheet modal"} />
+            <SheetModalContent title={'Floating sheet modal'} />
           </SheetModal>
 
           <SheetModal
@@ -122,13 +127,13 @@ function Content(): React.JSX.Element {
             snapPoints={isDetached ? detachedSnapPoints : snapPoints}
             detached={isDetached}
           >
-            <SheetModalContent title={"Responsive sheet modal"} />
+            <SheetModalContent title={'Responsive sheet modal'} />
           </SheetModal>
 
           <SheetModal
-            snapPoints={["50%", "80%", "100%"]}
+            snapPoints={['50%', '80%', '100%']}
             detached={true}
-            position={["bottom", "left"]}
+            position={['bottom', 'left']}
             offset={[50, 30]}
             withBackdrop={false}
             snapPointIndex={0}
@@ -138,7 +143,8 @@ function Content(): React.JSX.Element {
             panDownToClose={false}
             panContent={false}
           >
-            <SheetModalContent title={"This modal is opened on mount"} />
+            <Text>{randomText}</Text>
+            <SheetModalContent title={'This modal is opened on mount'} />
           </SheetModal>
         </View>
       </ScrollView>
