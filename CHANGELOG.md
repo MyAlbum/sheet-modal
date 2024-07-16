@@ -2,7 +2,9 @@
 
 ## [v2.3.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.3.0)
 ### Summary
-
+We made some internal changes for readability and maintainability. We also fixed a bug where the modal would not react to prop changes
+### Fixed
+- Reactivity of props
 ### Changes
 - Linting rules, code style, and auto formatting enhancements
 
