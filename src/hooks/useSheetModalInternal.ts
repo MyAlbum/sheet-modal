@@ -113,6 +113,7 @@ function sanitizeProps(props: Partial<SheetModalConfig>): Partial<SheetModalConf
     'handleComponent',
     'onClosed',
     'onOpened',
+    'onSnapPointChanged',
     'animateOnMount',
   ];
 

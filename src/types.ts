@@ -41,9 +41,24 @@ export type SheetModalConfig = {
    */
   offset: Offset;
 
+  /**
+   * Custom style for the container
+   */
   containerStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+
+  /**
+   * Custom style for the content
+   */
   headerStyle: StyleProp<ViewStyle>;
+
+  /**
+   * Custom style for the handle
+   */
   handleStyle?: StyleProp<ViewStyle>;
+
+  /**
+   * Custom colors for the close button
+   */
   closeButtonStyle?: {
     iconColor?: StyleProp<ViewStyle['backgroundColor']>;
     backgroundColor?: StyleProp<ViewStyle['backgroundColor']>;
@@ -97,11 +112,35 @@ export type SheetModalConfig = {
    */
   withClosebutton: boolean;
 
+  /**
+   * Render a custom handle component
+   */
   handleComponent?: () => ReactNode;
+
+  /**
+   * Render a custom backdrop
+   */
   backdropComponent?: () => ReactNode;
+
+  /**
+   * Render a custom close button
+   */
   closeButtonComponent?: () => ReactNode;
+
+  /**
+   * Callback when the sheet modal is closed
+   */
   onClosed?: () => void;
+
+  /**
+   * Callback when the sheet modal is opened
+   */
   onOpened?: () => void;
+
+  /**
+   * Callback when the sheet modal has changes snap point
+   */
+  onSnapPointChanged?: (index: number) => void;
 
   /**
    * Render a backdrop behind the sheet modal
