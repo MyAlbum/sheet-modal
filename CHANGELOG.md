@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.4.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.4.0)
+### Summary
+Added `onSnapPointChanged` prop that is triggered when the snap point has been changed.
+### Added
+- `onSnapPointChanged` prop
+
+
 ## [v2.3.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.3.0)
 ### Summary
 We made some internal changes for readability and maintainability. We also fixed a bug where the modal would not react to prop changes
