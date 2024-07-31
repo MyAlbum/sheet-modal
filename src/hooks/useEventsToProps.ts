@@ -8,8 +8,9 @@ export function useEventsToProps(store: SheetModalStore) {
   }, [store.config]);
 
   const onOpened = useCallback(() => {
+    store.config.value.onSnapPointChanged?.(store.state.snapPointIndex.value);
     store.config.value.onOpened?.();
-  }, [store.config]);
+  }, [store.config.value, store.state.snapPointIndex.value]);
 
   useAnimatedReaction(
     () => [store.state.visibilityPercentage.value, store.state.isPanning.value] as const,

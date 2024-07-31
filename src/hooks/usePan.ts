@@ -164,6 +164,7 @@ function usePan(panConfig: PanConfig) {
           nextSnapPointIndex = relevantSnapPoints.length - 1;
         }
 
+        const currentSnapPointIndex = store.state.snapPointIndex.value;
         const newSnapPointIndex = direction === 'up' ? nextSnapPointIndex : prevSnapPointIndex;
         const mode = newSnapPointIndex < 0 ? 'close' : 'resize';
 
@@ -171,6 +172,10 @@ function usePan(panConfig: PanConfig) {
           'worklet';
           if (mode === 'close') {
             store.state.visibilityPercentage.value = 0;
+          }
+
+          if (newSnapPointIndex !== currentSnapPointIndex) {
+            store.config.value.onSnapPointChanged?.(newSnapPointIndex);
           }
 
           isFinishingPan.value = false;

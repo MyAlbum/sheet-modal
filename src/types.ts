@@ -138,6 +138,11 @@ export type SheetModalConfig = {
   onOpened?: () => void;
 
   /**
+   * Callback when the sheet modal has changes snap point
+   */
+  onSnapPointChanged?: (index: number) => void;
+
+  /**
    * Render a backdrop behind the sheet modal
    * Defaults to true
    */

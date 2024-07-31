@@ -106,6 +106,9 @@ function Content(): React.JSX.Element {
             onOpened={() => {
               console.log('opened');
             }}
+            onSnapPointChanged={(index) => {
+              console.log('snap point changed', index);
+            }}
           >
             <SheetModalContent title={'Sheet modal attached to bottom'} />
           </SheetModal>
