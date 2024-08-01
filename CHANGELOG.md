@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.5.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.5.0)
+### Summary
+Added `portal` export
+### Added
+- `portal` exported
+
 ## [v2.4.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.4.0)
 ### Summary
 Added `onSnapPointChanged` prop that is triggered when the snap point has been changed.
