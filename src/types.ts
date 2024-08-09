@@ -101,6 +101,12 @@ export type SheetModalConfig = {
   panDownToClose: boolean;
 
   /**
+   * Name of the portal host to use
+   * Defaults to "default"
+   */
+  portalHostName?: string;
+
+  /**
    * Trap focus inside the sheet modal
    * Defaults to true
    */
@@ -111,6 +117,12 @@ export type SheetModalConfig = {
    * Defaults to true
    */
   withClosebutton: boolean;
+
+  /**
+   * Render a backdrop behind the sheet modal
+   * Defaults to true
+   */
+  withBackdrop: boolean;
 
   /**
    * Render a custom handle component
@@ -141,12 +153,6 @@ export type SheetModalConfig = {
    * Callback when the sheet modal has changes snap point
    */
   onSnapPointChanged?: (index: number) => void;
-
-  /**
-   * Render a backdrop behind the sheet modal
-   * Defaults to true
-   */
-  withBackdrop: boolean;
 };
 
 export type SheetModalMethods = {
