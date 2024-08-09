@@ -175,7 +175,9 @@ function usePan(panConfig: PanConfig) {
           }
 
           if (newSnapPointIndex !== currentSnapPointIndex) {
-            store.config.value.onSnapPointChanged?.(newSnapPointIndex);
+            if (store.config.value.onSnapPointChanged) {
+              runOnJS(store.config.value.onSnapPointChanged)(newSnapPointIndex);
+            }
           }
 
           isFinishingPan.value = false;

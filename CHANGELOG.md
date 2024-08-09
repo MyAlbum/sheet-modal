@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.6.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.6.0)
+### Summary
+Added a prop to render the modal in a different portal
+### Added
+- `portalHostName` prop to render in a different portal
+### Fixed
+- Crash on native when triggering `onSnapPointChanged`
+
 ## [v2.5.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.5.0)
 ### Summary
 Added `portal` export

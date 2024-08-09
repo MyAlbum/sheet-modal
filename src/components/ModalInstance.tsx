@@ -43,7 +43,7 @@ const SheetModalInstance = forwardRef<SheetModalMethods, SheetModalWithChildren>
   }
 
   return (
-    <PortalComponent>
+    <PortalComponent host={props.portalHostName ?? 'default'}>
       <WindowContext.Provider value={windowDimensions}>
         <SheetModalContext.Provider value={store}>
           <SheetModalBackdrop />
