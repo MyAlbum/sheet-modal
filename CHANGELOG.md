@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.6.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.6.1)
+### Fixed
+- Modal width not resizing when using `autoResize`
+- snapPoint larger than maxHeight or "100%" not working
+
 ## [v2.6.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.6.0)
 ### Summary
 Added a prop to render the modal in a different portal
