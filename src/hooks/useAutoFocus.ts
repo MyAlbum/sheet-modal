@@ -37,8 +37,13 @@ function useAutoFocus(config: Config) {
 
   useAnimatedReaction(
     () => [isActive.value, visibilityPercentage.value] as const,
-    ([_isActive, v]) => {
+    ([_isActive, v], prev) => {
       const focusReady = _isActive && v >= minVisibility;
+      if (prev && prev[1] >= v) {
+        // If the visibility percentage is not decreasing, don't focus
+        return;
+      }
+
       if (focusReady) {
         runOnJS(handleFocus)();
       }
