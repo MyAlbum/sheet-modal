@@ -1,6 +1,6 @@
 {
   "name": "@myalbum/sheet-modal",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "An interactive sheet modal, fully customizable & performance focused",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
