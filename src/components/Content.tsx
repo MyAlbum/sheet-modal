@@ -84,8 +84,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
       const alignSelf: FlexAlignType = horizontalPosition === 'center' ? 'center' : horizontalPosition === 'left' ? 'flex-start' : 'flex-end';
       const transform = [{ translateY: -store.state.y.value }];
       const visibility = store.state.y.value <= store.config.value.closeY ? 'hidden' : 'visible';
-
-      const width = Math.min(store.state.contentLayout.value.width, window.value.width - 2 * horizontalOffset);
+      const width = Math.min(store.state.width.value, window.value.width - 2 * horizontalOffset);
 
       if (store.config.value.detached) {
         // DETACHED
@@ -208,7 +207,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
         ref={measureRef}
       >
         <View
-          style={{ flex: 1 }}
+          style={{ position: 'absolute' }}
           onLayout={onContentLayout}
         >
           {props.children}

@@ -15,7 +15,7 @@ export const convertSnapPoints = (snapPoints: SnapPoint[], config: convertSnapPo
   const percentageSnappointIndices: Array<number> = [];
 
   // Convert percentage snap points to absolute values
-  let s = snapPoints.map((_s, i) => {
+  let newSpapPoints = snapPoints.map((_s, i) => {
     if (typeof _s === 'string') {
       percentageSnappointIndices.push(i);
       const percentage = parseInt(_s.replace('%', ''), 10);
@@ -26,7 +26,7 @@ export const convertSnapPoints = (snapPoints: SnapPoint[], config: convertSnapPo
   });
 
   // Remove non consecutive snap points
-  s = s.filter((_s, index, arr) => {
+  newSpapPoints = newSpapPoints.filter((_s, index, arr) => {
     if (_s === 0) {
       return false;
     }
@@ -48,33 +48,33 @@ export const convertSnapPoints = (snapPoints: SnapPoint[], config: convertSnapPo
 
   // Remove snap points larger than maxHeight
   let didRemoveMax = false;
-  s = s.filter((_s) => {
-    const isLargerThanMax = _s <= config.maxHeight;
+  newSpapPoints = newSpapPoints.filter((_s) => {
+    const isSmallerThanMax = _s <= config.maxHeight;
 
-    if (isLargerThanMax) {
+    if (!isSmallerThanMax) {
       didRemoveMax = true;
     }
 
-    return isLargerThanMax;
+    return isSmallerThanMax;
   });
 
   // Add maxHeight is snappoints larger than maxHeight were removed
   if (didRemoveMax) {
-    s.push(config.maxHeight);
+    newSpapPoints.push(config.maxHeight);
   }
 
   // Remove snap points smaller than minHeight
-  let r = s.filter((_s) => _s >= config.minHeight);
+  let r = newSpapPoints.filter((_s) => _s >= config.minHeight);
 
   // We removed some snap points smaller than minHeight, add minHeight as first snap point if it's not already there
-  if (r.length < s.length && r[0] !== config.minHeight) {
-    s.unshift(config.minHeight);
+  if (r.length < newSpapPoints.length && r[0] !== config.minHeight) {
+    newSpapPoints.unshift(config.minHeight);
   }
 
   // Remove duplicates
-  s = s.filter((_s, index, arr) => arr.indexOf(_s) === index);
+  newSpapPoints = newSpapPoints.filter((_s, index, arr) => arr.indexOf(_s) === index);
 
-  return s;
+  return newSpapPoints;
 };
 
 export const getNextSnapPointIndex = (_snapPoints: number[], _y: number) => {
