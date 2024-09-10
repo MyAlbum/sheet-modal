@@ -18,6 +18,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
 
   // STATE
   const height = useSharedValue(0);
+  const width = useSharedValue(0);
   const contentLayout = useSharedValue<ContentLayout>({
     width: 0,
     height: 0,
@@ -76,8 +77,16 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
         width: _width,
         height: _height,
       };
+
+      if (width.value > 0 && !config.value.autoResize) {
+        // If autoResize is disabled, don't update width
+        return;
+      }
+
+      // If width is 0, don't animate width
+      width.value = width.value > 0 ? withSpring(_width, AniConfig) : _width;
     },
-    [contentLayout, isPanning, skippedContentLayout]
+    [contentLayout, isPanning, skippedContentLayout, width, config]
   );
 
   const getYForHeight = useCallback(
@@ -270,6 +279,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
       state: {
         contentLayout,
         height,
+        width,
         isActive: stackItem.isActive,
         isClosed,
         isMounted,
@@ -295,6 +305,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
     contentLayout,
     getYForHeight,
     height,
+    width,
     id,
     isClosed,
     isMounted,

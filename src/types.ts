@@ -185,6 +185,7 @@ export type SheetModalStore = {
   state: {
     contentLayout: SharedValue<{ width: number; height: number }>;
     height: SharedValue<number>;
+    width: SharedValue<number>;
     isActive: SharedValue<boolean>;
     isClosed: SharedValue<boolean>;
     isMounted: SharedValue<boolean>;
