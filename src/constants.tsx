@@ -59,7 +59,6 @@ export const defaultProps: SheetModalConfig = {
   withFocusTrap: true,
   panDownToClose: true,
   panContent: true,
-  autoResize: true,
   animateOnMount: true,
 
   snapPoints: ['100%'],

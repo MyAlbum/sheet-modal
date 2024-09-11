@@ -53,7 +53,7 @@ The `useSheetModal` hook returns an object with the following properties:
 | `close` | `() => void` | Dismiss the sheet modal |
 | `snapTo` | `(index: number) => void` | Snap to a specific snap point |
 | `state` | `Object` | The current state of the sheet modal, see [SheetModalState](#SheetModalState) |
-| `onContentLayout` | `(w: number, h: number) => void` | Triggered when the size of the content changes |
+| `setContentLayout` | `(w: number, h: number) => void` | Manually set the content layout |
 | `getNextSnapPointIndex` | `(snapPoints: number[], y: number) => number` | Get the next snapPointIndex based on the y position |
 | `getPreviousSnapPointIndex` | `(snapPoints: number[], y: number) => number` | Get the previous snapPointIndex based on the y position |
 | `getYForHeight` | `(h: number) => number` | Calculate the y position from the given height |

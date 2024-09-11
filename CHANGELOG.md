@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.0.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.0.0)
+### Summary
+Renamed `onContentLayout` to `setContentLayout`. This method is useful when you want to update the content layout after the modal has been mounted.
+### Changed
+- `onContentLayout` method renamed to `setContentLayout`
+### Removed
+- `autoResize` prop because `setContentLayout` is more flexible
+
 ## [v2.6.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v2.6.1)
 ### Fixed
 - Modal width not resizing when using `autoResize`
