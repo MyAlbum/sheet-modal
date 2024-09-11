@@ -77,6 +77,12 @@ export type SheetModalConfig = {
   minHeight: number;
 
   /**
+   * Minimum width of the sheet modal
+   * Defaults to 100
+   */
+  minWidth: number;
+
+  /**
    * Array of snappoints for the sheet modal, in pixels (number) or percentage (string). If a snapPoint is greater than the content height, the sheet modal will not expand beyond the actual content size.
    * Defaults to [350, "70%"]
    */

@@ -98,6 +98,7 @@ function sanitizeProps(props: Partial<SheetModalConfig>): Partial<SheetModalConf
     'offset',
     'autoResize',
     'minHeight',
+    'minWidth',
     'snapPoints',
     'snapPointIndex',
     'containerStyle',

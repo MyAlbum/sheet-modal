@@ -113,7 +113,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
     return getStyle();
   }, [window, store.config.value.containerStyle, horizontalOffset, horizontalPosition, store.state.y, store.state.height, store.state.contentLayout]);
 
-  const measureStyle = useStableAnimatedStyle(() => {
+  const measureWrapperStyle = useStableAnimatedStyle(() => {
     'worklet';
 
     const getStyle = (): ViewStyle => {
@@ -133,7 +133,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
     };
 
     return getStyle();
-  }, [window, store.state.contentLayout, store.config.value.minHeight]);
+  }, [window, store.state.contentLayout]);
 
   // @ts-ignore
   const borderBottomLeftRadius = !config.detached ? 0 : config.containerStyle?.borderBottomLeftRadius ?? config.containerStyle?.borderRadius ?? 16;
@@ -181,7 +181,14 @@ const SheetModalContent = (props: PropsWithChildren) => {
     [store]
   );
 
-  const measureRef = useCallback((ref: any) => {
+  const onContentLayout2 = useCallback(
+    (e: LayoutChangeEvent) => {
+      store.onContentLayout(e.nativeEvent.layout.width, store.state.contentLayout.value.height);
+    },
+    [store]
+  );
+
+  const measureWrapperRef = useCallback((ref: any) => {
     if (!ref || Platform.OS !== 'web') {
       return;
     }
@@ -202,9 +209,9 @@ const SheetModalContent = (props: PropsWithChildren) => {
       testID={`${store.id}-content`}
     >
       <Animated.View
-        style={measureStyle}
+        style={measureWrapperStyle}
         aria-hidden={true}
-        ref={measureRef}
+        ref={measureWrapperRef}
       >
         <View
           style={{ position: 'absolute' }}
@@ -224,6 +231,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
             position: 'absolute',
             top: 0,
             minHeight: store.config.value.minHeight,
+            minWidth: store.config.value.minWidth,
           },
         ]}
         onPointerMove={onPointerMove}
@@ -244,7 +252,12 @@ const SheetModalContent = (props: PropsWithChildren) => {
             }}
           >
             <GestureDetector gesture={pan}>
-              <View style={{ flex: 1 }}>{props.children}</View>
+              <View
+                style={{ flex: 1, alignSelf: 'flex-start' }}
+                onLayout={onContentLayout2}
+              >
+                {props.children}
+              </View>
             </GestureDetector>
 
             <View style={store.config.value.headerStyle}>

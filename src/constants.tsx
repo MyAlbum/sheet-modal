@@ -66,6 +66,7 @@ export const defaultProps: SheetModalConfig = {
   snapPointIndex: -1,
   offset: [50, 30],
   minHeight: 50,
+  minWidth: 100,
   position: ['center', 'center'],
 
   detached: false,
