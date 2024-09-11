@@ -40,21 +40,24 @@ export default function SheetModalDynamicContent(): React.JSX.Element {
           ))}
         </View>
       </ScrollView>
-      <TextInput
-        value={count}
-        onChangeText={(c) => setCount(c)}
-        onBlur={updateItemCount}
-        style={{ ...styles.input, marginHorizontal: 16 }}
-      />
-      <View style={styles.rectContainer}>
-        {Array.from({ length: itemCount }).map((_, index) => (
-          <View
-            style={styles.rect}
-            key={index}
-          >
-            <Text>Item {index}</Text>
-          </View>
-        ))}
+
+      <View style={{ flex: 1 }}>
+        <TextInput
+          value={count}
+          onChangeText={(c) => setCount(c)}
+          onBlur={updateItemCount}
+          style={{ ...styles.input, marginHorizontal: 16 }}
+        />
+        <View style={styles.rectContainer}>
+          {Array.from({ length: itemCount }).map((_, index) => (
+            <View
+              style={styles.rect}
+              key={index}
+            >
+              <Text>Item {index}</Text>
+            </View>
+          ))}
+        </View>
       </View>
     </View>
   );

@@ -120,7 +120,6 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `panContent` | `boolean` | `true` | Allow panning the content of the sheet modal, when false and panDownToClose is true, only the handle can be used to pan |
 | `minHeight` | `number` | `50` | Minimum height of the sheet modal |
 | `closeY` | `number` | `-50` | Y position of the sheet modal when closed, should be something (0 - shadow size) |
-| `autoResize` | `boolean` | `true` | Automaticaly resize the sheet modal to the nearest snapp point when content is smaller than the current snap point |
 | `detached` | `boolean` | `false` | Detach the sheet modal from the bottom of the screen |
 | `position` | `["bottom" \| "center" \| "top", "left" \| "center" \| "right"]` | `["center", "center"]` | Position of the sheet modal, [vertical, horizontal] <br/><br/> *Attached mode ignores vertical position* |
 | `offset` | `[number, number]` | `[50, 30]` | Offset from the screen, [vertical, horizontal] |
@@ -160,6 +159,7 @@ The methods below can be used in the `SheetModal` component
 | `snapToIndex: (index: number, animate?: boolean) => void` | Snap to a specific snap point |
 | `close: () => void` | Closes the sheet modal |
 | `autoFocus: (node: ReactNode) => void` | Sets the active focus on a node |
+| `setContentLayout: (w: number, h: number) => void` | Manually set the content layout |
 
 <br/>
 

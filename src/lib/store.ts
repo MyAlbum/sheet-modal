@@ -60,7 +60,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
     [isPanning]
   );
 
-  const onContentLayout = useCallback(
+  const setContentLayout = useCallback(
     (_width: number, _height: number) => {
       if (isPanning.value) {
         // Don't update contentLayout while panning, it will be updated after panning ends
@@ -78,15 +78,10 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
         height: _height,
       };
 
-      if (width.value > 0 && !config.value.autoResize) {
-        // If autoResize is disabled, don't update width
-        return;
-      }
-
       // If width is 0, don't animate width
       width.value = width.value > 0 ? withSpring(_width, AniConfig) : _width;
     },
-    [contentLayout, isPanning, skippedContentLayout, width, config]
+    [contentLayout, isPanning, skippedContentLayout, width]
   );
 
   const getYForHeight = useCallback(
@@ -198,8 +193,8 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
     const availableWindowHeight = window.value.height - offsetYSpacing;
     const convertConfig = {
       windowHeight: window.value.height,
-      maxHeight: config.value.autoResize ? Math.min(availableWindowHeight, neededHeight) : availableWindowHeight,
-      minHeight: config.value.autoResize ? Math.min(neededHeight, config.value.minHeight) : config.value.minHeight,
+      maxHeight: Math.min(availableWindowHeight, neededHeight),
+      minHeight: Math.min(neededHeight, config.value.minHeight),
     };
     const _snapPoints = convertSnapPoints(config.value.snapPoints, convertConfig);
 
@@ -215,12 +210,6 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
 
     if (snapPointsChanged) {
       snapPoints.value = _snapPoints;
-    }
-
-    // CONDITIONAL LAYOUT UPDATES
-    // Don't update height if not detached and autoResize is disabled
-    if (!config.value.autoResize && !detachedChanged) {
-      return;
     }
 
     if ((snapPointsChanged || detachedChanged || windowHeightChanged || positionChanged) && y.value > 0) {
@@ -290,7 +279,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
         y,
       },
 
-      onContentLayout,
+      setContentLayout,
       getNextSnapPointIndex,
       getPreviousSnapPointIndex,
       getYForHeight,
@@ -310,7 +299,7 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
     isClosed,
     isMounted,
     isPanning,
-    onContentLayout,
+    setContentLayout,
     snapPointIndex,
     snapPoints,
     snapToIndex,

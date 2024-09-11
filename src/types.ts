@@ -65,12 +65,6 @@ export type SheetModalConfig = {
   };
 
   /**
-   * Automaticaly resize the sheet modal to the nearest snapp point when content is smaller than the current snap point
-   * Defaults to true
-   */
-  autoResize: boolean;
-
-  /**
    * Minimum height of the sheet modal
    * Defaults to 50
    */
@@ -199,7 +193,7 @@ export type SheetModalStore = {
   /**
    * Set the content layout
    */
-  onContentLayout: (w: number, h: number) => void;
+  setContentLayout: (w: number, h: number) => void;
 
   /**
    * returns next SnapPoint index based on the y position
@@ -254,6 +248,7 @@ export type ContentAnimationStyle = {
   marginLeft: number;
   marginRight: number;
   height?: number;
+  minHeight?: number;
   width: number;
   maxWidth?: number;
   visibility: 'hidden' | 'visible';

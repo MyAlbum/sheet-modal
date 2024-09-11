@@ -142,7 +142,6 @@ function Content(): React.JSX.Element {
             snapPointIndex={0}
             animateOnMount={false}
             withFocusTrap={false}
-            autoResize={false}
             panDownToClose={false}
             panContent={false}
           >

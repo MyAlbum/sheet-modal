@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useCallback, useMemo, useRef } from 'react';
-import { FlexAlignType, LayoutChangeEvent, Platform, PointerEvent, View, ViewStyle } from 'react-native';
+import { FlexAlignType, LayoutChangeEvent, Platform, PointerEvent, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedReaction, useAnimatedRef } from 'react-native-reanimated';
 import usePan from '../hooks/usePan';
@@ -94,6 +94,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: horizontalOffset,
           marginRight: horizontalOffset,
           height: store.state.height.value,
+          minHeight: store.state.contentLayout.value.height > 0 ? store.config.value.minHeight : 0,
           width,
           visibility,
         };
@@ -104,6 +105,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
           marginLeft: alignSelf === 'flex-start' ? horizontalOffset : 0,
           marginRight: alignSelf === 'flex-end' ? horizontalOffset : 0,
           height: store.state.height.value,
+          minHeight: store.state.contentLayout.value.height > 0 ? store.config.value.minHeight : 0,
           width,
           visibility,
         };
@@ -111,29 +113,34 @@ const SheetModalContent = (props: PropsWithChildren) => {
     };
 
     return getStyle();
-  }, [window, store.config.value.containerStyle, horizontalOffset, horizontalPosition, store.state.y, store.state.height, store.state.contentLayout]);
+  }, [
+    window,
+    store.config.value.containerStyle,
+    store.config.value.minHeight,
+    horizontalOffset,
+    horizontalPosition,
+    store.state.y,
+    store.state.height,
+    store.state.contentLayout,
+  ]);
 
-  const measureStyle = useStableAnimatedStyle(() => {
+  const contentStyle = useStableAnimatedStyle(() => {
     'worklet';
 
-    const getStyle = (): ViewStyle => {
-      // Width should be undefined at first render
-      const width = store.state.contentLayout.value.width > 0 ? Math.min(store.state.contentLayout.value.width, window.value.width - 2 * horizontalOffset) : undefined;
+    const hasLayout = store.state.contentLayout.value.height > 0;
 
-      // Don't add height, RN messes up onContentLayout on the childnodes if u do
+    if (hasLayout) {
       return {
-        width,
+        flex: 1,
+        height: '100%',
+      };
+    } else {
+      return {
         position: 'absolute',
         top: 0,
-        left: 0,
-        pointerEvents: 'none',
-        opacity: 0,
-        overflow: 'hidden',
       };
-    };
-
-    return getStyle();
-  }, [window, store.state.contentLayout, store.config.value.minHeight]);
+    }
+  }, [store.state.contentLayout]);
 
   // @ts-ignore
   const borderBottomLeftRadius = !config.detached ? 0 : config.containerStyle?.borderBottomLeftRadius ?? config.containerStyle?.borderRadius ?? 16;
@@ -176,19 +183,15 @@ const SheetModalContent = (props: PropsWithChildren) => {
 
   const onContentLayout = useCallback(
     (e: LayoutChangeEvent) => {
-      store.onContentLayout(e.nativeEvent.layout.width, e.nativeEvent.layout.height);
+      if (store.state.contentLayout.value.height > 0) {
+        // Content is already laid out, skip
+        return;
+      }
+
+      store.setContentLayout(e.nativeEvent.layout.width, e.nativeEvent.layout.height);
     },
     [store]
   );
-
-  const measureRef = useCallback((ref: any) => {
-    if (!ref || Platform.OS !== 'web') {
-      return;
-    }
-
-    // Prevent focus, but React Native For Web doesn't support inert attribute
-    (ref as unknown as HTMLElement).setAttribute('inert', 'true');
-  }, []);
 
   return (
     <View
@@ -202,19 +205,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
       testID={`${store.id}-content`}
     >
       <Animated.View
-        style={measureStyle}
-        aria-hidden={true}
-        ref={measureRef}
-      >
-        <View
-          style={{ position: 'absolute' }}
-          onLayout={onContentLayout}
-        >
-          {props.children}
-        </View>
-      </Animated.View>
-
-      <Animated.View
         style={[
           store.config.value.containerStyle,
           style,
@@ -223,7 +213,6 @@ const SheetModalContent = (props: PropsWithChildren) => {
             borderBottomLeftRadius,
             position: 'absolute',
             top: 0,
-            minHeight: store.config.value.minHeight,
           },
         ]}
         onPointerMove={onPointerMove}
@@ -244,7 +233,12 @@ const SheetModalContent = (props: PropsWithChildren) => {
             }}
           >
             <GestureDetector gesture={pan}>
-              <View style={{ flex: 1 }}>{props.children}</View>
+              <Animated.View
+                style={[contentStyle]}
+                onLayout={onContentLayout}
+              >
+                {props.children}
+              </Animated.View>
             </GestureDetector>
 
             <View style={store.config.value.headerStyle}>

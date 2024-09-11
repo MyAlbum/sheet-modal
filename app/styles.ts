@@ -87,6 +87,7 @@ export const styles = StyleSheet.create({
   },
   scrollView: {
     marginBottom: 35,
+    flexGrow: 0,
   },
 
   rectContainer: {
