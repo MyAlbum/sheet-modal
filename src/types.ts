@@ -65,6 +65,12 @@ export type SheetModalConfig = {
   };
 
   /**
+   * Auto shrink the sheet modal when the content is smaller than the sheet modal
+   * Defaults to true
+   */
+  autoShrink: boolean;
+
+  /**
    * Minimum height of the sheet modal
    * Defaults to 50
    */

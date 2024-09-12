@@ -119,6 +119,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | `panDownToClose` | `boolean` | `true` | Allow panning down to close the sheet modal |
 | `panContent` | `boolean` | `true` | Allow panning the content of the sheet modal, when false and panDownToClose is true, only the handle can be used to pan |
 | `minHeight` | `number` | `50` | Minimum height of the sheet modal |
+| `autoShrink` | `boolean` | `true` | Shrink the sheet modal to the content height when the content is smaller than the modal. |
 | `closeY` | `number` | `-50` | Y position of the sheet modal when closed, should be something (0 - shadow size) |
 | `detached` | `boolean` | `false` | Detach the sheet modal from the bottom of the screen |
 | `position` | `["bottom" \| "center" \| "top", "left" \| "center" \| "right"]` | `["center", "center"]` | Position of the sheet modal, [vertical, horizontal] <br/><br/> *Attached mode ignores vertical position* |
