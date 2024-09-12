@@ -34,7 +34,7 @@ export default function SheetCustomizer() {
   const [position, setPosition] = React.useState<Position>(['center', 'center']);
   const [withBackDrop, setWithBackdrop] = React.useState(true);
   const [withCloseButton, setWithCloseButton] = React.useState(true);
-
+  const [autoShrink, setAutoShrink] = React.useState(false);
   return (
     <>
       <View style={styles.option}>
@@ -69,6 +69,14 @@ export default function SheetCustomizer() {
           value={minHeight.toString()}
           onChangeText={(text) => setMinHeight(parseInt(text, 10))}
           style={styles.input}
+        />
+      </View>
+
+      <View style={styles.option}>
+        <Text>Auto shrink</Text>
+        <Switch
+          value={autoShrink}
+          onValueChange={setAutoShrink}
         />
       </View>
 
@@ -172,6 +180,7 @@ export default function SheetCustomizer() {
         position={position}
         withBackdrop={withBackDrop}
         withClosebutton={withCloseButton}
+        autoShrink={autoShrink}
       >
         <SheetModalDynamicContent />
       </SheetModal>

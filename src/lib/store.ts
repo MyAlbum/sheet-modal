@@ -193,8 +193,8 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
     const availableWindowHeight = window.value.height - offsetYSpacing;
     const convertConfig = {
       windowHeight: window.value.height,
-      maxHeight: Math.min(availableWindowHeight, neededHeight),
-      minHeight: Math.min(neededHeight, config.value.minHeight),
+      maxHeight: config.value.autoShrink ? Math.min(availableWindowHeight, neededHeight) : availableWindowHeight,
+      minHeight: config.value.minHeight,
     };
     const _snapPoints = convertSnapPoints(config.value.snapPoints, convertConfig);
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [v3.1.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.0)
+### Summary
+Added `autoShrink` prop to the modal. This prop makes the modal shrink to the content height when the content is smaller than the modal. Default is `true`.
+### Added
+- `autoShrink` prop
+
 ## [v3.0.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.0.0)
 ### Summary
 Renamed `onContentLayout` to `setContentLayout`. This method is useful when you want to update the content layout after the modal has been mounted.
