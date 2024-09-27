@@ -7,8 +7,8 @@ import { SheetModal, SheetModalMethods, ScrollView } from '@myalbum/sheet-modal'
 import { useWindowDimensions, Pressable, Text, View } from "react-native";
 
 function ResponsiveExample() {
-  const window = useWindowDimensions();
-  const isDetached = (Math.min(window.width, window.height) > 700);
+  const windowDimensions = useWindowDimensions();
+  const isDetached = (Math.min(windowDimensions.width, windowDimensions.height) > 700);
   const sheetModalRef = useRef<SheetModalMethods>(null);
 
   return (

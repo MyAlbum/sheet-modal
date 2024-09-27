@@ -13,7 +13,7 @@ function usePan(panConfig: PanConfig) {
   const oldY = useSharedValue(0);
   const isFinishingPan = useSharedValue(false);
   const isActive = useSharedValue(false);
-  const window = useWindowDimensions();
+  const windowDimensions = useWindowDimensions();
   const initialUserSelect = useRef<any>(undefined);
 
   const dismissKeyboard = useCallback(() => {
@@ -58,7 +58,7 @@ function usePan(panConfig: PanConfig) {
         startPos.value = { x: e.absoluteX, y: e.absoluteY };
         oldY.value = store.state.y.value;
 
-        const relativeStartY = startPos.value.y - (window.value.height - store.state.y.value);
+        const relativeStartY = startPos.value.y - (windowDimensions.value.height - store.state.y.value);
 
         const shouldStart = panConfig.onStartShouldSetPanResponder({
           direction: 'unknown', // We haven't moved yet
@@ -83,7 +83,7 @@ function usePan(panConfig: PanConfig) {
         }
 
         // Start Y position within the sheet modal
-        const relativeStartY = startPos.value.y - (window.value.height - store.state.y.value);
+        const relativeStartY = startPos.value.y - (windowDimensions.value.height - store.state.y.value);
 
         const gestureDirection = e.allTouches[0].absoluteY - startPos.value.y > 0 ? 'down' : 'up';
         if (
@@ -201,7 +201,7 @@ function usePan(panConfig: PanConfig) {
             break;
         }
       });
-  }, [startPos, oldY, store, preventTextSelection, isActive, window, panConfig, isFinishingPan, dismissKeyboard]);
+  }, [startPos, oldY, store, preventTextSelection, isActive, windowDimensions, panConfig, isFinishingPan, dismissKeyboard]);
 
   useAnimatedReaction(
     () => store.state.y.value,
