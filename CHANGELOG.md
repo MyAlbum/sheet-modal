@@ -1,5 +1,11 @@
 # Changelog
 
+## [v3.1.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.1)
+### Summary
+Renamed `window` variables to `windowDimensions` to prevent conflicts with the global `window` object.
+### Changes
+- Refactored `window` variables to `windowDimensions`
+
 ## [v3.1.0](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.0)
 ### Summary
 Added `autoShrink` prop to the modal. This prop makes the modal shrink to the content height when the content is smaller than the modal. Default is `true`.
