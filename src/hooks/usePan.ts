@@ -55,6 +55,7 @@ function usePan(panConfig: PanConfig) {
       .maxPointers(1)
       .activeCursor('grabbing')
       .onBegin((e) => {
+        'worklet';
         startPos.value = { x: e.absoluteX, y: e.absoluteY };
         oldY.value = store.state.y.value;
 
@@ -142,6 +143,7 @@ function usePan(panConfig: PanConfig) {
         store.state.y.value = newY;
       })
       .onFinalize(() => {
+        'worklet';
         isActive.value = false;
         runOnJS(preventTextSelection)(false);
       })
