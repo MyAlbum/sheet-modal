@@ -159,7 +159,7 @@ export type SheetModalMethods = {
   /**
    * Close the sheet modal
    */
-  close: () => void;
+  close: (onClosed?: () => void) => void;
 
   /**
    * Snap the sheet modal to a specific SnapPoint index

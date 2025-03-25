@@ -154,28 +154,35 @@ function useCreateSheetModalStore(incomingProps: Partial<SheetModalConfig>) {
     [isClosed, snapPointIndex, stackItem, mount, height, visibilityPercentage, y, snapPoints, getYForHeight]
   );
 
-  const close = useCallback(() => {
-    if (isClosed.value) {
-      return;
-    }
+  const close = useCallback(
+    (onClosed?: () => void) => {
+      if (isClosed.value) {
+        return;
+      }
 
-    isClosed.value = true;
-    cancelAnimation(y);
-    cancelAnimation(visibilityPercentage);
+      isClosed.value = true;
+      cancelAnimation(y);
+      cancelAnimation(visibilityPercentage);
 
-    if (stackItem.isActive.value) {
-      // If this modal is the current active modal, dismiss keyboard
-      Keyboard.dismiss();
-    }
+      if (stackItem.isActive.value) {
+        // If this modal is the current active modal, dismiss keyboard
+        Keyboard.dismiss();
+      }
 
-    visibilityPercentage.value = withSpring(0, AniConfig);
-    y.value = withSpring(config.value.closeY, AniConfig, () => {
-      'worklet';
+      visibilityPercentage.value = withSpring(0, AniConfig);
+      y.value = withSpring(config.value.closeY, AniConfig, () => {
+        'worklet';
 
-      y.value = config.value.closeY;
-      visibilityPercentage.value = 0;
-    });
-  }, [config, isClosed, stackItem.isActive, visibilityPercentage, y]);
+        y.value = config.value.closeY;
+        visibilityPercentage.value = 0;
+
+        if (onClosed) {
+          runOnJS(onClosed)();
+        }
+      });
+    },
+    [config, isClosed, stackItem.isActive, visibilityPercentage, y]
+  );
 
   // Extra height caused by border
   const borderHeight = useMemo(() => {

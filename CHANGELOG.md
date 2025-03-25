@@ -1,8 +1,12 @@
 # Changelog
 
+## [v3.1.3](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.3)
+### Added
+Added an optional callback to the `close` method to be called after the modal has been closed.
+
 ## [v3.1.2](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.2)
 ### Summary
-FIxed a react-native-gesture-handler warning about callbacks not being marked as worklets.
+Fixed a react-native-gesture-handler warning about callbacks not being marked as worklets.
 
 ## [v3.1.1](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.1)
 ### Summary

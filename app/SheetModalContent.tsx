@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { Button, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { ScrollView, useSheetModal } from '../src';
 import { snapPoints } from './const';
 import { styles } from './styles';
@@ -11,6 +11,13 @@ type Props = {
 export default function SheetModalContent(props: Props): React.JSX.Element {
   const currentModal = useSheetModal();
 
+  const onClose = useCallback(() => {
+    console.log('Closing');
+    currentModal.close(() => {
+      console.log('Closed');
+    });
+  }, [currentModal]);
+
   return (
     <View
       style={[
@@ -21,6 +28,10 @@ export default function SheetModalContent(props: Props): React.JSX.Element {
       ]}
     >
       <Text style={{ padding: 16 }}>{props.title}</Text>
+      <Button
+        title="Close"
+        onPress={onClose}
+      />
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 35,
