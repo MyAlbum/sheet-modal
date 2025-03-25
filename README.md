@@ -146,7 +146,7 @@ The props below can be used in any `SheetModalProvider` or `SheetModal`. The pro
 | Prop | Type | Description |
 | --- | --- | --- |
 | `backdropComponent` | `() => ReactNode` | Custom backdrop component |
-| `closeButtonComponent` | `() => ReactNode` | Custom close button component |
+| `closeButtonComponent` | `(sheetModal: SheetModalMethods) => ReactNode` | Custom close button component |
 | `handleComponent` | `() => ReactNode` | Custom handle component |
 
 <br/>
@@ -158,7 +158,7 @@ The methods below can be used in the `SheetModal` component
 | Method | Description |
 | --- | --- |
 | `snapToIndex: (index: number, animate?: boolean) => void` | Snap to a specific snap point |
-| `close: () => void` | Closes the sheet modal |
+| `close: (onClosed: () => void) => void` | Closes the sheet modal |
 | `autoFocus: (node: ReactNode) => void` | Sets the active focus on a node |
 | `setContentLayout: (w: number, h: number) => void` | Manually set the content layout |
 

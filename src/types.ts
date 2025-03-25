@@ -137,7 +137,7 @@ export type SheetModalConfig = {
   /**
    * Render a custom close button
    */
-  closeButtonComponent?: () => ReactNode;
+  closeButtonComponent?: (close: SheetModalMethods['close']) => ReactNode;
 
   /**
    * Callback when the sheet modal is closed

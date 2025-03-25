@@ -245,7 +245,7 @@ const SheetModalContent = (props: PropsWithChildren) => {
               <HandleWrapper />
             </View>
 
-            {config.withClosebutton && config.closeButtonComponent?.()}
+            {config.withClosebutton && config.closeButtonComponent?.(() => store.close())}
           </View>
         </FocusTrap>
       </Animated.View>
