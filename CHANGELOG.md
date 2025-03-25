@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.1.4](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.4)
+### Added
+Pass `close` method to `closeButtonComponent` function
+
 ## [v3.1.3](https://github.com/MyAlbum/sheet-modal/releases/tag/v3.1.3)
 ### Added
 Added an optional callback to the `close` method to be called after the modal has been closed.
